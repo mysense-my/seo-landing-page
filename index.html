@@ -8,11 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css?v=1788397376">
-<link rel="stylesheet" href="css/hero.css?v=1788397376">
-<link rel="stylesheet" href="css/sections.css?v=1788397376">
-<link rel="stylesheet" href="css/reveal.css?v=1788397376">
-<link rel="stylesheet" href="css/chrome.css?v=1788397376">
+<link rel="stylesheet" href="css/base.css?v=1788397826">
+<link rel="stylesheet" href="css/hero.css?v=1788397826">
+<link rel="stylesheet" href="css/sections.css?v=1788397826">
+<link rel="stylesheet" href="css/reveal.css?v=1788397826">
+<link rel="stylesheet" href="css/chrome.css?v=1788397826">
 </head>
 <body>
 
@@ -225,10 +225,37 @@
   </div>
 
   <div class="wrap">
+
+    <!-- Awards plaque. It sits on a dark inset inside this light section for a
+         reason: the a+m trophy is light silver and the MYSense-supplied Malaysia
+         Book of Records mark comes in black or white. Neither reads on the page
+         ground, and one dark plaque solves both at once. Award artwork is the
+         client's own; the award names are set in the page's type rather than
+         using each mark's baked-in caption, so the two read as one block. -->
+    <div class="awards" data-reveal>
+      <article class="award">
+        <span class="award__mark award__mark--trophy">
+          <img src="assets/award-aoty.webp" alt="Agency of the Year trophy" loading="lazy" width="344" height="400">
+        </span>
+        <div class="award__text">
+          <h3 class="award__t">Search Agency of the Year 2026</h3>
+          <p class="award__d"><b>Silver</b> · Agency of the Year awards</p>
+        </div>
+      </article>
+
+      <article class="award">
+        <span class="award__mark award__mark--mbor">
+          <img src="assets/award-mbor.webp" alt="The Malaysia Book of Records" loading="lazy" width="565" height="300">
+        </span>
+        <div class="award__text">
+          <h3 class="award__t">Malaysia Book of Records 2026</h3>
+          <p class="award__d">Most healthcare brand clients managed by a digital marketing agency</p>
+        </div>
+      </article>
+    </div>
+
     <ul class="badges" data-reveal>
       <li><span class="badges__dot"></span>160+ Google reviews</li>
-      <li><span class="badges__dot"></span>Malaysia Book of Records 2026</li>
-      <li><span class="badges__dot"></span>Search Agency of the Year 2026</li>
       <li><span class="badges__dot"></span>Google Partner</li>
       <li><span class="badges__dot"></span>300+ brands</li>
     </ul>
@@ -844,6 +871,6 @@
   </div>
 </footer>
 
-<script src="js/motion.js?v=1788397376"></script>
+<script src="js/motion.js?v=1788397826"></script>
 </body>
 </html>

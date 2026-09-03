@@ -31,7 +31,7 @@ css/sections.css      brands, numbers, cases, journey, why-us, reviews, FAQ, for
 css/reveal.css        the three signature mechanics (problem cards, table, slats)
 css/chrome.css        header and footer
 js/motion.js          the whole motion system, no dependencies
-assets/               19 client logos, 2 MYSense logos, 14 image slots
+assets/               23 client logos, 2 MYSense logos, 2 award marks, 14 image slots
 ```
 
 ## Section order
@@ -39,7 +39,7 @@ assets/               19 client logos, 2 MYSense logos, 14 image slots
 | # | id | Ground | What it does |
 |---|---|---|---|
 | 1 | `#top` | navy → cyan | Hero. The search stage, no form. |
-| 2 | `#brands` | page | Trusted by 300+ brands, two logo rails, the credentials strip. |
+| 2 | `#brands` | page | Trusted by 300+ brands, two logo rails, the awards plaque, the credentials strip. |
 | 3 | `#numbers` | navy → cyan | Four count-up figures. |
 | 4 | `#problem` | page | The problem, as three title-first hover cards. |
 | 5 | `#method` | navy | The comparison table. |
