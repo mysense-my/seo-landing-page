@@ -233,7 +233,11 @@
     const paint = () => {
       ticking = false;
       if (!mq.matches) {
-        cards.forEach(c => { c.style.removeProperty('--stack-s'); c.style.removeProperty('opacity'); });
+        cards.forEach(c => {
+          c.style.removeProperty('--stack-s');
+          c.style.removeProperty('--stack-d');
+          c.style.removeProperty('opacity');
+        });
         return;
       }
       for (let i = 0; i < cards.length - 1; i++) {
@@ -241,7 +245,11 @@
         const next = cards[i + 1].getBoundingClientRect();
         const p = Math.min(1, Math.max(0, (mine.bottom - next.top) / mine.height));
         cards[i].style.setProperty('--stack-s', (1 - 0.06 * p).toFixed(4));
-        cards[i].style.opacity = (1 - 0.28 * p).toFixed(3);
+        /* The dim is a scrim INSIDE the card, not the card's own opacity.
+           Fading the element itself makes it translucent, and since every card
+           is also covering the one behind it, the card underneath shows
+           straight through. */
+        cards[i].style.setProperty('--stack-d', (0.42 * p).toFixed(3));
       }
     };
     const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(paint); } };

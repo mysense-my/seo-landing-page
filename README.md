@@ -130,7 +130,8 @@ static but stay legible, the climb jumps straight to its landed state.
 1. **Fourteen photographs.** Every image slot currently holds a stand-in from the
    MYSense library. Generated art overwrites the same filename in `assets/` and
    the page picks it up with no markup change.
-2. **The form is a styled placeholder** until the live embed is wired in.
+2. ~~The form is a styled placeholder~~ — now the live SenseBeat dual-form
+   HubSpot chooser. Real submissions.
 3. **WebP conversion** once the final photographs land.
 4. **Elementor paste pack**, if this ships as stacked HTML widgets the way the
    sibling landing pages did. Not built yet.

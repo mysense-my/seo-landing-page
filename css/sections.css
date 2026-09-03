@@ -138,7 +138,7 @@
 
 /* ---------------------------- 8. JOURNEY -------------------------------- */
 .journey{
-  position:relative;overflow:hidden;
+  position:relative;overflow:clip;
   background:var(--ink);color:#fff;
 }
 .journey::before{
@@ -221,16 +221,25 @@
    settle-back scale and dim on the covered cards. */
 @media (max-width:767px){
   .track{display:block}
+  /* Stacked cards must be OPAQUE. A translucent card with a backdrop blur
+     samples the card pinned underneath it, which smears the yellow dot's glow
+     across the whole panel and reads as a rendering fault. */
   .jstep{
     position:sticky;top:calc(72px + var(--i,0) * 12px);
-    background:rgba(255,255,255,.07);
-    border:1px solid rgba(255,255,255,.14);
+    background:#141D47;
+    border:1px solid rgba(255,255,255,.16);
     border-radius:var(--r-card);
     padding:22px 20px 24px 20px;
     margin-bottom:14px;
-    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    box-shadow:0 -10px 26px rgba(0,0,0,.35);
+    overflow:hidden;
     transform:scale(var(--stack-s,1));transform-origin:top center;
-    transition:transform .2s linear,opacity .2s linear;
+    transition:transform .2s linear;
+  }
+  .jstep::after{
+    content:'';position:absolute;inset:0;border-radius:inherit;z-index:3;
+    background:var(--ink);opacity:var(--stack-d,0);
+    pointer-events:none;transition:opacity .2s linear;
   }
   .jstep::before{display:none}
   .jstep__dot{position:static;margin-bottom:4px}
@@ -362,7 +371,7 @@
 
 /* ---------------------------- 12. PLAN ----------------------------------- */
 .plan{
-  position:relative;overflow:hidden;
+  position:relative;overflow:clip;
   background:var(--grad-climb);color:#fff;
   padding-block:var(--sec-y);
 }
@@ -371,12 +380,24 @@
   background:radial-gradient(circle,rgba(242,66,119,.30),transparent 66%);
   pointer-events:none;
 }
+/* start-aligned, not centred: the real HubSpot form is far taller than the
+   copy beside it, and centring left the heading floating in the middle of a
+   very tall row. */
 .plan__grid{
   position:relative;z-index:1;
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:clamp(30px,4vw,64px);align-items:center;
+  display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);
+  gap:clamp(30px,4vw,64px);align-items:start;
 }
-.plan__copy{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+/* The HubSpot form runs to about 1,650px, roughly a thousand taller than the
+   copy beside it. Sticking the copy keeps the offer and the phone number next
+   to the fields the whole way down instead of leaving a navy void. */
+.plan__copy{
+  display:flex;flex-direction:column;align-items:flex-start;gap:16px;
+  position:sticky;top:clamp(92px,10vw,120px);
+}
+@media (max-width:900px){
+  .plan__copy{position:static}
+}
 .plan__t{margin:6px 0 0}
 .plan__t em{font-style:normal;color:var(--yellow)}
 .plan__lede{font-size:clamp(15px,1.3vw,17px);line-height:1.6;color:var(--muted-on-dark);max-width:50ch}
@@ -390,32 +411,32 @@
 .plan__meta dd{margin:0;font-size:16px;font-weight:600;color:#fff}
 
 .plan__form{position:relative;z-index:1}
+/* The card shell is ours; the fields inside it are HubSpot's own markup and
+   are left alone deliberately. Overriding a third-party form's internals is how
+   you end up with a broken layout after their next embed release. */
 .pform{
   background:#fff;color:var(--ink);
   border-radius:var(--r-panel);
-  padding:clamp(24px,2.6vw,34px);
+  padding:clamp(22px,2.4vw,30px);
   box-shadow:0 34px 74px rgba(0,17,77,.34);
-  display:flex;flex-direction:column;gap:14px;
+  min-width:0;
 }
-.pform__t{font-family:var(--display);font-weight:800;font-size:19px;color:var(--navy)}
-.pform__s{font-size:13.5px;color:var(--muted);margin-top:-8px}
-.pfield{display:flex;flex-direction:column;gap:6px}
-.pfield span{font-size:12.5px;font-weight:700;color:var(--navy)}
-.pfield input{
-  font-family:var(--body);font-size:14.5px;
-  border:1.5px solid rgba(11,19,57,.14);border-radius:var(--r-input);
-  padding:13px 14px;background:#FBFCFE;color:var(--ink);
-  transition:border-color .3s var(--ease),box-shadow .3s var(--ease);
+.hsslot{min-height:400px}
+
+.pform__switch{text-align:center;padding:18px 10px 4px}
+.pform__switch p{margin:0 0 6px;font-size:14px;color:var(--muted)}
+.pform__switch a{
+  font-size:15px;font-weight:700;color:var(--navy);
+  text-decoration:underline;text-underline-offset:3px;
+  transition:color .3s var(--ease);
 }
-.pfield input::placeholder{color:var(--muted-2)}
-.pfield input:focus{
-  outline:none;border-color:var(--blue);
-  box-shadow:0 0 0 4px rgba(0,48,176,.12);
+.pform__switch a:hover{color:var(--blue)}
+
+.pform__back{
+  margin:0 0 12px;font-size:13px;line-height:1.55;color:var(--muted);
 }
-.pform__go{width:100%;margin-top:6px;background:var(--pink);color:#fff;
-  box-shadow:0 12px 28px rgba(242,66,119,.30)}
-.pform__go:hover{background:#FF5285}
-.pform__note{font-size:12px;color:var(--muted-2);text-align:center}
+.pform__back a{color:var(--blue);font-weight:600}
+.pform__back a:hover{text-decoration:underline}
 
 @media (max-width:900px){
   .plan__grid{grid-template-columns:1fr}

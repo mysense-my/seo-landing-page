@@ -713,19 +713,66 @@
     </div>
 
     <div class="plan__form" data-reveal data-reveal-delay="120">
-      <!-- Placeholder for the live embed. The DM landing page ships a dual
-           HubSpot chooser here; this page will take whichever form the client
-           nominates. Fields and the submit label follow the writer's mockup. -->
-      <form class="pform" onsubmit="return false">
-        <p class="pform__t">Get your free SEO audit</p>
-        <p class="pform__s">We'll review your rankings and show you what's holding them back.</p>
-        <label class="pfield"><span>Name</span><input type="text" name="name" autocomplete="name" placeholder="Your name"></label>
-        <label class="pfield"><span>Company email</span><input type="email" name="email" autocomplete="email" placeholder="you@company.com.my"></label>
-        <label class="pfield"><span>Website URL</span><input type="url" name="website" placeholder="yourbrand.com.my"></label>
-        <label class="pfield"><span>WhatsApp number</span><input type="tel" name="phone" autocomplete="tel" placeholder="01X-XXX XXXX"></label>
-        <button class="btn btn--primary pform__go" type="submit">Show me where I'm losing ground</button>
-        <p class="pform__note">Reply within 1 working day</p>
-      </form>
+      <!-- The client's SenseBeat dual-form HubSpot chooser, the same pattern the
+           DM landing page ships. Real submissions, not a mock. Form A is the main
+           "Talk To Our Experts" form; anyone without a company email is handed
+           Form B, which accepts any address. Form B is only created on demand, so
+           a visitor who never asks for it pays nothing for it. -->
+      <div class="pform" id="ms-form-chooser">
+
+        <div id="ms-form-a">
+          <div id="ms-form-a-slot" class="hsslot"></div>
+          <div class="pform__switch">
+            <p>Don't have a company email?</p>
+            <a href="javascript:void(0)" onclick="msShowB()">New business? Submit here &rarr;</a>
+          </div>
+        </div>
+
+        <div id="ms-form-b" hidden>
+          <p class="pform__back">No problem, new businesses can reach us with any email address.
+            <a href="javascript:void(0)" onclick="msShowA()">&larr; back to the main form</a></p>
+          <div id="ms-form-b-slot" class="hsslot"></div>
+        </div>
+
+        <script>
+          (function () {
+            var PORTAL = '40037102';
+            var REGION = 'na2';
+            var FORM_A = '1a414128-01fe-423e-9624-77bae980b62a';   /* "Talk To Our Experts" */
+            var FORM_B = '81cb68b2-65f2-4aad-acf6-5fd2129b14b4';   /* "…- New Business" */
+            var loadedB = false;
+
+            function ensureScript(cb) {
+              if (window.hbspt && window.hbspt.forms) { cb(); return; }
+              var s = document.createElement('script');
+              s.src = 'https://js-na2.hsforms.net/forms/embed/v2.js';
+              s.onload = cb;
+              document.head.appendChild(s);
+            }
+
+            ensureScript(function () {
+              window.hbspt.forms.create({ region: REGION, portalId: PORTAL, formId: FORM_A, target: '#ms-form-a-slot' });
+            });
+
+            window.msShowB = function () {
+              document.getElementById('ms-form-a').hidden = true;
+              document.getElementById('ms-form-b').hidden = false;
+              if (!loadedB) {
+                loadedB = true;
+                ensureScript(function () {
+                  window.hbspt.forms.create({ region: REGION, portalId: PORTAL, formId: FORM_B, target: '#ms-form-b-slot' });
+                });
+              }
+            };
+
+            window.msShowA = function () {
+              document.getElementById('ms-form-b').hidden = true;
+              document.getElementById('ms-form-a').hidden = false;
+            };
+          })();
+        </script>
+
+      </div>
     </div>
 
   </div>
