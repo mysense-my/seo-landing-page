@@ -1,0 +1,160 @@
+/* ===========================================================================
+   Header + footer. Same shape as the DM and IM landing pages so the three
+   siblings share one chrome; only the accent tokens differ (yellow underline
+   stays, hover colour moves from purple to blue).
+=========================================================================== */
+
+/* ---------------------------- HEADER ------------------------------------ */
+/* Transparent over the hero, solid once the page scrolls. The hero is a dark
+   navy-to-cyan ground, so a solid bar at the top would cut it in half. */
+.site-head{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  padding-block:clamp(14px,1.6vw,22px);
+  transition:background .32s var(--ease),box-shadow .32s var(--ease),
+             padding .32s var(--ease);
+}
+.site-head.is-stuck{
+  background:rgba(0,17,77,.84);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 10px 30px rgba(0,27,118,.30);
+  padding-block:clamp(10px,1.1vw,14px);
+}
+.site-head__inner{display:flex;align-items:center;gap:clamp(16px,2.4vw,40px)}
+.site-head__logo{flex:0 0 auto;display:block}
+.site-head__logo img{width:auto;height:clamp(30px,3.2vw,42px);display:block}
+
+.site-nav{
+  display:flex;align-items:center;gap:clamp(16px,2vw,30px);
+  margin-left:auto;
+}
+.site-nav a{
+  color:#fff;font-weight:600;font-size:15px;text-decoration:none;
+  position:relative;padding-block:6px;
+}
+/* underline grows from the left rather than fading in */
+.site-nav a::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:var(--yellow);border-radius:2px;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .28s var(--ease);
+}
+.site-nav a:hover::after,.site-nav a:focus-visible::after{transform:scaleX(1)}
+
+.btn--dark{background:var(--ink);color:#fff;display:inline-flex;align-items:center;gap:9px}
+.btn--dark:hover{background:#000}
+.site-head__cta{flex:0 0 auto;padding:12px 22px;font-size:14px}
+
+.site-head__burger{
+  display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:44px;height:44px;padding:0 10px;flex:0 0 auto;
+  background:rgba(255,255,255,.14);border:0;border-radius:12px;cursor:pointer;
+}
+.site-head__burger span{
+  display:block;height:2px;width:100%;background:#fff;border-radius:2px;
+  transition:transform .3s var(--ease),opacity .2s var(--ease);
+}
+.site-head__burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.site-head__burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.site-head__burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+@media (max-width:1024px){
+  .site-head__burger{display:flex;margin-left:auto}
+  .site-head__cta{display:none}
+  .site-nav{
+    position:absolute;left:0;right:0;top:100%;
+    flex-direction:column;align-items:stretch;gap:0;margin:0;
+    background:rgba(0,17,77,.97);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    padding:8px 24px 18px;
+    clip-path:inset(0 0 100% 0);opacity:0;pointer-events:none;
+    transition:clip-path .34s var(--ease),opacity .24s var(--ease);
+  }
+  .site-nav.is-open{clip-path:inset(0 0 0 0);opacity:1;pointer-events:auto}
+  .site-nav a{padding-block:13px;font-size:16px}
+  .site-nav a::after{display:none}
+  .site-nav .site-nav__cta{
+    margin-top:12px;justify-content:center;background:var(--yellow);color:var(--ink);
+    padding:14px 22px;border-radius:var(--r-pill);font-weight:700;
+  }
+  .site-nav .site-nav__cta::after{display:none}
+}
+@media (min-width:1025px){
+  .site-nav .site-nav__cta{display:none}
+}
+
+/* ---------------------------- FOOTER ------------------------------------ */
+/* Same structure as the DM and IM footers: logo and headline on one row,
+   three detail columns under a hairline, a closing line at the bottom.
+   Deliberately light on links. Contact details are plain text and there are no
+   socials or legal links, because every exit from a landing page is a lost
+   conversion. The quick links are the only anchors and all scroll in-page. */
+.site-foot{
+  background:#fff;color:var(--ink);
+  padding-block:clamp(56px,7vw,104px) clamp(26px,3vw,40px);
+  border-top:1px solid var(--line);
+  position:relative;overflow:hidden;
+}
+/* one soft cyan wash in the bottom-left corner so the footer is not a flat
+   white slab under a very colourful page */
+.site-foot::before{
+  content:'';position:absolute;left:-160px;bottom:-220px;
+  width:620px;height:620px;border-radius:50%;
+  background:radial-gradient(circle,rgba(65,206,226,.22),transparent 68%);
+  pointer-events:none;
+}
+.site-foot .wrap{position:relative;z-index:1}
+
+.foot__top{
+  display:flex;flex-direction:row;align-items:flex-start;
+  justify-content:space-between;gap:clamp(28px,4vw,56px);flex-wrap:wrap;
+}
+.foot__logo{display:inline-flex;align-items:center}
+.foot__logo img{display:block;height:clamp(34px,3.4vw,46px);width:auto}
+.foot__lead{display:flex;flex-direction:column;align-items:flex-start;max-width:640px}
+.foot__t{max-width:16ch;margin:0}
+.foot__t em{font-style:normal;background:linear-gradient(96deg,var(--blue),var(--cyan-deep));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.foot__cta{margin-top:clamp(24px,3vw,38px)}
+
+.foot__cols{
+  display:grid;grid-template-columns:1.2fr 1.2fr .9fr;
+  gap:clamp(24px,3.2vw,40px);
+  margin-top:clamp(48px,6vw,76px);padding-top:clamp(30px,3.4vw,44px);
+  border-top:1px solid var(--line);
+}
+.foot__col{display:flex;flex-direction:column;align-items:flex-start;gap:11px}
+.foot__label{
+  display:inline-block;padding:7px 14px;border-radius:var(--r-pill);
+  background:rgba(11,19,57,.05);border:1px solid var(--line);
+  font-size:13px;font-weight:500;color:var(--muted);margin-bottom:6px;
+}
+.foot__big{
+  font-size:clamp(17px,1.7vw,24px);font-weight:600;
+  letter-spacing:-.03em;line-height:1.25;color:var(--ink);margin:0;
+}
+.foot__note{font-size:15px;line-height:1.6;color:var(--muted);margin:0}
+.foot__col a{
+  color:var(--muted);text-decoration:none;font-size:15px;
+  transition:color .22s var(--ease);
+}
+.foot__col a:hover,.foot__col a:focus-visible{color:var(--blue)}
+
+.foot__end{
+  display:flex;flex-direction:row;justify-content:space-between;
+  gap:20px;flex-wrap:wrap;
+  margin-top:clamp(36px,4.5vw,56px);padding-top:24px;
+  border-top:1px solid var(--line);
+  font-size:13px;color:var(--muted-2);
+}
+
+@media (max-width:900px){
+  .foot__cols{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .foot__cols{grid-template-columns:1fr}
+  .foot__top{flex-direction:column}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .site-head,.site-nav{transition:none}
+}

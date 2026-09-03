@@ -1,0 +1,274 @@
+/* ===========================================================================
+   MYSense — SEO landing page (seo.mysense.com.my)
+   Third sibling of the DM and IM landing pages. Same type system, same
+   component grammar, same motion engine. Different lead colour so the three
+   pages read as one family without looking like the same page twice:
+
+     DM landing  -> purple lead
+     IM landing  -> pink lead
+     SEO landing -> BLUE / NAVY -> CYAN lead, pink as accent, yellow as action
+
+   Type: Montserrat (display) + Manrope (body/UI) only.
+
+   ACTION-COLOUR RULE (measured on the DM build, still governs here):
+     yellow #FFCC00 contrast — on navy 9.79, blue 6.78, purple 5.30, ink 11.91
+                             — on page bg 1.36, on white 1.51  <- invisible
+     => yellow CTAs only ever sit on a dark ground, always with an ink label.
+        On white / page-bg the primary becomes a solid BLUE pill, white label
+        (#0030B0 on white = 8.59:1).
+=========================================================================== */
+
+:root{
+  /* -- brand ------------------------------------------------------------- */
+  --navy:#001B76;
+  --blue:#0030B0;
+  --pink:#F24277;
+  --purple:#6C00D7;
+  --yellow:#FFCC00;
+  --cyan:#41CEE2;
+  --page:#F1F3FA;
+  --ink:#0B1339;
+  --white:#fff;
+
+  /* -- derived surfaces (tints and shades of the above, no new hues) ------ */
+  --blue-lite:#2E5BE0;        /* gradient light end of --blue */
+  --blue-deep:#001F82;
+  --navy-deep:#00114D;
+  --cyan-deep:#1FA8BC;
+  --cyan-soft:#D8F4F8;
+  --ink-2:#1B2450;
+  --line:rgba(11,19,57,.10);
+  --line-on-dark:rgba(255,255,255,.16);
+  --muted:#454D68;            /* body on light: 8.35:1 */
+  --muted-2:#818AA7;          /* de-emphasised UI text */
+  --muted-on-dark:rgba(255,255,255,.78);
+
+  /* the page's one signature gradient: navy -> blue -> cyan, the "climb" */
+  --grad-climb:linear-gradient(118deg,var(--navy) 0%,var(--blue) 46%,var(--cyan-deep) 100%);
+  --grad-climb-soft:linear-gradient(118deg,#001B76 0%,#0030B0 55%,#2C97AB 120%);
+  --grad-line:linear-gradient(90deg,var(--cyan),var(--blue),var(--pink));
+
+  /* -- type -------------------------------------------------------------- */
+  --display:Montserrat,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+
+  /* -- shape ------------------------------------------------------------- */
+  --r-pill:999px;
+  --r-card:24px;
+  --r-panel:32px;
+  --r-input:14px;
+  --r-chip:18px;
+
+  /* -- elevation --------------------------------------------------------- */
+  --sh-chip:24px 24px 40px rgba(0,27,118,.26);
+  --sh-card:0 10px 34px rgba(11,19,57,.08);
+  --sh-lift:0 26px 56px rgba(0,27,118,.16);
+  --sh-deck:0 30px 70px rgba(11,19,57,.28);
+
+  /* -- layout ------------------------------------------------------------ */
+  --container:1308px;
+  --gutter:clamp(20px,5vw,66px);
+  --sec-y:clamp(72px,9vw,132px);
+
+  /* -- motion ------------------------------------------------------------ */
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --ease-hover:cubic-bezier(0.44,0,0.56,1);
+  --dur-reveal:1050ms;
+  --dur-hover:400ms;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+html{-webkit-text-size-adjust:100%}
+
+body{
+  margin:0;
+  background:var(--page);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  /* clip, not hidden: `hidden` breaks position:sticky further down the page */
+  overflow-x:clip;
+}
+
+img,svg,video{max-width:100%;height:auto;display:block}
+button{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+
+h1,h2,h3,h4,h5{
+  font-family:var(--display);
+  font-weight:800;
+  margin:0;
+  letter-spacing:-.02em;
+  line-height:1;
+}
+
+p{margin:0}
+
+.wrap{
+  width:100%;
+  max-width:var(--container);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+.wrap--narrow{max-width:1020px}
+
+.section{padding-block:var(--sec-y)}
+.section--tight{padding-block:clamp(52px,6vw,86px)}
+
+/* ---- type scale ---------------------------------------------------------
+   The display cap is set by the LONGEST headline line, measured, not guessed.
+   The longest line on this page is "OPTIMISATION" (12 chars) in the hero H1,
+   which at 64px Montserrat 800 is ~470px inside a 560px column. That leaves
+   real headroom, so the cap can go a step above the DM page's 64px.
+   Re-measure if the H1 copy ever changes.                                   */
+.display{
+  font-family:var(--display);
+  font-weight:800;
+  text-transform:uppercase;
+  font-size:clamp(32px,5vw,68px);
+  line-height:1;
+  letter-spacing:-.035em;
+}
+.h2{
+  font-family:var(--display);
+  font-weight:800;
+  text-transform:uppercase;
+  font-size:clamp(28px,3.6vw,50px);
+  line-height:1.06;
+  letter-spacing:-.025em;
+}
+.h3{
+  font-family:var(--display);
+  font-weight:800;
+  font-size:clamp(18px,1.5vw,21px);
+  line-height:1.18;
+  letter-spacing:-.01em;
+}
+.h4{
+  font-family:var(--display);
+  font-weight:800;
+  font-size:clamp(16px,1.2vw,18px);
+  line-height:1.25;
+  letter-spacing:-.01em;
+}
+.lead{
+  font-family:var(--body);
+  font-weight:500;
+  font-size:clamp(16px,1.35vw,19px);
+  line-height:1.5;
+}
+.body{font-size:16px;line-height:1.62;color:var(--muted)}
+.small{font-size:14px;line-height:1.5}
+
+/* ---- section heading block ---------------------------------------------- */
+.sechead{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  gap:16px;max-width:820px;margin:0 auto clamp(38px,4.4vw,62px);
+}
+.sechead--left{align-items:flex-start;text-align:left;margin-inline:0}
+.sechead__lede{font-size:clamp(16px,1.3vw,18px);line-height:1.6;color:var(--muted);max-width:64ch}
+.sechead--on-dark .sechead__lede{color:var(--muted-on-dark)}
+.sechead--on-dark .h2{color:#fff}
+
+/* ---- pill label ---------------------------------------------------------
+   Sentence case, filled, no letter-spacing. The user reads caps-tracked
+   micro-labels as AI-made, so this component must never be uppercased.      */
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--body);font-weight:600;font-size:14px;
+  padding:8px 16px;border-radius:var(--r-pill);
+  background:rgba(0,48,176,.10);color:var(--blue);
+  letter-spacing:0;text-transform:none;
+}
+.pill--on-dark{background:rgba(255,255,255,.14);color:#fff}
+.pill--cyan{background:rgba(65,206,226,.18);color:#0E7A8B}
+.pill--pink{background:rgba(242,66,119,.12);color:#C4104A}
+
+/* ---- buttons ------------------------------------------------------------ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--body);font-weight:700;font-size:16px;line-height:1;
+  padding:18px 28px;border-radius:var(--r-pill);border:0;cursor:pointer;
+  text-align:center;
+  transition:transform var(--dur-hover) var(--ease),
+             box-shadow var(--dur-hover) var(--ease),
+             background-color var(--dur-hover) var(--ease-hover),
+             color var(--dur-hover) var(--ease-hover);
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+
+/* primary: yellow pill, ink label — dark grounds only */
+.btn--primary{background:var(--yellow);color:var(--ink);
+  box-shadow:0 10px 26px rgba(255,204,0,.28)}
+.btn--primary:hover{background:#FFD633;box-shadow:0 16px 34px rgba(255,204,0,.36)}
+
+/* the light-surface primary, per the contrast rule at the top of this file */
+.btn--blue{background:var(--blue);color:#fff;
+  box-shadow:0 10px 26px rgba(0,48,176,.24)}
+.btn--blue:hover{background:#0038CC;box-shadow:0 16px 34px rgba(0,48,176,.30)}
+
+.btn--ghost-dark{
+  background:transparent;color:#fff;
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.42);
+}
+.btn--ghost-dark:hover{background:rgba(255,255,255,.10);box-shadow:inset 0 0 0 1.5px #fff}
+
+.btn--ghost{
+  background:transparent;color:var(--ink);
+  box-shadow:inset 0 0 0 1.5px var(--line);
+}
+.btn--ghost:hover{background:#fff;box-shadow:inset 0 0 0 1.5px rgba(11,19,57,.24)}
+
+.btn--sm{padding:13px 22px;font-size:14px}
+
+/* round icon button (carousel arrows) */
+.iconbtn{
+  width:52px;height:52px;border-radius:50%;
+  border:1.5px solid var(--line);background:transparent;color:var(--ink);
+  display:grid;place-items:center;cursor:pointer;flex:0 0 auto;
+  transition:background-color var(--dur-hover) var(--ease-hover),
+             color var(--dur-hover) var(--ease-hover),
+             border-color var(--dur-hover) var(--ease-hover);
+}
+.iconbtn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.iconbtn--on-dark{border-color:var(--line-on-dark);color:#fff}
+.iconbtn--on-dark:hover{background:#fff;color:var(--navy);border-color:#fff}
+
+/* a centred CTA row under a section */
+.sec-cta{display:flex;justify-content:center;margin-top:clamp(34px,4vw,54px)}
+.sec-cta--left{justify-content:flex-start}
+
+/* ---- motion primitives -------------------------------------------------- */
+[data-reveal]{
+  opacity:0;transform:translateY(40px);
+  transition:opacity var(--dur-reveal) var(--ease),
+             transform var(--dur-reveal) var(--ease);
+}
+[data-reveal].is-in{opacity:1;transform:none}
+
+[data-pop]{
+  opacity:0;transform:scale(.72);
+  transition:opacity 700ms var(--ease),transform 700ms var(--ease);
+}
+[data-pop].is-in{opacity:1;transform:none}
+
+[data-float]{transform:translateY(var(--float-y,0));will-change:transform}
+
+.visually-hidden{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important;
+  }
+  [data-reveal],[data-pop]{opacity:1!important;transform:none!important}
+  [data-float]{transform:none!important}
+}

@@ -1,0 +1,271 @@
+/* ===========================================================================
+   HERO — the search stage.
+
+   The visual column is not a photograph. It is the page's subject rendered as
+   a working object: a query types itself, an AI answer resolves beneath it,
+   and the brand's own result climbs from position four to position one. That
+   is the whole pitch, before a word of body copy.
+=========================================================================== */
+
+.hero{
+  position:relative;
+  isolation:isolate;
+  background:var(--grad-climb);
+  color:#fff;
+  padding-top:clamp(112px,10vw,176px);
+  padding-bottom:clamp(72px,8vw,116px);
+  overflow:hidden;
+}
+
+/* the ascent ribbon. The global `svg{max-width:100%}` reset would silently
+   clamp this and kill the bleed, so it is explicitly released. */
+.hero__bg{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.hero__bg svg{
+  position:absolute;inset:0;
+  width:100%;height:100%;max-width:none;
+  display:block;
+}
+/* a soft dark veil at the top so the fixed header always has something to sit
+   on, whatever slice of the ribbon happens to be showing */
+.hero::before{
+  content:'';position:absolute;inset:0 0 auto;height:220px;z-index:-1;
+  background:linear-gradient(180deg,rgba(0,17,77,.55),transparent);
+  pointer-events:none;
+}
+
+.hero__inner{
+  display:grid;
+  grid-template-columns:1.02fr .98fr;
+  gap:clamp(28px,4vw,64px);
+  align-items:center;
+  min-height:min(78vh,760px);
+}
+/* Grid items default to min-width:auto, so the SERP rows' `white-space:nowrap`
+   titles set the column's minimum and stretched the whole hero past the
+   viewport on a phone. It reads as a broken layout and is invisible to a
+   scrollWidth check, because the body clips its own overflow. */
+.hero__inner > *{min-width:0}
+
+.hero__copy{display:flex;flex-direction:column;align-items:flex-start}
+.hero__badge{margin-bottom:22px}
+.hero__title{margin:0 0 20px}
+.hero__title .line{display:block}
+.hero__sub{color:var(--muted-on-dark);max-width:36ch;margin-bottom:26px}
+
+.hero__checks{
+  list-style:none;margin:0 0 32px;padding:0;
+  display:flex;flex-direction:column;gap:11px;
+}
+.hero__checks li{
+  position:relative;padding-left:30px;
+  font-size:15px;font-weight:600;color:rgba(255,255,255,.94);
+}
+.hero__checks li::before{
+  content:'';position:absolute;left:0;top:2px;
+  width:19px;height:19px;border-radius:50%;
+  background:var(--yellow);
+}
+.hero__checks li::after{
+  content:'';position:absolute;left:5.5px;top:8px;
+  width:8px;height:4px;
+  border-left:2px solid var(--ink);border-bottom:2px solid var(--ink);
+  transform:rotate(-45deg);
+}
+
+.hero__cta{display:flex;flex-wrap:wrap;gap:14px}
+.hero__reply{margin-top:16px;font-size:14px;font-weight:500;color:rgba(255,255,255,.58)}
+
+/* the H1's second line carries a stroke that is flat, then rises: the page's
+   argument in six pixels. It is sized off the line, not the column. */
+.hero__title .line:last-child{position:relative;display:inline-block}
+.hero__rule{
+  position:absolute;left:0;right:-2%;bottom:-.14em;
+  width:104%;height:auto;max-width:none;
+  pointer-events:none;
+}
+
+/* ------------------------------- the stage ------------------------------ */
+.hero__stage{position:relative;padding-block:34px}
+
+.stage{
+  background:#fff;
+  border-radius:var(--r-panel);
+  padding:clamp(16px,1.6vw,22px);
+  box-shadow:0 40px 90px rgba(0,17,77,.42);
+  display:flex;flex-direction:column;gap:14px;
+  color:var(--ink);
+  max-width:516px;margin-inline:auto;
+}
+
+/* --- instrument header ---
+   The stage is an authored diagram, not a screenshot of anybody's product, so
+   it says what it is and which row belongs to the visitor. */
+.stage__head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:2px 6px 0;
+}
+.stage__head-l{font-size:12.5px;font-weight:700;color:var(--muted)}
+.stage__legend{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:12px;font-weight:600;color:var(--muted-2);
+}
+.stage__legend i{
+  width:10px;height:10px;border-radius:3px;flex:0 0 auto;
+  background:var(--grad-climb-soft);
+}
+
+/* --- search bar --- */
+.stage__bar{
+  display:flex;align-items:center;gap:12px;
+  background:#F4F6FB;
+  border:1.5px solid rgba(11,19,57,.09);
+  border-radius:var(--r-pill);
+  padding:14px 20px;
+  min-height:54px;
+}
+.stage__glass{color:var(--muted-2);display:flex;flex:0 0 auto}
+.stage__query{
+  font-size:15.5px;font-weight:600;color:var(--ink);
+  display:flex;align-items:center;min-width:0;
+  white-space:nowrap;overflow:hidden;
+}
+.stage__caret{
+  display:inline-block;width:2px;height:17px;margin-left:2px;
+  background:var(--blue);border-radius:1px;flex:0 0 auto;
+  animation:caret 1.05s steps(1) infinite;
+}
+@keyframes caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+/* --- AI answer panel --- */
+.ai{
+  background:linear-gradient(120deg,rgba(65,206,226,.16),rgba(0,48,176,.09));
+  border:1.5px solid rgba(65,206,226,.42);
+  border-radius:18px;
+  padding:14px 16px;
+  display:flex;flex-direction:column;gap:7px;
+  animation:aiIn .9s var(--ease) .5s both;
+}
+@keyframes aiIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ai__tag{
+  display:inline-flex;align-items:center;gap:6px;align-self:flex-start;
+  font-size:11.5px;font-weight:800;color:#0E7A8B;
+  background:rgba(255,255,255,.82);border-radius:var(--r-pill);
+  padding:4px 10px;
+}
+.ai__body{font-size:13.5px;line-height:1.5;color:var(--ink-2);font-weight:500}
+.ai__cite{font-size:11.5px;color:var(--muted)}
+.ai__cite b{color:var(--blue);font-weight:700}
+
+/* --- the SERP stack ---
+   Rows sit in normal flow at their FINAL order, so the DOM reads correctly to
+   a screen reader and to a crawler. The climb is expressed purely as
+   transform, which means it never reflows anything. */
+.serp{
+  list-style:none;margin:0;padding:0;
+  display:flex;flex-direction:column;gap:10px;
+  --row-h:64px;
+}
+.serp__row{
+  height:var(--row-h);
+  display:flex;align-items:center;gap:12px;
+  padding:0 14px;
+  border-radius:16px;
+  background:#fff;
+  border:1.5px solid rgba(11,19,57,.09);
+  transform:translateY(var(--y,0));
+  transition:transform .62s var(--ease),
+             box-shadow .62s var(--ease),
+             border-color .4s var(--ease);
+}
+.serp__rank{
+  flex:0 0 auto;width:32px;height:32px;border-radius:50%;
+  display:grid;place-items:center;
+  font-family:var(--display);font-weight:800;font-size:12.5px;
+  background:rgba(11,19,57,.06);color:var(--muted);
+  transition:background .4s var(--ease),color .4s var(--ease);
+}
+.serp__body{display:flex;flex-direction:column;gap:2px;min-width:0}
+.serp__url{font-size:11px;color:var(--muted-2);font-weight:600}
+.serp__title{
+  font-size:13.5px;font-weight:700;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* the brand's own row */
+.serp__row--brand{
+  background:var(--grad-climb-soft);
+  border-color:transparent;
+  box-shadow:0 14px 30px rgba(0,27,118,.30);
+  position:relative;z-index:2;
+}
+.serp__row--brand .serp__url{color:rgba(255,255,255,.72)}
+.serp__row--brand .serp__title{color:#fff}
+.serp__row--brand .serp__rank{background:var(--yellow);color:var(--ink)}
+
+/* the +3 chip only earns its place once the climb has finished */
+.serp__delta{
+  margin-left:auto;flex:0 0 auto;
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:11.5px;font-weight:800;
+  background:rgba(255,255,255,.16);color:#fff;
+  border-radius:var(--r-pill);padding:5px 10px;
+  opacity:0;transform:translateX(6px);
+  transition:opacity .5s var(--ease),transform .5s var(--ease);
+}
+.serp.is-landed .serp__delta{opacity:1;transform:none}
+
+/* a single-frame nudge on each hop, so the jump reads as effort */
+.serp.is-hopping .serp__row--brand{box-shadow:0 22px 44px rgba(0,27,118,.42)}
+
+/* --- floating chips ---
+   Offset down-right shadow, same device as the DM landing page's hero chips. */
+.chip{
+  position:absolute;
+  background:#fff;color:var(--ink);
+  border-radius:var(--r-chip);
+  padding:14px 18px;
+  box-shadow:var(--sh-chip);
+  display:flex;flex-direction:column;gap:2px;
+  transform:translateY(var(--float-y,0));
+  max-width:200px;
+}
+.chip__n{
+  font-family:var(--display);font-weight:900;font-size:24px;
+  letter-spacing:-.03em;line-height:1;color:var(--blue);
+}
+.chip__l{font-size:11.5px;font-weight:600;color:var(--muted);line-height:1.35}
+/* the chips sit OUTSIDE the stage's text, hooked over its top-left and
+   bottom-right corners. Anything that overlaps the search bar or a result row
+   reads as a rendering bug rather than a flourish. */
+.chip--a{left:-30px;top:-34px}
+.chip--b{right:-26px;bottom:-30px}
+.chip--b .chip__n{color:var(--pink)}
+
+/* ------------------------------ responsive ------------------------------ */
+@media (max-width:1100px){
+  .chip--a{left:-12px}
+  .chip--b{right:-10px}
+}
+@media (max-width:940px){
+  .hero__inner{grid-template-columns:1fr;gap:44px;min-height:0}
+  .hero__copy{align-items:flex-start}
+  .hero__sub{max-width:52ch}
+  .hero__stage{max-width:560px;margin-inline:auto;width:100%}
+  .chip--a{left:-6px;top:-30px}
+  .chip--b{right:-6px;bottom:-26px}
+}
+@media (max-width:600px){
+  .stage{padding:14px;border-radius:24px}
+  .serp{--row-h:60px}
+  .serp__title{font-size:12.5px}
+  .chip{padding:11px 13px;max-width:154px;border-radius:14px}
+  .chip__n{font-size:19px}
+  .chip__l{font-size:10.5px}
+  .chip--a{left:-4px;top:-24px}
+  .chip--b{right:-4px;bottom:-22px}
+  .hero__cta{width:100%}
+  .hero__cta .btn{flex:1 1 auto}
+}
+@media (max-width:380px){
+  .chip--a,.chip--b{display:none}
+}

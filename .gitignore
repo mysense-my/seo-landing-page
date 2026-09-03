@@ -1,0 +1,11 @@
+.DS_Store
+
+# Internal working material — deliberately NOT published.
+# This repository is public, and these files discuss unverified claims, client
+# questions and figures that have no source yet. They stay on the Desktop.
+spec/
+CONTENT-TODO.md
+IMAGE-PROMPTS.md
+preview-*.jpg
+preview-*.png
+sync.sh

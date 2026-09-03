@@ -1,0 +1,444 @@
+/* ===========================================================================
+   Section styles. One card treatment per section on purpose: the page should
+   read as one family without ever repeating a layout.
+
+     brands   logo rails, two speeds, opposite directions
+     numbers  count-up figures on the dark gradient
+     cases    split card, image left, evidence right
+     journey  a track with a scroll-filled progress line
+     whyus    bubble-masked photo above the text (the DM page's device)
+     reviews  two counter-drifting rails of flat quote cards
+     faq      accordion on the dark ground
+     plan     two-column closer, contact left, form right
+=========================================================================== */
+
+/* ---------------------------- 2. BRANDS --------------------------------- */
+.brands{background:var(--page);position:relative;overflow:hidden}
+/* corner washes so a white-ish band is not a flat slab between two dark ones */
+.brands::before,.brands::after{
+  content:'';position:absolute;width:520px;height:520px;border-radius:50%;
+  pointer-events:none;z-index:0;
+}
+.brands::before{left:-220px;top:-260px;background:radial-gradient(circle,rgba(0,48,176,.10),transparent 68%)}
+.brands::after{right:-240px;bottom:-300px;background:radial-gradient(circle,rgba(65,206,226,.20),transparent 68%)}
+.brands > *{position:relative;z-index:1}
+
+.logorail{
+  display:flex;flex-direction:column;gap:clamp(12px,1.4vw,18px);
+  margin-block:clamp(6px,1vw,14px);
+  /* fade both ends so the loop has no hard edge */
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+}
+.logorail__rail{display:flex;width:max-content;transform:translateX(var(--marquee-x,0))}
+.logorail__set{display:flex;align-items:center;gap:clamp(12px,1.4vw,18px);padding-right:clamp(12px,1.4vw,18px)}
+/* Transparent cells, full colour, no card and no hover effect: the client
+   wants the logo band to read exactly like the IM and DM pages' bands, which
+   show the artwork and nothing else. */
+.logocell{
+  flex:0 0 auto;
+  width:clamp(140px,14vw,200px);height:clamp(72px,7.4vw,104px);
+  display:flex;align-items:center;justify-content:center;
+  background:transparent;border:0;padding:0;
+}
+.logocell img{
+  width:100%;height:100%;min-width:0;min-height:0;
+  object-fit:contain;
+}
+/* Brother's artwork is white on transparent, so on a light ground it is
+   literally invisible. Recolouring it to near-black is a legibility fix, not a
+   styling effect, and it is what the IM page does with the same file. */
+.logocell--ink img{filter:brightness(0);opacity:.82}
+
+.badges{
+  list-style:none;margin:clamp(26px,3vw,40px) 0 0;padding:0;
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:12px clamp(18px,2.4vw,34px);
+}
+.badges li{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:14px;font-weight:700;color:var(--navy);
+}
+.badges__dot{
+  width:8px;height:8px;border-radius:50%;flex:0 0 auto;
+  background:var(--grad-line);
+}
+
+/* ---------------------------- 3. NUMBERS -------------------------------- */
+.numbers{
+  position:relative;overflow:hidden;
+  background:var(--grad-climb);color:#fff;
+}
+.numbers__glow{
+  position:absolute;right:-180px;top:-220px;width:640px;height:640px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,204,0,.22),transparent 66%);
+  pointer-events:none;
+}
+.numbers .wrap{position:relative;z-index:1}
+.numgrid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:clamp(14px,1.8vw,22px);
+}
+.numcard{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:var(--r-card);
+  padding:clamp(22px,2.6vw,34px) clamp(18px,2vw,26px);
+  display:flex;flex-direction:column;gap:8px;
+  position:relative;overflow:hidden;
+  transition:background .4s var(--ease),transform .4s var(--ease);
+}
+.numcard::after{
+  content:'';position:absolute;left:0;right:0;top:0;height:3px;
+  background:var(--grad-line);opacity:.85;
+}
+.numcard:hover{background:rgba(255,255,255,.13);transform:translateY(-4px)}
+.numcard__n{
+  font-family:var(--display);font-weight:900;
+  font-size:clamp(32px,3.6vw,50px);line-height:1;
+  letter-spacing:-.04em;color:var(--yellow);
+}
+.numcard__l{font-size:14px;font-weight:600;color:rgba(255,255,255,.84);line-height:1.4}
+
+@media (max-width:900px){.numgrid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.numgrid{grid-template-columns:1fr}}
+
+/* ---------------------------- 7. CASES ---------------------------------- */
+.cases{background:var(--page)}
+.casegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,2.4vw,30px)}
+.case{
+  background:#fff;border-radius:var(--r-panel);overflow:hidden;
+  border:1px solid var(--line);
+  display:flex;flex-direction:column;
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease);
+}
+.case:hover{transform:translateY(-6px);box-shadow:var(--sh-lift)}
+.case__media{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--navy-deep)}
+.case__media img{width:100%;height:100%;object-fit:cover;
+  transition:transform .8s var(--ease)}
+.case:hover .case__media img{transform:scale(1.045)}
+.case__tag{
+  position:absolute;left:16px;bottom:16px;
+  background:rgba(0,17,77,.86);color:#fff;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  font-size:12.5px;font-weight:700;border-radius:var(--r-pill);padding:7px 14px;
+}
+.case__body{padding:clamp(22px,2.4vw,32px);display:flex;flex-direction:column;gap:6px}
+.case__name{margin-bottom:8px;color:var(--navy)}
+.case__lbl{font-size:12.5px;font-weight:800;color:var(--blue);margin-top:10px}
+.case__p{font-size:14.5px;line-height:1.6;color:var(--muted)}
+.case__pills{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0}
+.case__pills li{
+  font-size:12.5px;font-weight:800;color:#fff;
+  background:var(--navy);border-radius:var(--r-pill);padding:8px 14px;
+}
+.case__pills li:nth-child(2){background:var(--pink)}
+
+@media (max-width:820px){.casegrid{grid-template-columns:1fr}}
+
+/* ---------------------------- 8. JOURNEY -------------------------------- */
+.journey{
+  position:relative;overflow:hidden;
+  background:var(--ink);color:#fff;
+}
+.journey::before{
+  content:'';position:absolute;left:-200px;bottom:-260px;
+  width:620px;height:620px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,48,176,.55),transparent 68%);
+  pointer-events:none;
+}
+.journey .wrap{position:relative;z-index:1}
+
+.track{
+  list-style:none;margin:0;padding:0;
+  --tgap:clamp(12px,1.6vw,22px);
+  --tpad:20px;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:var(--tgap);
+  position:relative;
+}
+/* The rail runs dot centre to dot centre, not edge to edge: a line that
+   overshoots the last step reads as an unfinished process. The right-hand
+   inset has to account for the grid gap as well as the column, or the rail
+   stops short of the fifth dot by four fifths of a gap. */
+.track::before,.track::after{
+  content:'';position:absolute;
+  left:calc(var(--tpad) + 11px);
+  right:calc(20% - var(--tpad) - 11px - .8 * var(--tgap));
+  top:26px;height:2px;border-radius:2px;
+}
+.track::before{background:rgba(255,255,255,.16)}
+.track::after{
+  background:var(--grad-line);
+  transform:scaleX(var(--track-p,0));transform-origin:left;
+  transition:transform .18s linear;
+}
+
+.jstep{
+  position:relative;
+  padding:52px var(--tpad) 24px;
+  display:flex;flex-direction:column;gap:7px;
+}
+/* a glass panel behind each step, starting below the dot so the rail passes
+   over open ground rather than across a card */
+.jstep::before{
+  content:'';position:absolute;left:0;right:0;top:40px;bottom:0;z-index:0;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--r-card);
+  transition:background .45s var(--ease),border-color .45s var(--ease);
+}
+.jstep.is-done::before{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.20)}
+.jstep > *{position:relative;z-index:1}
+
+.jstep__dot{
+  position:absolute;left:var(--tpad);top:16px;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--ink);border:2px solid rgba(255,255,255,.3);
+  display:block;z-index:2;
+  transition:background .4s var(--ease),border-color .4s var(--ease),
+             box-shadow .4s var(--ease);
+}
+.jstep.is-done .jstep__dot{
+  background:var(--yellow);border-color:var(--yellow);
+  box-shadow:0 0 0 7px rgba(255,204,0,.16);
+}
+.jstep__step{font-size:12.5px;font-weight:700;color:var(--cyan)}
+.jstep__t{color:#fff}
+.jstep__b{font-size:14px;line-height:1.55;color:rgba(255,255,255,.76)}
+
+/* No rail at three-up, so the dot has nothing to sit on: it moves inside the
+   panel rather than floating above a card it is no longer connected to. */
+@media (max-width:1024px){
+  .track{grid-template-columns:repeat(3,1fr);row-gap:20px}
+  .track::before,.track::after{display:none}
+  .jstep{padding-top:24px}
+  .jstep::before{top:0}
+  .jstep__dot{position:static;margin-bottom:6px}
+}
+/* below the tablet breakpoint the five steps become a sticky stack: each card
+   pins under the header and the next one slides over it. initStack() adds the
+   settle-back scale and dim on the covered cards. */
+@media (max-width:767px){
+  .track{display:block}
+  .jstep{
+    position:sticky;top:calc(72px + var(--i,0) * 12px);
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:var(--r-card);
+    padding:22px 20px 24px 20px;
+    margin-bottom:14px;
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    transform:scale(var(--stack-s,1));transform-origin:top center;
+    transition:transform .2s linear,opacity .2s linear;
+  }
+  .jstep::before{display:none}
+  .jstep__dot{position:static;margin-bottom:4px}
+  .jstep:nth-child(1){--i:0}
+  .jstep:nth-child(2){--i:1}
+  .jstep:nth-child(3){--i:2}
+  .jstep:nth-child(4){--i:3}
+  .jstep:nth-child(5){--i:4}
+}
+
+/* ---------------------------- 9. WHY US --------------------------------- */
+.whyus{background:var(--page)}
+.whygrid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,30px)}
+.wcard{
+  position:relative;
+  background:#fff;border:1px solid var(--line);border-radius:var(--r-panel);
+  padding:clamp(16px,1.6vw,20px) clamp(18px,2vw,26px) clamp(26px,2.8vw,34px);
+  display:flex;flex-direction:column;
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease);
+}
+.wcard:hover{transform:translateY(-6px);box-shadow:var(--sh-lift)}
+/* the bubble mask: a rounded rectangle with one corner bitten out, so the
+   coloured dot below can sit inside the notch */
+.wcard__media{
+  aspect-ratio:4/3;border-radius:20px;overflow:hidden;
+  /* a semicircular bite out of the bottom edge, with the colour dot nesting
+     inside it. Third card treatment on this page, deliberately unlike the
+     problem tiles and the offer slats. */
+  -webkit-mask-image:radial-gradient(circle 27px at 40px 100%,transparent 98%,#000 100%);
+  mask-image:radial-gradient(circle 27px at 40px 100%,transparent 98%,#000 100%);
+}
+.wcard__media img{width:100%;height:100%;object-fit:cover;
+  transition:transform .8s var(--ease)}
+.wcard:hover .wcard__media img{transform:scale(1.05)}
+/* The dot is a flex sibling pulled back over the photo's bottom edge, so it
+   lands in the bite at any card height without needing a measured offset. */
+.wcard__dot{
+  position:relative;z-index:2;
+  width:26px;height:26px;border-radius:50%;display:block;
+  margin:-13px 0 20px 40px;
+  transform:translateX(-50%);
+  box-shadow:0 4px 14px rgba(11,19,57,.22);
+}
+.wcard__dot--purple{background:var(--purple)}
+.wcard__dot--blue{background:var(--blue)}
+.wcard__dot--pink{background:var(--pink)}
+.wcard__t{color:var(--navy);margin:0 0 10px}
+.wcard__b{font-size:14.5px;line-height:1.62;color:var(--muted)}
+
+@media (max-width:900px){.whygrid{grid-template-columns:1fr}}
+
+/* ---------------------------- 10. REVIEWS -------------------------------- */
+.reviews{background:#fff;overflow:hidden}
+.rating{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:15px;font-weight:700;color:var(--navy);
+}
+.rating__stars{color:var(--yellow);letter-spacing:2px;font-size:16px}
+
+.rrails{
+  display:flex;flex-direction:column;gap:clamp(12px,1.4vw,18px);
+  margin-block:clamp(6px,1vw,12px);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+}
+.rrail{display:flex;width:max-content;transform:translateX(var(--marquee-x,0))}
+.rrail__set{display:flex;gap:clamp(12px,1.4vw,18px);padding-right:clamp(12px,1.4vw,18px)}
+.rcard{
+  flex:0 0 auto;width:clamp(280px,26vw,364px);
+  background:var(--page);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:24px 24px 20px;
+  display:flex;flex-direction:column;gap:12px;position:relative;
+}
+.rcard__q{
+  font-family:var(--display);font-size:44px;line-height:.6;color:var(--cyan);
+  font-weight:900;display:block;height:22px;
+}
+.rcard__b{font-size:14px;line-height:1.62;color:var(--muted)}
+.rcard__w{
+  margin-top:auto;padding-top:12px;border-top:1px solid var(--line);
+  display:flex;flex-direction:column;gap:2px;
+}
+.rcard__w b{font-size:14px;font-weight:800;color:var(--navy)}
+.rcard__w span{font-size:12px;color:var(--muted-2)}
+
+/* ---------------------------- 11. FAQ ------------------------------------
+   On the light ground on purpose. This is the one section people read word for
+   word, and it also used to sit dark-against-dark with the closing CTA. */
+.faq{background:var(--page)}
+.acc{display:flex;flex-direction:column;gap:10px}
+.acc__item{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;overflow:hidden;
+  transition:border-color .4s var(--ease),box-shadow .4s var(--ease);
+}
+.acc__item.is-open{border-color:rgba(0,48,176,.34);box-shadow:var(--sh-card)}
+.acc__btn{
+  width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  background:none;border:0;cursor:pointer;text-align:left;
+  padding:20px 22px;
+  font-family:var(--display);font-weight:800;font-size:clamp(15px,1.3vw,18px);
+  color:var(--navy);letter-spacing:-.01em;
+}
+.acc__btn i{
+  flex:0 0 auto;width:30px;height:30px;border-radius:50%;
+  background:rgba(0,48,176,.09);position:relative;
+  transition:background .4s var(--ease),transform .4s var(--ease);
+}
+.acc__btn i::before,.acc__btn i::after{
+  content:'';position:absolute;left:50%;top:50%;background:var(--blue);border-radius:2px;
+  transform:translate(-50%,-50%);transition:opacity .3s var(--ease),background .3s var(--ease);
+}
+.acc__btn i::before{width:12px;height:2px}
+.acc__btn i::after{width:2px;height:12px}
+.acc__item.is-open .acc__btn i{background:var(--blue);transform:rotate(90deg)}
+.acc__item.is-open .acc__btn i::before,
+.acc__item.is-open .acc__btn i::after{background:#fff}
+.acc__item.is-open .acc__btn i::before{opacity:0}
+.acc__panel{
+  height:0;overflow:hidden;
+  transition:height .44s var(--ease);
+}
+.acc__panel p{
+  padding:0 22px 22px;
+  font-size:15px;line-height:1.65;color:var(--muted);
+  max-width:68ch;
+}
+
+/* ---------------------------- 12. PLAN ----------------------------------- */
+.plan{
+  position:relative;overflow:hidden;
+  background:var(--grad-climb);color:#fff;
+  padding-block:var(--sec-y);
+}
+.plan__glow{
+  position:absolute;left:-200px;bottom:-280px;width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(242,66,119,.30),transparent 66%);
+  pointer-events:none;
+}
+.plan__grid{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(30px,4vw,64px);align-items:center;
+}
+.plan__copy{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.plan__t{margin:6px 0 0}
+.plan__t em{font-style:normal;color:var(--yellow)}
+.plan__lede{font-size:clamp(15px,1.3vw,17px);line-height:1.6;color:var(--muted-on-dark);max-width:50ch}
+.plan__note{font-size:14px;color:rgba(255,255,255,.66)}
+.plan__meta{
+  margin:14px 0 0;display:grid;gap:14px;width:100%;
+  padding-top:22px;border-top:1px solid rgba(255,255,255,.18);
+}
+.plan__meta div{display:flex;flex-direction:column;gap:2px}
+.plan__meta dt{font-size:12.5px;font-weight:700;color:var(--cyan)}
+.plan__meta dd{margin:0;font-size:16px;font-weight:600;color:#fff}
+
+.plan__form{position:relative;z-index:1}
+.pform{
+  background:#fff;color:var(--ink);
+  border-radius:var(--r-panel);
+  padding:clamp(24px,2.6vw,34px);
+  box-shadow:0 34px 74px rgba(0,17,77,.34);
+  display:flex;flex-direction:column;gap:14px;
+}
+.pform__t{font-family:var(--display);font-weight:800;font-size:19px;color:var(--navy)}
+.pform__s{font-size:13.5px;color:var(--muted);margin-top:-8px}
+.pfield{display:flex;flex-direction:column;gap:6px}
+.pfield span{font-size:12.5px;font-weight:700;color:var(--navy)}
+.pfield input{
+  font-family:var(--body);font-size:14.5px;
+  border:1.5px solid rgba(11,19,57,.14);border-radius:var(--r-input);
+  padding:13px 14px;background:#FBFCFE;color:var(--ink);
+  transition:border-color .3s var(--ease),box-shadow .3s var(--ease);
+}
+.pfield input::placeholder{color:var(--muted-2)}
+.pfield input:focus{
+  outline:none;border-color:var(--blue);
+  box-shadow:0 0 0 4px rgba(0,48,176,.12);
+}
+.pform__go{width:100%;margin-top:6px;background:var(--pink);color:#fff;
+  box-shadow:0 12px 28px rgba(242,66,119,.30)}
+.pform__go:hover{background:#FF5285}
+.pform__note{font-size:12px;color:var(--muted-2);text-align:center}
+
+@media (max-width:900px){
+  .plan__grid{grid-template-columns:1fr}
+}
+
+/* -------------------- closing discipline marquee ------------------------- */
+.band{
+  background:var(--yellow);color:var(--ink);
+  padding-block:clamp(16px,1.8vw,24px);
+  overflow:hidden;display:flex;width:100%;
+}
+.band > div{
+  display:flex;align-items:center;gap:clamp(20px,2.6vw,38px);
+  padding-right:clamp(20px,2.6vw,38px);
+  width:max-content;flex:0 0 auto;
+  transform:translateX(var(--marquee-x,0));
+}
+.band span{
+  font-family:var(--display);font-weight:800;text-transform:uppercase;
+  font-size:clamp(16px,2vw,26px);letter-spacing:-.02em;
+  white-space:nowrap;color:var(--ink);
+}
+.band i{
+  width:9px;height:9px;border-radius:50%;flex:0 0 auto;
+  background:var(--navy);display:block;
+}
