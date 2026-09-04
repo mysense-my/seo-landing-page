@@ -8,11 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css?v=1788397826">
-<link rel="stylesheet" href="css/hero.css?v=1788397826">
-<link rel="stylesheet" href="css/sections.css?v=1788397826">
-<link rel="stylesheet" href="css/reveal.css?v=1788397826">
-<link rel="stylesheet" href="css/chrome.css?v=1788397826">
+<link rel="stylesheet" href="css/base.css?v=1788530897">
+<link rel="stylesheet" href="css/hero.css?v=1788530897">
+<link rel="stylesheet" href="css/sections.css?v=1788530897">
+<link rel="stylesheet" href="css/reveal.css?v=1788530897">
+<link rel="stylesheet" href="css/chrome.css?v=1788530897">
 </head>
 <body>
 
@@ -28,7 +28,7 @@
 <header class="site-head" id="siteHead">
   <div class="wrap site-head__inner">
     <a class="site-head__logo" href="#top" aria-label="MYSense home">
-      <img src="assets/mysense-logo-white.webp" alt="MYSense" width="385" height="80">
+      <img src="assets/mysense-logo-white.webp" alt="MYSense" width="900" height="183">
     </a>
 
     <nav class="site-nav" aria-label="Primary">
@@ -118,60 +118,275 @@
       <p class="hero__reply">A consultant replies within 1 working day.</p>
     </div>
 
-    <!-- ---------------------- the search stage ---------------------- -->
+    <!-- ---------------------- the search stage ----------------------
+         A results page, laid out the way every search engine lays one out: a
+         query field with its tools, the result tabs, the count, an AI overview,
+         then results as plain text — favicon, site name, URL, link-coloured
+         title, snippet with the query terms bolded.
+
+         What is deliberately NOT here, and why: rank badges, a "your brand"
+         legend and a highlighted card for the visitor's row. Those are the
+         marks of an annotated diagram, and a column of equal boxes with a
+         field on top is the shape of a form no matter what the text says.
+         The visitor's site is simply first, and its domain says whose it is.
+
+         The layout convention is generic; no search engine's logo, wordmark or
+         brand colours are reproduced anywhere in it.
+    ------------------------------------------------------------------ -->
     <div class="hero__stage" data-reveal data-reveal-delay="140">
 
-      <div class="stage" aria-label="Illustration of a brand's search result climbing from position four to position one">
+      <div class="stage" data-stage role="img" aria-label="Illustration of a search results page in which the visitor's own website is the first result.">
+       <div aria-hidden="true">
 
-        <div class="stage__head" aria-hidden="true">
-          <span class="stage__head-l">Organic search results</span>
-          <span class="stage__legend"><i></i>Your brand</span>
-        </div>
-
-        <div class="stage__bar">
-          <span class="stage__glass" aria-hidden="true">
+        <div class="srch">
+          <span class="srch__glass">
             <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
           </span>
-          <span class="stage__query" data-type="aesthetic clinic petaling jaya|car battery delivery kl|takaful for small business|halal catering selangor|international school subang jaya|cnc machining supplier malaysia">
-            <span data-type-out></span><i class="stage__caret" aria-hidden="true"></i>
+          <span class="srch__q"><span data-stage-q>aesthetic clinic petaling jaya</span><i class="srch__caret"></i></span>
+          <span class="srch__tools">
+            <span class="srch__x">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </span>
+            <i class="srch__div"></i>
+            <span class="srch__mic">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>
+            </span>
           </span>
-          <span class="visually-hidden">Example searches: aesthetic clinic petaling jaya, car battery delivery kl, takaful for small business, halal catering selangor, international school subang jaya, cnc machining supplier malaysia.</span>
         </div>
 
-        <div class="ai" aria-hidden="true">
-          <span class="ai__tag">
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M12 2l1.9 5.6L19.5 9l-4.4 3.4 1.5 5.6L12 14.8 7.4 18l1.5-5.6L4.5 9l5.6-1.4z"/></svg>
-            AI answer
-          </span>
-          <p class="ai__body">The brands people shortlist are the ones AI can read, quote and trust.</p>
-          <span class="ai__cite">Cited: <b>yourbrand.com.my</b></span>
-        </div>
+        <div class="tabs"><span class="tabs__t is-on">All</span><span class="tabs__t">Images</span><span class="tabs__t">Maps</span><span class="tabs__t">News</span><span class="tabs__t">Videos</span></div>
 
-        <ol class="serp" data-climb data-climb-from="4" data-climb-to="1">
-          <li class="serp__row serp__row--brand" data-climb-row data-climb-hero>
-            <span class="serp__rank" data-climb-badge>#4</span>
-            <span class="serp__body">
-              <span class="serp__url">yourbrand.com.my</span>
-              <span class="serp__title">Your page, for the searches that actually convert</span>
+        <p class="stage__meta">About <b data-stage-count>41,300</b> results (<span data-stage-time>0.38</span> seconds)</p>
+
+
+        <ol class="res">
+          <li class="res__i res__i--me">
+            <span class="res__site">
+              <span class="res__fav res__fav--me">Y</span>
+              <span class="res__id">
+                <b class="res__host">yourbrand.com.my</b>
+                <span class="res__url">https://yourbrand.com.my<i>&rsaquo;</i><span class="res__path">aesthetic-clinic-petaling-jaya</span></span>
+              </span>
             </span>
-            <span class="serp__delta">
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M12 4l7 8h-4v8h-6v-8H5z"/></svg>3
-            </span>
+            <span class="res__t">Aesthetic Clinic in Petaling Jaya | Treatments &amp; Pricing</span>
+            <span class="res__s">Consultation-led <b>aesthetic</b> treatments in <b>Petaling</b> <b>Jaya</b> with pricing published up front. Book a slot with a doctor, weekdays and Saturdays.</span>
           </li>
-          <li class="serp__row" data-climb-row><span class="serp__rank">#2</span><span class="serp__body"><span class="serp__url">directory-listing.com</span><span class="serp__title">Top 10 places, updated monthly</span></span></li>
-          <li class="serp__row" data-climb-row><span class="serp__rank">#3</span><span class="serp__body"><span class="serp__url">competitor.com.my</span><span class="serp__title">Services and price list</span></span></li>
-          <li class="serp__row" data-climb-row><span class="serp__rank">#4</span><span class="serp__body"><span class="serp__url">forum-thread.com</span><span class="serp__title">Anyone tried this? 41 replies</span></span></li>
+          <li class="res__i">
+            <span class="res__site">
+              <span class="res__fav">D</span>
+              <span class="res__id">
+                <b class="res__host">directory-listing.com</b>
+                <span class="res__url">https://directory-listing.com<i>&rsaquo;</i><span class="res__path">klang-valley</span></span>
+              </span>
+            </span>
+            <span class="res__t">12 Best Aesthetic Clinics in PJ, Updated 2026</span>
+            <span class="res__s">Our editors round up the <b>aesthetic</b> <b>clinic</b>s worth visiting around <b>Petaling</b> <b>Jaya</b> this year, with addresses and opening hours.</span>
+          </li>
+          <li class="res__i">
+            <span class="res__site">
+              <span class="res__fav">C</span>
+              <span class="res__id">
+                <b class="res__host">competitor.com.my</b>
+                <span class="res__url">https://competitor.com.my<i>&rsaquo;</i><span class="res__path">services</span></span>
+              </span>
+            </span>
+            <span class="res__t">Services and Price List</span>
+            <span class="res__s">The full list of facial, laser and injectable treatments offered at our <b>clinic</b>, with current promotional pricing.</span>
+          </li>
         </ol>
+
+       </div>
       </div>
 
       <div class="chip chip--a" data-float="9" data-float-phase=".1">
         <b class="chip__n" data-count="250" data-count-suf="K+">250K+</b>
         <span class="chip__l">Keywords ranked on page 1</span>
       </div>
-      <div class="chip chip--b" data-float="11" data-float-phase=".55">
+      <div class="chip chip--b" data-float="7" data-float-phase=".55">
         <b class="chip__n" data-count="96" data-count-suf="%">96%</b>
         <span class="chip__l">Average organic traffic growth</span>
       </div>
+
+      <span class="visually-hidden">Example searches: aesthetic clinic petaling jaya, car battery delivery kl, takaful for small business, halal catering selangor, international school subang jaya, cnc machining supplier malaysia.</span>
+
+      <script type="application/json" data-stage-data>
+[
+ {
+  "q": "aesthetic clinic petaling jaya",
+  "n": "41,300",
+  "t": "0.38",
+  "rows": [
+   {
+    "fav": "Y",
+    "host": "yourbrand.com.my",
+    "path": "aesthetic-clinic-petaling-jaya",
+    "me": true,
+    "title": "Aesthetic Clinic in Petaling Jaya | Treatments & Pricing",
+    "snip": "Consultation-led aesthetic treatments in Petaling Jaya with pricing published up front. Book a slot with a doctor, weekdays and Saturdays."
+   },
+   {
+    "fav": "D",
+    "host": "directory-listing.com",
+    "path": "klang-valley",
+    "title": "12 Best Aesthetic Clinics in PJ, Updated 2026",
+    "snip": "Our editors round up the aesthetic clinics worth visiting around Petaling Jaya this year, with addresses and opening hours."
+   },
+   {
+    "fav": "C",
+    "host": "competitor.com.my",
+    "path": "services",
+    "title": "Services and Price List",
+    "snip": "The full list of facial, laser and injectable treatments offered at our clinic, with current promotional pricing."
+   }
+  ]
+ },
+ {
+  "q": "car battery delivery kl",
+  "n": "18,900",
+  "t": "0.41",
+  "rows": [
+   {
+    "fav": "Y",
+    "host": "yourbrand.com.my",
+    "path": "car-battery-delivery-kl",
+    "me": true,
+    "title": "24-Hour Car Battery Delivery in KL | On-Site Fitting",
+    "snip": "Flat battery? We come to you anywhere in Kuala Lumpur, test the alternator and fit a new battery on the spot, usually within the hour."
+   },
+   {
+    "fav": "D",
+    "host": "directory-listing.com",
+    "path": "automotive",
+    "title": "Top 10 Car Battery Services in Kuala Lumpur",
+    "snip": "A roundup of the workshops and mobile battery services operating around KL and the wider Klang Valley."
+   },
+   {
+    "fav": "C",
+    "host": "competitor.com.my",
+    "path": "battery",
+    "title": "Car Battery Price List 2026",
+    "snip": "Prices by make and model, plus the warranty terms for each of the battery brands we carry in stock."
+   }
+  ]
+ },
+ {
+  "q": "takaful for small business",
+  "n": "9,640",
+  "t": "0.29",
+  "rows": [
+   {
+    "fav": "Y",
+    "host": "yourbrand.com.my",
+    "path": "business-takaful",
+    "me": true,
+    "title": "Takaful for Small Business | Compare Plans",
+    "snip": "Shariah-compliant cover for Malaysian SMEs: premises, staff, liability and business interruption, explained without the jargon."
+   },
+   {
+    "fav": "D",
+    "host": "directory-listing.com",
+    "path": "finance",
+    "title": "Best Business Takaful Plans in Malaysia 2026",
+    "snip": "A comparison of takaful operators and what each plan covers for small and medium enterprises this year."
+   },
+   {
+    "fav": "C",
+    "host": "competitor.com.my",
+    "path": "sme",
+    "title": "SME Protection Plans",
+    "snip": "Our range of business protection products, the contribution rates for each tier and how to make a claim."
+   }
+  ]
+ },
+ {
+  "q": "halal catering selangor",
+  "n": "27,400",
+  "t": "0.44",
+  "rows": [
+   {
+    "fav": "Y",
+    "host": "yourbrand.com.my",
+    "path": "halal-catering-selangor",
+    "me": true,
+    "title": "Halal Catering in Selangor | Menus & Per-Head Pricing",
+    "snip": "JAKIM-certified catering for weddings, corporate events and majlis across Selangor, with menus and per-head pricing on one page."
+   },
+   {
+    "fav": "D",
+    "host": "directory-listing.com",
+    "path": "events",
+    "title": "20 Halal Caterers in Selangor Worth Booking",
+    "snip": "Our shortlist of halal caterers serving Shah Alam, Subang, Petaling Jaya and the surrounding districts."
+   },
+   {
+    "fav": "C",
+    "host": "competitor.com.my",
+    "path": "menu",
+    "title": "Wedding & Corporate Menu Packages",
+    "snip": "Buffet, set menu and mini-buffet packages, with a sample menu and minimum head count for each price tier."
+   }
+  ]
+ },
+ {
+  "q": "international school subang jaya",
+  "n": "14,200",
+  "t": "0.36",
+  "rows": [
+   {
+    "fav": "Y",
+    "host": "yourbrand.com.my",
+    "path": "international-school-subang-jaya",
+    "me": true,
+    "title": "International School in Subang Jaya | Fees & Curriculum",
+    "snip": "IGCSE and A-Level pathways, class sizes, term fees and the application timeline, all set out before you book a campus tour."
+   },
+   {
+    "fav": "D",
+    "host": "directory-listing.com",
+    "path": "education",
+    "title": "Best International Schools in Subang Jaya, 2026",
+    "snip": "A parents' guide to the international schools around Subang Jaya, with curricula and indicative fee ranges."
+   },
+   {
+    "fav": "C",
+    "host": "competitor.com.my",
+    "path": "admissions",
+    "title": "Admissions and Fee Structure",
+    "snip": "Entry requirements, assessment dates and the full fee schedule for the current academic year."
+   }
+  ]
+ },
+ {
+  "q": "cnc machining supplier malaysia",
+  "n": "6,120",
+  "t": "0.31",
+  "rows": [
+   {
+    "fav": "Y",
+    "host": "yourbrand.com.my",
+    "path": "cnc-machining",
+    "me": true,
+    "title": "CNC Machining Supplier Malaysia | Tolerances & Lead Times",
+    "snip": "Precision turning and milling to 0.01mm. Material list, tolerance table and typical lead times, with drawings quoted in two working days."
+   },
+   {
+    "fav": "D",
+    "host": "directory-listing.com",
+    "path": "manufacturing",
+    "title": "Malaysian CNC Machining Suppliers Directory",
+    "snip": "Listings for precision machining workshops across Selangor, Penang and Johor, with capabilities and contact details."
+   },
+   {
+    "fav": "C",
+    "host": "competitor.com.my",
+    "path": "capabilities",
+    "title": "Machining Capabilities",
+    "snip": "Our machine list, the maximum part envelope we can handle and the quality certifications we currently hold."
+   }
+  ]
+ }
+]
+      </script>
     </div>
 
   </div>
@@ -239,7 +454,6 @@
         </span>
         <div class="award__text">
           <h3 class="award__t">Search Agency of the Year 2026</h3>
-          <p class="award__d"><b>Silver</b> · Agency of the Year awards</p>
         </div>
       </article>
 
@@ -690,7 +904,7 @@
   <div class="wrap wrap--narrow">
     <div class="sechead" data-reveal>
       <h2 class="h2">Common questions</h2>
-      <p class="sechead__lede">Five things clients ask before they start.</p>
+      <p class="sechead__lede">Six things clients ask before they start.</p>
     </div>
 
     <div class="acc" data-accordion data-reveal>
@@ -713,6 +927,10 @@
       <div class="acc__item" data-acc-item>
         <button class="acc__btn" type="button" data-acc-btn>How will I know it's working?<i aria-hidden="true"></i></button>
         <div class="acc__panel" data-acc-panel><p>A monthly report on rankings, organic traffic and enquiries, plus a meeting with your specialist to walk through it. Every keyword we target is listed with its monthly search volume, so you can see what moved and what it is worth.</p></div>
+      </div>
+      <div class="acc__item" data-acc-item>
+        <button class="acc__btn" type="button" data-acc-btn>Why choose MYSense over another SEO agency in Malaysia?<i aria-hidden="true"></i></button>
+        <div class="acc__panel" data-acc-panel><p>We're not generalists running SEO as one of ten services, it's what we specialise in, across healthcare, automotive, finance, F&amp;B, education and B2B. You get a dedicated consultant, monthly reporting on rankings and enquiries (not just positions), and every keyword comes with its search volume and the reason it made the list.</p></div>
       </div>
     </div>
 
@@ -824,7 +1042,7 @@
 
     <div class="foot__top">
       <span class="foot__logo">
-        <img src="assets/mysense-logo-black.webp" alt="MYSense" width="385" height="80" loading="lazy">
+        <img src="assets/mysense-logo-black.webp" alt="MYSense" width="900" height="183" loading="lazy">
       </span>
       <div class="foot__lead">
         <h2 class="h2 foot__t">Search that brings <em>enquiries</em>, not just positions.</h2>
@@ -871,6 +1089,6 @@
   </div>
 </footer>
 
-<script src="js/motion.js?v=1788397826"></script>
+<script src="js/motion.js?v=1788530897"></script>
 </body>
 </html>

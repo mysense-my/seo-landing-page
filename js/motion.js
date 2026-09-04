@@ -9,9 +9,9 @@
      marquee  px/second, negative speed drifts the other way, seamless wrap.
      counters count up from 0 on first view, easeOutExpo.
 
-   The rest are new and specific to this page: the hero search typewriter, the
-   rank climb, the two title-first reveal patterns (cards and slats), the
-   comparison table, and the journey progress line.
+   The rest are new and specific to this page: the hero search stage, the two
+   title-first reveal patterns (cards and slats), the comparison table, and the
+   journey progress line.
 --------------------------------------------------------------------------- */
 (() => {
   'use strict';
@@ -299,82 +299,121 @@
     });
   }
 
-  /* -- 9. rank climb --------------------------------------------------------
-     The SERP stack in the hero. The rows sit in the DOM at their FINAL order,
-     so the markup reads correctly to a screen reader and to a crawler whatever
-     the animation is doing. The climb is expressed only as translateY on each
-     row, so nothing ever reflows: the brand row walks up one slot at a time
-     and each row it passes drops one slot to make room. */
-  function initClimb() {
-    document.querySelectorAll('[data-climb]').forEach(stage => {
-      const rows = [...stage.querySelectorAll('[data-climb-row]')];
-      const hero = stage.querySelector('[data-climb-hero]');
-      const badge = stage.querySelector('[data-climb-badge]');
-      if (rows.length < 2 || !hero) return;
+  /* -- 9. the search stage --------------------------------------------------
+     Ties the typed query to the results underneath it. Six searches live in a
+     JSON block beside the stage; each carries its query, its result count and
+     time, its AI overview and its three results. The cycle is: the results
+     leave, the query retypes, the new results paint back in top to bottom.
 
-      const from = Math.min(parseInt(stage.dataset.climbFrom || rows.length, 10), rows.length);
-      const to = Math.max(parseInt(stage.dataset.climbTo || 1, 10), 1);
-      let pos = from;
+     There is no rank animation any more. Rank badges and a climbing row are
+     the marks of an annotated diagram rather than a results page, and a column
+     of equal boxes under a query field is the shape of a form whatever the
+     text in it says. The visitor's site is simply the first result.
 
-      /* The step is taken from the --row-h custom property first and only
-         measured as a fallback. A measured step is fragile once this markup is
-         pasted into a page whose theme can change a row's line-height after
-         boot: the rows and the rank badge desync silently, on the single most
-         important object on the page. */
-      const step = () => {
-        const cs = getComputedStyle(stage);
-        const declared = parseFloat(cs.getPropertyValue('--row-h'));
-        const gap = parseFloat(cs.rowGap) || 0;
-        const h = declared || hero.getBoundingClientRect().height;
-        return h + gap;
-      };
+     Search one is also present as real markup, so the stage is complete and
+     crawlable with no JavaScript at all. */
+  function initStage() {
+    const card = document.querySelector('[data-stage]');
+    if (!card) return;
 
-      const place = p => {
-        pos = p;
-        const s = step();
-        rows.forEach((row, i) => {
-          if (row === hero) {
-            row.style.setProperty('--y', ((p - 1) * s).toFixed(1) + 'px');
-            return;
-          }
-          const natural = i + 1;                       // its resting position
-          const displaced = natural <= p;              // the brand is below it
-          row.style.setProperty('--y', displaced ? (-s).toFixed(1) + 'px' : '0px');
-          const shown = displaced ? natural - 1 : natural;
-          const rank = row.querySelector('.serp__rank');
-          if (rank) rank.textContent = '#' + shown;
-        });
-        if (badge) badge.textContent = '#' + p;
-      };
+    const src = (card.parentElement || document).querySelector('[data-stage-data]');
+    const qOut = card.querySelector('[data-stage-q]');
+    const countEl = card.querySelector('[data-stage-count]');
+    const timeEl = card.querySelector('[data-stage-time]');
+    const items = [...card.querySelectorAll('.res__i')];
+    if (!src || !qOut || !countEl || !items.length) return;
 
-      place(from);
-      if (REDUCED) { place(to); stage.classList.add('is-landed'); return; }
+    let data;
+    try { data = JSON.parse(src.textContent); } catch (err) { return; }
+    if (!Array.isArray(data) || data.length < 2 || data[0].rows.length !== items.length) return;
 
-      let played = false;
-      const run = () => {
-        if (played) return;
-        played = true;
-        const hop = () => {
-          place(pos - 1);
-          stage.classList.add('is-hopping');
-          setTimeout(() => stage.classList.remove('is-hopping'), 620);
-          if (pos > to) setTimeout(hop, 900);
-          else setTimeout(() => stage.classList.add('is-landed'), 500);
-        };
-        setTimeout(hop, 1100);
-      };
+    const rx = t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-      if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver((es, obs) => {
-          es.forEach(e => { if (e.isIntersecting) { run(); obs.unobserve(e.target); } });
-        }, { threshold: .35 });
-        io.observe(stage);
-      } else { run(); }
+    /* A results page bolds the terms it matched, so the snippet is built as
+       text nodes and <b> rather than assigned wholesale — no markup from the
+       data ever reaches innerHTML. */
+    const snippet = (el, text, query) => {
+      el.textContent = '';
+      const terms = query.split(/\s+/).filter(w => w.length >= 3);
+      if (!terms.length) { el.textContent = text; return; }
+      const re = new RegExp('(' + terms.map(rx).join('|') + ')', 'ig');
+      text.split(re).forEach((part, i) => {
+        if (!part) return;
+        if (i % 2) {
+          const b = document.createElement('b');
+          b.textContent = part;
+          el.appendChild(b);
+        } else el.appendChild(document.createTextNode(part));
+      });
+    };
 
-      // the row height is font-dependent, so re-place once the webfont lands
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => place(pos));
-      window.addEventListener('resize', () => place(pos));
-    });
+    const set = (root, sel, txt) => {
+      const el = root.querySelector(sel);
+      if (el) el.textContent = txt;
+    };
+
+    const paint = i => {
+      const s = data[i];
+      countEl.textContent = s.n;
+      if (timeEl) timeEl.textContent = s.t;
+      s.rows.forEach((r, n) => {
+        const it = items[n];
+        if (!it) return;
+        set(it, '.res__fav', r.fav);
+        set(it, '.res__host', r.host);
+        set(it, '.res__path', r.path);
+        set(it, '.res__t', r.title);
+        const url = it.querySelector('.res__url');
+        if (url) url.firstChild.nodeValue = 'https://' + r.host;
+        const sn = it.querySelector('.res__s');
+        if (sn) snippet(sn, r.snip, s.q);
+      });
+    };
+
+    if (REDUCED) { paint(0); qOut.textContent = data[0].q; return; }
+
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    let onScreen = true;
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(es => es.forEach(e => { onScreen = e.isIntersecting; }),
+        { threshold: 0 }).observe(card);
+    }
+    /* hold between searches rather than typing into a hidden tab, where timers
+       are throttled to about one a second and the typing would crawl */
+    const ready = async () => { while (!onScreen || document.hidden) await sleep(400); };
+
+    const IN = 56, OUT = 26, HOLD = 3400;
+    const typeIn = async t => { for (let n = 1; n <= t.length; n++) { qOut.textContent = t.slice(0, n); await sleep(IN); } };
+    const typeOut = async t => { for (let n = t.length; n >= 0; n--) { qOut.textContent = t.slice(0, n); await sleep(OUT); } };
+
+    let i = 0;
+    paint(0);
+    qOut.textContent = '';
+    /* the page opens by running a search rather than presenting a finished one */
+    card.classList.add('is-swapping');
+
+    (async () => {
+      await ready();
+      await sleep(600);
+      await typeIn(data[0].q);
+      await sleep(330);
+      card.classList.remove('is-swapping');
+      await sleep(HOLD);
+
+      for (;;) {
+        await ready();
+        card.classList.add('is-swapping');
+        await sleep(260);
+        await typeOut(data[i].q);
+        i = (i + 1) % data.length;
+        paint(i);
+        await sleep(180);
+        await typeIn(data[i].q);
+        await sleep(330);
+        card.classList.remove('is-swapping');
+        await sleep(HOLD);
+      }
+    })();
   }
 
   /* -- 10. title-first reveal cards ----------------------------------------
@@ -555,7 +594,7 @@
   const boot = () => {
     initReveal(); initMarquee(); initCounters(); initFloat();
     initAccordion(); initHeader(); initStack();
-    initType(); initClimb(); initHoverCards(); initSlats();
+    initType(); initStage(); initHoverCards(); initSlats();
     initCompare(); initTrack(); initTabs();
   };
   if (document.readyState === 'loading') {

@@ -94,6 +94,9 @@
   font-size:clamp(15px,1.3vw,17.5px);line-height:1.2;letter-spacing:-.015em;
   color:#fff;margin:0 0 6px;
 }
+/* the a+m award carries no subline (client, 4 Sep), so the title is then the
+   only child and its 6px trailing margin would push the block off centre */
+.award__t:last-child{margin-bottom:0}
 .award__d{font-size:13.5px;line-height:1.5;color:rgba(255,255,255,.76)}
 .award__d b{color:var(--yellow);font-weight:800}
 

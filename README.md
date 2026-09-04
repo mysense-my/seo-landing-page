@@ -38,7 +38,7 @@ assets/               23 client logos, 2 MYSense logos, 2 award marks, 14 image 
 
 | # | id | Ground | What it does |
 |---|---|---|---|
-| 1 | `#top` | navy → cyan | Hero. The search stage, no form. |
+| 1 | `#top` | navy → cyan | Hero. The search results stage. |
 | 2 | `#brands` | page | Trusted by 300+ brands, two logo rails, the awards plaque, the credentials strip. |
 | 3 | `#numbers` | navy → cyan | Four count-up figures. |
 | 4 | `#problem` | page | The problem, as three title-first hover cards. |
@@ -54,18 +54,25 @@ assets/               23 client logos, 2 MYSense logos, 2 award marks, 14 image 
 
 ## The four signature moments
 
-**The hero search stage.** A query types itself through six Malaysian searches, an
-AI answer panel resolves under it, and the visitor's own result climbs from
-position 4 to position 1 while the rank badge counts down and a `+3` chip lands.
-It is an authored diagram, not a picture of anybody's product: MYSense palette and
-type only, no browser chrome, no favicons, no four-colour anything.
+**The hero search stage.** A search results page. A query types itself through six
+Malaysian searches and the whole set under it changes with the query: the result
+count and all three results, with the query terms bolded in each snippet the way a
+results page bolds what it matched. The visitor's own site is always the first
+result.
 
-The climb never reflows. Rows sit in the DOM at their **final** order, so the
-markup reads correctly to a screen reader and to a crawler whatever the animation
-is doing, and the movement is pure `translateY`. The step is taken from the
-`--row-h` custom property rather than measured, so a theme that changes a row's
-line-height after boot cannot silently desync the rows from the badge. That
-matters when this gets pasted into Elementor.
+It went through two rejected versions, and both failures were the same failure.
+The first typed six different queries over one fixed set of generic rows, so the
+results never answered the query. The second fixed that but kept rank badges, a
+"your brand" legend and a highlighted card for the visitor's row — and a column of
+equal bordered boxes under a query field is the shape of a **form**, whatever the
+text inside it says. What finally worked was removing the diagram: no rank badges,
+no legend, no highlight, no boxes. Results are plain text of natural heights on a
+white page, and the visitor's site is identified by its own domain and by being
+first.
+
+The layout convention — query field with its tools, result tabs, count, then
+favicon + site name + URL + link-coloured title + snippet — is the universal one. No search engine's logo, wordmark or brand colours are reproduced
+anywhere in it, which matters because this is a commercial page.
 
 **Problem cards.** At rest, a photograph with the title across the bottom. On
 hover a navy sheet wipes up over the picture with `clip-path` and the body copy
@@ -103,8 +110,7 @@ the DM landing page, where the values were measured off the reference build:
 | `[data-float]` | continuous bob, per-element phase |
 | `[data-accordion]` | single-open FAQ |
 | `[data-stack]` | mobile sticky stack, settle-back scale and dim |
-| `[data-type]` | the search typewriter, pauses when off screen |
-| `[data-climb]` | the rank climb |
+| `[data-stage]` | the search stage: types the query, swaps the result set |
 | `[data-hovercard]` | title-first cards with a tap fallback |
 | `[data-slats]` | the expanding panels |
 | `[data-compare]` | table row reveal and hover focus |
@@ -122,8 +128,10 @@ static but stay legible, the climb jumps straight to its landed state.
   behaviour with correct `aria-expanded`, slat hover and flex-grow transition,
   table focus and hot row, accordion panel height, journey progress at 0.96 with
   all five steps marked done, all five marquees running.
-- The climb lands on `#1` with the other rows renumbered `#2 #3 #4` and the `+3`
-  chip shown.
+- All six searches cycle, each painting a result set that matches its own query.
+- The 96% chip clears the last snippet at every width across a full float cycle
+  (worst case 8px). It is 85px tall once its label wraps, and the card carries
+  bottom padding specifically so the chip hooks over white space rather than text.
 
 ## Still to do
 

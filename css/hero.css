@@ -84,138 +84,146 @@
   pointer-events:none;
 }
 
-/* ------------------------------- the stage ------------------------------ */
+/* ------------------------------- the stage ------------------------------
+   A search results page. Everything here is in service of one thing: that it
+   reads as a page of results and not as a form.
+
+   The three things that made the previous version read as a form, all removed:
+     1. rank badges (#1 #2 #3) beside every entry  -> an annotated diagram;
+     2. an "Organic search results / Your brand" legend -> a diagram again;
+     3. entries as identical bordered boxes of a fixed height -> a field list.
+   Results are now plain text of naturally different heights on a white page,
+   with no box, no border and no fill. The visitor's site is simply first.
+
+   The layout convention (query field, tabs, count, overview, favicon + site +
+   URL + link title + snippet) is the universal one. No search engine's logo,
+   wordmark or brand colours are reproduced.
+------------------------------------------------------------------------- */
 .hero__stage{position:relative;padding-block:34px}
 
 .stage{
   background:#fff;
-  border-radius:var(--r-panel);
-  padding:clamp(16px,1.6vw,22px);
+  border-radius:26px;
+  /* the extra bottom padding is not decoration: the 96% chip hooks over this
+     corner and is 85px tall once its label wraps, so without clear white here
+     it lands on the last result's snippet and reads as a rendering fault */
+  padding:clamp(15px,1.5vw,19px) clamp(15px,1.6vw,20px) clamp(40px,3.8vw,46px);
   box-shadow:0 40px 90px rgba(0,17,77,.42);
-  display:flex;flex-direction:column;gap:14px;
   color:var(--ink);
   max-width:516px;margin-inline:auto;
 }
 
-/* --- instrument header ---
-   The stage is an authored diagram, not a screenshot of anybody's product, so
-   it says what it is and which row belongs to the visitor. */
-.stage__head{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:2px 6px 0;
-}
-.stage__head-l{font-size:12.5px;font-weight:700;color:var(--muted)}
-.stage__legend{
-  display:inline-flex;align-items:center;gap:7px;
-  font-size:12px;font-weight:600;color:var(--muted-2);
-}
-.stage__legend i{
-  width:10px;height:10px;border-radius:3px;flex:0 0 auto;
-  background:var(--grad-climb-soft);
-}
-
-/* --- search bar --- */
-.stage__bar{
-  display:flex;align-items:center;gap:12px;
-  background:#F4F6FB;
-  border:1.5px solid rgba(11,19,57,.09);
+/* --- the query field ---
+   A search field, with the tools a search engine puts in one. The old version
+   was a bare filled rectangle with a caret, which is an input on a form; the
+   clear button, the divider and the mic are what make this one read as the
+   search box of a search engine instead. */
+.srch{
+  display:flex;align-items:center;gap:11px;
+  background:#fff;
+  border:1px solid rgba(11,19,57,.14);
   border-radius:var(--r-pill);
-  padding:14px 20px;
-  min-height:54px;
+  box-shadow:0 1px 5px rgba(11,19,57,.07);
+  padding:11px 15px;
 }
-.stage__glass{color:var(--muted-2);display:flex;flex:0 0 auto}
-.stage__query{
-  font-size:15.5px;font-weight:600;color:var(--ink);
-  display:flex;align-items:center;min-width:0;
+.srch__glass{color:var(--muted-2);display:flex;flex:0 0 auto}
+.srch__q{
+  font-size:15.5px;font-weight:500;color:var(--ink);
+  display:flex;align-items:center;min-width:0;flex:1 1 auto;
   white-space:nowrap;overflow:hidden;
 }
-.stage__caret{
-  display:inline-block;width:2px;height:17px;margin-left:2px;
-  background:var(--blue);border-radius:1px;flex:0 0 auto;
+.srch__caret{
+  display:inline-block;width:1.5px;height:17px;margin-left:2px;
+  background:var(--ink);border-radius:1px;flex:0 0 auto;
   animation:caret 1.05s steps(1) infinite;
 }
 @keyframes caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+.srch__tools{display:flex;align-items:center;gap:11px;flex:0 0 auto}
+.srch__x{color:var(--muted-2);display:flex}
+.srch__div{width:1px;height:19px;background:rgba(11,19,57,.14);display:block}
+.srch__mic{color:var(--blue);display:flex}
 
-/* --- AI answer panel --- */
-.ai{
-  background:linear-gradient(120deg,rgba(65,206,226,.16),rgba(0,48,176,.09));
-  border:1.5px solid rgba(65,206,226,.42);
-  border-radius:18px;
-  padding:14px 16px;
-  display:flex;flex-direction:column;gap:7px;
-  animation:aiIn .9s var(--ease) .5s both;
+/* --- result tabs ---
+   Cheap in height and instantly legible as a search engine. Sentence case, no
+   letter-spacing, per the page's label rule. */
+.tabs{
+  display:flex;align-items:center;gap:clamp(14px,2vw,24px);
+  margin-top:13px;padding:0 4px;
+  border-bottom:1px solid rgba(11,19,57,.09);
 }
-@keyframes aiIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.ai__tag{
-  display:inline-flex;align-items:center;gap:6px;align-self:flex-start;
-  font-size:11.5px;font-weight:800;color:#0E7A8B;
-  background:rgba(255,255,255,.82);border-radius:var(--r-pill);
-  padding:4px 10px;
+.tabs__t{
+  font-size:12.5px;font-weight:500;color:var(--muted);
+  padding-bottom:9px;position:relative;white-space:nowrap;
 }
-.ai__body{font-size:13.5px;line-height:1.5;color:var(--ink-2);font-weight:500}
-.ai__cite{font-size:11.5px;color:var(--muted)}
-.ai__cite b{color:var(--blue);font-weight:700}
+.tabs__t.is-on{color:var(--blue);font-weight:700}
+.tabs__t.is-on::after{
+  content:'';position:absolute;left:0;right:0;bottom:-1px;height:2.5px;
+  background:var(--blue);border-radius:2px 2px 0 0;
+}
 
-/* --- the SERP stack ---
-   Rows sit in normal flow at their FINAL order, so the DOM reads correctly to
-   a screen reader and to a crawler. The climb is expressed purely as
-   transform, which means it never reflows anything. */
-.serp{
-  list-style:none;margin:0;padding:0;
-  display:flex;flex-direction:column;gap:10px;
-  --row-h:64px;
+.stage__meta{
+  font-size:11.5px;font-weight:400;color:var(--muted-2);
+  padding:0 4px;margin:11px 0 0;
 }
-.serp__row{
-  height:var(--row-h);
-  display:flex;align-items:center;gap:12px;
-  padding:0 14px;
-  border-radius:16px;
-  background:#fff;
-  border:1.5px solid rgba(11,19,57,.09);
-  transform:translateY(var(--y,0));
-  transition:transform .62s var(--ease),
-             box-shadow .62s var(--ease),
-             border-color .4s var(--ease);
+.stage__meta b{font-weight:400}
+
+/* --- the results ---
+   Plain text on white. No box, no border, no fill, no fixed height: entries
+   are as tall as their own copy, which is the single clearest difference
+   between a page of results and a stack of form fields. */
+.res{list-style:none;margin:16px 0 0;padding:0 4px}
+.res__i{
+  display:flex;flex-direction:column;
+  opacity:1;transform:none;
+  transition:opacity .34s var(--ease),transform .34s var(--ease);
 }
-.serp__rank{
-  flex:0 0 auto;width:32px;height:32px;border-radius:50%;
+.res__i + .res__i{margin-top:19px}
+
+.res__site{display:flex;align-items:center;gap:9px;min-width:0}
+.res__fav{
+  flex:0 0 auto;width:23px;height:23px;border-radius:50%;
   display:grid;place-items:center;
-  font-family:var(--display);font-weight:800;font-size:12.5px;
-  background:rgba(11,19,57,.06);color:var(--muted);
-  transition:background .4s var(--ease),color .4s var(--ease);
+  background:#EDEFF6;color:var(--muted-2);
+  font-family:var(--display);font-weight:800;font-size:10.5px;
 }
-.serp__body{display:flex;flex-direction:column;gap:2px;min-width:0}
-.serp__url{font-size:11px;color:var(--muted-2);font-weight:600}
-.serp__title{
-  font-size:13.5px;font-weight:700;color:var(--ink);
+/* the visitor's own site is the only coloured mark, the way a real favicon is
+   coloured among plainer ones. It is a cue, not an annotation. */
+.res__fav--me{background:var(--grad-climb-soft);color:#fff}
+.res__id{display:flex;flex-direction:column;gap:1px;min-width:0}
+.res__host{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.25}
+.res__url{
+  font-size:11.5px;color:var(--muted-2);line-height:1.25;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
+.res__url i{font-style:normal;padding:0 4px}
 
-/* the brand's own row */
-.serp__row--brand{
-  background:var(--grad-climb-soft);
-  border-color:transparent;
-  box-shadow:0 14px 30px rgba(0,27,118,.30);
-  position:relative;z-index:2;
+/* the title wraps to two lines the way a real result's does. Nothing pins the
+   rows to a shared height any more, so entries are naturally different sizes —
+   which is most of what stops a list of them reading as a column of fields. */
+.res__t{
+  margin-top:5px;
+  font-size:15.5px;font-weight:600;color:var(--blue);
+  line-height:1.3;letter-spacing:-.005em;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;
 }
-.serp__row--brand .serp__url{color:rgba(255,255,255,.72)}
-.serp__row--brand .serp__title{color:#fff}
-.serp__row--brand .serp__rank{background:var(--yellow);color:var(--ink)}
-
-/* the +3 chip only earns its place once the climb has finished */
-.serp__delta{
-  margin-left:auto;flex:0 0 auto;
-  display:inline-flex;align-items:center;gap:3px;
-  font-size:11.5px;font-weight:800;
-  background:rgba(255,255,255,.16);color:#fff;
-  border-radius:var(--r-pill);padding:5px 10px;
-  opacity:0;transform:translateX(6px);
-  transition:opacity .5s var(--ease),transform .5s var(--ease);
+.res__s{
+  margin-top:3px;
+  font-size:12.5px;line-height:1.5;color:var(--muted);
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;
 }
-.serp.is-landed .serp__delta{opacity:1;transform:none}
+/* a results page bolds the query terms it matched */
+.res__s b{font-weight:700;color:var(--ink-2)}
 
-/* a single-frame nudge on each hop, so the jump reads as effort */
-.serp.is-hopping .serp__row--brand{box-shadow:0 22px 44px rgba(0,27,118,.42)}
+/* --- swapping one result set for the next ---
+   Out together, back in top to bottom, the way a page paints. */
+.stage__meta{transition:opacity .26s var(--ease),transform .26s var(--ease)}
+.res__i:nth-child(2){transition-delay:70ms}
+.res__i:nth-child(3){transition-delay:140ms}
+.stage.is-swapping .stage__meta,
+.stage.is-swapping .res__i{
+  opacity:0;transform:translateY(8px);
+  transition-duration:.2s;transition-delay:0ms;
+}
 
 /* --- floating chips ---
    Offset down-right shadow, same device as the DM landing page's hero chips. */
@@ -255,9 +263,13 @@
   .chip--b{right:-6px;bottom:-26px}
 }
 @media (max-width:600px){
-  .stage{padding:14px;border-radius:24px}
-  .serp{--row-h:60px}
-  .serp__title{font-size:12.5px}
+  .stage{padding:14px 13px 38px;border-radius:22px}
+  .srch{padding:10px 13px}
+  .srch__q{font-size:14.5px}
+  .tabs{gap:15px}
+  .res__t{font-size:14.5px}
+  .res__s{font-size:12px}
+  .res__i + .res__i{margin-top:16px}
   .chip{padding:11px 13px;max-width:154px;border-radius:14px}
   .chip__n{font-size:19px}
   .chip__l{font-size:10.5px}
