@@ -202,20 +202,28 @@
   function initHeader() {
     const head = document.querySelector('.site-head');
     if (!head) return;
-    const nav = document.querySelector('.site-nav');
     const burger = document.querySelector('[data-nav-toggle]');
 
     const onScroll = () => head.classList.toggle('is-stuck', window.scrollY > 24);
     onScroll();
     addEventListener('scroll', onScroll, { passive: true });
 
-    if (burger && nav) {
+    /* The mobile menu is a full-screen panel, the same one the influencer
+       landing page uses. `hidden` is toggled as well as the class because the
+       panel is fixed over the whole page: leaving it in the tree while
+       invisible would trap taps and keep its links in the tab order. */
+    const menu = document.getElementById('siteMenu');
+    if (burger && menu) {
       const setOpen = open => {
-        nav.classList.toggle('is-open', open);
+        head.classList.toggle('is-open', open);
+        menu.hidden = !open;
         burger.setAttribute('aria-expanded', String(open));
+        document.body.style.overflow = open ? 'hidden' : '';
       };
-      burger.addEventListener('click', () => setOpen(!nav.classList.contains('is-open')));
-      nav.addEventListener('click', e => { if (e.target.closest('a')) setOpen(false); });
+      burger.addEventListener('click', () => setOpen(!head.classList.contains('is-open')));
+      menu.addEventListener('click', e => {
+        if (e.target.closest('[data-nav-close]') || e.target.closest('a')) setOpen(false);
+      });
       addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
     }
   }

@@ -57,29 +57,82 @@
 .site-head__burger[aria-expanded="true"] span:nth-child(2){opacity:0}
 .site-head__burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
+/* --- full-screen mobile menu ---------------------------------------------
+   Lifted from the influencer landing page's `.sitebar__menu` so the siblings
+   share one chrome. The panel is fixed over everything and floods open on a
+   clip-path circle grown from the burger; the links stagger in behind it.
+   The IM page's --ms-navy is the same #001B76 as this page's --navy, so the
+   only real change is the nav items and the CTA label.
+------------------------------------------------------------------------- */
+.site-menu{
+  display:none;position:fixed;inset:0;z-index:800;
+  background:var(--navy);
+  flex-direction:column;
+  padding:14px clamp(20px,5vw,26px) calc(20px + env(safe-area-inset-bottom,0px));
+}
+.site-menu[hidden]{display:none!important}
+.site-head.is-open .site-menu:not([hidden]){
+  display:flex;
+  animation:smflood .6s var(--ease) both;
+}
+/* the circle is centred on the burger, so the panel appears to come out of it */
+@keyframes smflood{
+  from{clip-path:circle(30px at calc(100% - 42px) 40px)}
+  to{clip-path:circle(180% at calc(100% - 42px) 40px)}
+}
+
+.site-menu__top{display:flex;align-items:center;justify-content:space-between;min-height:44px}
+.site-menu__logo{display:block;height:26px;width:auto}
+.site-menu__close{
+  background:none;border:0;cursor:pointer;color:#fff;padding:12px 0 12px 16px;
+  font-family:var(--display);font-size:12px;font-weight:800;letter-spacing:.16em;
+  text-transform:uppercase;opacity:.85;transition:opacity .3s;
+}
+.site-menu__close:hover{opacity:.5}
+
+.site-menu__links{display:flex;flex-direction:column;margin-top:30px}
+.site-menu__links a{
+  color:#fff;font-family:var(--display);font-weight:800;
+  text-transform:uppercase;font-size:clamp(28px,7.4vw,56px);line-height:1.14;
+  letter-spacing:-.02em;padding:2px 0;transition:opacity .3s;
+  animation:smfade .45s var(--ease) both;
+}
+.site-menu__links a:hover{opacity:.55}
+.site-menu__links a:nth-child(1){animation-delay:.16s}
+.site-menu__links a:nth-child(2){animation-delay:.22s}
+.site-menu__links a:nth-child(3){animation-delay:.28s}
+.site-menu__links a:nth-child(4){animation-delay:.34s}
+.site-menu__links a:nth-child(5){animation-delay:.40s}
+@keyframes smfade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.site-menu__foot{
+  margin-top:auto;display:flex;align-items:flex-end;
+  justify-content:space-between;gap:20px;padding-bottom:18px;
+}
+.site-menu__label{
+  color:rgba(255,255,255,.5);font-family:var(--display);
+  font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+}
+.site-menu__contact{display:flex;flex-direction:column;gap:7px;text-align:right}
+.site-menu__contact a{color:#fff;font-size:15px;font-weight:600;transition:opacity .3s}
+.site-menu__contact a:hover{opacity:.55}
+
+.site-menu__cta{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  border-top:1px solid rgba(255,255,255,.18);padding-top:18px;color:#fff;
+  font-family:var(--display);font-weight:800;text-transform:uppercase;
+  font-size:clamp(16px,4.6vw,22px);letter-spacing:-.01em;transition:opacity .3s;
+}
+.site-menu__cta:hover{opacity:.6}
+.site-menu__cta em{font-style:normal;font-size:1.2em;line-height:1}
+
 @media (max-width:1024px){
   .site-head__burger{display:flex;margin-left:auto}
   .site-head__cta{display:none}
-  .site-nav{
-    position:absolute;left:0;right:0;top:100%;
-    flex-direction:column;align-items:stretch;gap:0;margin:0;
-    background:rgba(0,17,77,.97);
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-    padding:8px 24px 18px;
-    clip-path:inset(0 0 100% 0);opacity:0;pointer-events:none;
-    transition:clip-path .34s var(--ease),opacity .24s var(--ease);
-  }
-  .site-nav.is-open{clip-path:inset(0 0 0 0);opacity:1;pointer-events:auto}
-  .site-nav a{padding-block:13px;font-size:16px}
-  .site-nav a::after{display:none}
-  .site-nav .site-nav__cta{
-    margin-top:12px;justify-content:center;background:var(--yellow);color:var(--ink);
-    padding:14px 22px;border-radius:var(--r-pill);font-weight:700;
-  }
-  .site-nav .site-nav__cta::after{display:none}
+  .site-nav{display:none}
 }
 @media (min-width:1025px){
-  .site-nav .site-nav__cta{display:none}
+  .site-menu{display:none!important}
 }
 
 /* ---------------------------- FOOTER ------------------------------------ */

@@ -108,7 +108,10 @@
   }
 }
 @media (max-width:460px){
-  .award{flex-direction:column;align-items:flex-start;text-align:left}
+  /* stacked, the mark and its caption read better centred on the plaque than
+     hard left against a wide dark panel (client, 4 Sep) */
+  .award{flex-direction:column;align-items:center;text-align:center}
+  .award__text{text-align:center}
 }
 
 .badges{

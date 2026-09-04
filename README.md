@@ -29,7 +29,7 @@ css/base.css          tokens, type scale, buttons, pills, motion primitives
 css/hero.css          the search stage
 css/sections.css      brands, numbers, cases, journey, why-us, reviews, FAQ, form
 css/reveal.css        the three signature mechanics (problem cards, table, slats)
-css/chrome.css        header and footer
+css/chrome.css        header, the full-screen mobile menu, footer
 js/motion.js          the whole motion system, no dependencies
 assets/               23 client logos, 2 MYSense logos, 2 award marks, 14 image slots
 ```
@@ -89,6 +89,21 @@ closed panel is only about 130px wide, so its title runs up the left edge as a
 vertical spine. That is the only reason six panels fit in one row at all. Below
 1025px the spine goes away and the whole thing becomes a tap accordion.
 
+## The mobile menu
+
+Below 1025px the nav and the header CTA are replaced by a full-screen panel,
+carried over from the influencer landing page's `.sitebar__menu` so the three
+siblings share one chrome. It is a fixed navy sheet that floods open on a
+`clip-path` circle grown from the burger, with oversized uppercase links that
+stagger in, contact details in the foot and the CTA on a hairline at the bottom.
+The IM page's `--ms-navy` is the same `#001B76` as this page's `--navy`, so only
+the nav items and the CTA label actually differ.
+
+`hidden` is toggled alongside the open class, not just the class: the panel is
+fixed over the whole page, so leaving it in the tree while invisible would swallow
+taps and keep its links in the tab order. `body` scroll is locked while it is open.
+It closes on the Close button, on any link, on the CTA and on Escape.
+
 ## Touch
 
 `html.is-touch` is set at boot from `(hover: hover) and (pointer: fine)`. The
@@ -129,6 +144,10 @@ static but stay legible, the climb jumps straight to its landed state.
   table focus and hot row, accordion panel height, journey progress at 0.96 with
   all five steps marked done, all five marquees running.
 - All six searches cycle, each painting a result set that matches its own query.
+- The mobile menu opens and closes at 390, 768 and 1024 with correct
+  `aria-expanded`, and the scroll lock is applied and released every time.
+- The hero card is 379px on a 390x844 phone, 45% of the viewport, down from 518px
+  and 61% before the mobile pass.
 - The 96% chip clears the last snippet at every width across a full float cycle
   (worst case 8px). It is 85px tall once its label wraps, and the card carries
   bottom padding specifically so the chip hooks over white space rather than text.

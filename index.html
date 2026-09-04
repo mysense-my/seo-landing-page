@@ -8,11 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css?v=1788530897">
-<link rel="stylesheet" href="css/hero.css?v=1788530897">
-<link rel="stylesheet" href="css/sections.css?v=1788530897">
-<link rel="stylesheet" href="css/reveal.css?v=1788530897">
-<link rel="stylesheet" href="css/chrome.css?v=1788530897">
+<link rel="stylesheet" href="css/base.css?v=1788531674">
+<link rel="stylesheet" href="css/hero.css?v=1788531674">
+<link rel="stylesheet" href="css/sections.css?v=1788531674">
+<link rel="stylesheet" href="css/reveal.css?v=1788531674">
+<link rel="stylesheet" href="css/chrome.css?v=1788531674">
 </head>
 <body>
 
@@ -37,7 +37,6 @@
       <a href="#work">Our results</a>
       <a href="#process">How we work</a>
       <a href="#reviews">Reviews</a>
-      <a class="site-nav__cta" href="#plan">Get a free consultation</a>
     </nav>
 
     <a class="btn btn--dark site-head__cta" href="#plan">
@@ -45,9 +44,40 @@
       Get a free consultation
     </a>
 
-    <button class="site-head__burger" type="button" aria-label="Menu" aria-expanded="false" data-nav-toggle>
+    <button class="site-head__burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="siteMenu" data-nav-toggle>
       <span></span><span></span><span></span>
     </button>
+  </div>
+
+  <!-- Full-screen mobile menu. Same design as the influencer landing page's
+       `.sitebar__menu`, carried over deliberately so the three siblings share
+       one chrome: a navy panel that floods open from the burger on a clip-path
+       circle, oversized uppercase links that stagger in, contact details in the
+       foot and the CTA on a hairline at the bottom. Only the tokens differ, and
+       barely — the IM page's --ms-navy is the same #001B76 as this page's. -->
+  <div class="site-menu" id="siteMenu" hidden>
+    <div class="site-menu__top">
+      <img class="site-menu__logo" src="assets/mysense-logo-white.webp" alt="MYSense" width="900" height="183">
+      <button class="site-menu__close" type="button" data-nav-close>Close</button>
+    </div>
+
+    <nav class="site-menu__links" aria-label="Menu">
+      <a href="#problem">The problem</a>
+      <a href="#services">What we do</a>
+      <a href="#work">Our results</a>
+      <a href="#process">How we work</a>
+      <a href="#reviews">Reviews</a>
+    </nav>
+
+    <div class="site-menu__foot">
+      <span class="site-menu__label">Contact</span>
+      <div class="site-menu__contact">
+        <a href="mailto:contact@mysense.com.my">contact@mysense.com.my</a>
+        <a href="tel:+60193541688">019-354 1688</a>
+      </div>
+    </div>
+
+    <a class="site-menu__cta" href="#plan"><span>Get a free consultation</span><em aria-hidden="true">&#8599;</em></a>
   </div>
 </header>
 
@@ -1089,6 +1119,6 @@
   </div>
 </footer>
 
-<script src="js/motion.js?v=1788530897"></script>
+<script src="js/motion.js?v=1788531674"></script>
 </body>
 </html>

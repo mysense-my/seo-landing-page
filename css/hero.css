@@ -263,13 +263,25 @@
   .chip--b{right:-6px;bottom:-26px}
 }
 @media (max-width:600px){
-  .stage{padding:14px 13px 38px;border-radius:22px}
-  .srch{padding:10px 13px}
+  /* The card was 518px on a 390x844 phone - about 72% of the usable screen once
+     browser chrome is counted, which the client flagged. Everything below is
+     that reduction: tighter frame, smaller type, and two results instead of
+     three. A real results page is cut off by the fold on a phone anyway, so
+     showing two is more faithful, not less. */
+  .stage{padding:13px 13px 30px;border-radius:22px}
+  .srch{padding:9px 12px}
   .srch__q{font-size:14.5px}
-  .tabs{gap:15px}
-  .res__t{font-size:14.5px}
-  .res__s{font-size:12px}
-  .res__i + .res__i{margin-top:16px}
+  .tabs{gap:14px;margin-top:11px}
+  .tabs__t{font-size:12px;padding-bottom:8px}
+  .stage__meta{margin-top:9px}
+  .res{margin-top:13px}
+  .res__i:nth-child(3){display:none}
+  .res__i + .res__i{margin-top:14px}
+  .res__fav{width:21px;height:21px;font-size:10px}
+  .res__host{font-size:12px}
+  .res__url{font-size:11px}
+  .res__t{font-size:14px}
+  .res__s{font-size:11.5px}
   .chip{padding:11px 13px;max-width:154px;border-radius:14px}
   .chip__n{font-size:19px}
   .chip__l{font-size:10.5px}
