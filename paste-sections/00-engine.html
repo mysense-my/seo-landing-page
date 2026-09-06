@@ -1,0 +1,1771 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style id="seo-css">
+/* ===========================================================================
+   MYSense — SEO landing page (seo.mysense.com.my)
+   Third sibling of the DM and IM landing pages. Same type system, same
+   component grammar, same motion engine. Different lead colour so the three
+   pages read as one family without looking like the same page twice:
+
+     DM landing  -> purple lead
+     IM landing  -> pink lead
+     SEO landing -> BLUE / NAVY -> CYAN lead, pink as accent, yellow as action
+
+   Type: Montserrat (display) + Manrope (body/UI) only.
+
+   ACTION-COLOUR RULE (measured on the DM build, still governs here):
+     yellow #FFCC00 contrast — on navy 9.79, blue 6.78, purple 5.30, ink 11.91
+                             — on page bg 1.36, on white 1.51  <- invisible
+     => yellow CTAs only ever sit on a dark ground, always with an ink label.
+        On white / page-bg the primary becomes a solid BLUE pill, white label
+        (#0030B0 on white = 8.59:1).
+=========================================================================== */
+
+:root{
+  /* -- brand ------------------------------------------------------------- */
+  --navy:#001B76;
+  --blue:#0030B0;
+  --pink:#F24277;
+  --purple:#6C00D7;
+  --yellow:#FFCC00;
+  --cyan:#41CEE2;
+  --page:#F1F3FA;
+  --ink:#0B1339;
+  --white:#fff;
+
+  /* -- derived surfaces (tints and shades of the above, no new hues) ------ */
+  --blue-lite:#2E5BE0;        /* gradient light end of --blue */
+  --blue-deep:#001F82;
+  --navy-deep:#00114D;
+  --cyan-deep:#1FA8BC;
+  --cyan-soft:#D8F4F8;
+  --ink-2:#1B2450;
+  --line:rgba(11,19,57,.10);
+  --line-on-dark:rgba(255,255,255,.16);
+  --muted:#454D68;            /* body on light: 8.35:1 */
+  --muted-2:#818AA7;          /* de-emphasised UI text */
+  --muted-on-dark:rgba(255,255,255,.78);
+
+  /* the page's one signature gradient: navy -> blue -> cyan, the "climb" */
+  --grad-climb:linear-gradient(118deg,var(--navy) 0%,var(--blue) 46%,var(--cyan-deep) 100%);
+  --grad-climb-soft:linear-gradient(118deg,#001B76 0%,#0030B0 55%,#2C97AB 120%);
+  --grad-line:linear-gradient(90deg,var(--cyan),var(--blue),var(--pink));
+
+  /* -- type -------------------------------------------------------------- */
+  --display:Montserrat,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+
+  /* -- shape ------------------------------------------------------------- */
+  --r-pill:999px;
+  --r-card:24px;
+  --r-panel:32px;
+  --r-input:14px;
+  --r-chip:18px;
+
+  /* -- elevation --------------------------------------------------------- */
+  --sh-chip:24px 24px 40px rgba(0,27,118,.26);
+  --sh-card:0 10px 34px rgba(11,19,57,.08);
+  --sh-lift:0 26px 56px rgba(0,27,118,.16);
+  --sh-deck:0 30px 70px rgba(11,19,57,.28);
+
+  /* -- layout ------------------------------------------------------------ */
+  --container:1308px;
+  --gutter:clamp(20px,5vw,66px);
+  --sec-y:clamp(72px,9vw,132px);
+
+  /* -- motion ------------------------------------------------------------ */
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --ease-hover:cubic-bezier(0.44,0,0.56,1);
+  --dur-reveal:1050ms;
+  --dur-hover:400ms;
+}
+
+:where(.seo),:where(.seo) *,:where(.seo) *::before,:where(.seo) *::after{box-sizing:border-box}
+
+.seo{-webkit-text-size-adjust:100%}
+
+.seo{margin:0;background:var(--page);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+:where(.seo) img,:where(.seo) svg,:where(.seo) video{max-width:100%;height:auto;display:block}
+:where(.seo) button{font:inherit;color:inherit}
+:where(.seo) a{color:inherit;text-decoration:none}
+
+:where(.seo) h1,:where(.seo) h2,:where(.seo) h3,:where(.seo) h4,:where(.seo) h5{
+  font-family:var(--display);
+  font-weight:800;
+  margin:0;
+  letter-spacing:-.02em;
+  line-height:1;
+}
+
+:where(.seo) p{margin:0}
+
+.wrap{
+  width:100%;
+  max-width:var(--container);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+.wrap--narrow{max-width:1020px}
+
+.section{padding-block:var(--sec-y)}
+.section--tight{padding-block:clamp(52px,6vw,86px)}
+
+/* ---- type scale ---------------------------------------------------------
+   The display cap is set by the LONGEST headline line, measured, not guessed.
+   The longest line on this page is "OPTIMISATION" (12 chars) in the hero H1,
+   which at 64px Montserrat 800 is ~470px inside a 560px column. That leaves
+   real headroom, so the cap can go a step above the DM page's 64px.
+   Re-measure if the H1 copy ever changes.                                   */
+.display{
+  font-family:var(--display);
+  font-weight:800;
+  text-transform:uppercase;
+  font-size:clamp(32px,5vw,68px);
+  line-height:1;
+  letter-spacing:-.035em;
+}
+.h2{
+  font-family:var(--display);
+  font-weight:800;
+  text-transform:uppercase;
+  font-size:clamp(28px,3.6vw,50px);
+  line-height:1.06;
+  letter-spacing:-.025em;
+}
+.h3{
+  font-family:var(--display);
+  font-weight:800;
+  font-size:clamp(18px,1.5vw,21px);
+  line-height:1.18;
+  letter-spacing:-.01em;
+}
+.h4{
+  font-family:var(--display);
+  font-weight:800;
+  font-size:clamp(16px,1.2vw,18px);
+  line-height:1.25;
+  letter-spacing:-.01em;
+}
+.lead{
+  font-family:var(--body);
+  font-weight:500;
+  font-size:clamp(16px,1.35vw,19px);
+  line-height:1.5;
+}
+.body{font-size:16px;line-height:1.62;color:var(--muted)}
+.small{font-size:14px;line-height:1.5}
+
+/* ---- section heading block ---------------------------------------------- */
+.sechead{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  gap:16px;max-width:820px;margin:0 auto clamp(38px,4.4vw,62px);
+}
+.sechead--left{align-items:flex-start;text-align:left;margin-inline:0}
+.sechead__lede{font-size:clamp(16px,1.3vw,18px);line-height:1.6;color:var(--muted);max-width:64ch}
+.sechead--on-dark .sechead__lede{color:var(--muted-on-dark)}
+.sechead--on-dark .h2{color:#fff}
+
+/* ---- pill label ---------------------------------------------------------
+   Sentence case, filled, no letter-spacing. The user reads caps-tracked
+   micro-labels as AI-made, so this component must never be uppercased.      */
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--body);font-weight:600;font-size:14px;
+  padding:8px 16px;border-radius:var(--r-pill);
+  background:rgba(0,48,176,.10);color:var(--blue);
+  letter-spacing:0;text-transform:none;
+}
+.pill--on-dark{background:rgba(255,255,255,.14);color:#fff}
+.pill--cyan{background:rgba(65,206,226,.18);color:#0E7A8B}
+.pill--pink{background:rgba(242,66,119,.12);color:#C4104A}
+
+/* ---- buttons ------------------------------------------------------------ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--body);font-weight:700;font-size:16px;line-height:1;
+  padding:18px 28px;border-radius:var(--r-pill);border:0;cursor:pointer;
+  text-align:center;
+  transition:transform var(--dur-hover) var(--ease),
+             box-shadow var(--dur-hover) var(--ease),
+             background-color var(--dur-hover) var(--ease-hover),
+             color var(--dur-hover) var(--ease-hover);
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+
+/* primary: yellow pill, ink label — dark grounds only */
+.btn--primary{background:var(--yellow);color:var(--ink);
+  box-shadow:0 10px 26px rgba(255,204,0,.28)}
+.btn--primary:hover{background:#FFD633;box-shadow:0 16px 34px rgba(255,204,0,.36)}
+
+/* the light-surface primary, per the contrast rule at the top of this file */
+.btn--blue{background:var(--blue);color:#fff;
+  box-shadow:0 10px 26px rgba(0,48,176,.24)}
+.btn--blue:hover{background:#0038CC;box-shadow:0 16px 34px rgba(0,48,176,.30)}
+
+.btn--ghost-dark{
+  background:transparent;color:#fff;
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.42);
+}
+.btn--ghost-dark:hover{background:rgba(255,255,255,.10);box-shadow:inset 0 0 0 1.5px #fff}
+
+.btn--ghost{
+  background:transparent;color:var(--ink);
+  box-shadow:inset 0 0 0 1.5px var(--line);
+}
+.btn--ghost:hover{background:#fff;box-shadow:inset 0 0 0 1.5px rgba(11,19,57,.24)}
+
+.btn--sm{padding:13px 22px;font-size:14px}
+
+/* round icon button (carousel arrows) */
+.iconbtn{
+  width:52px;height:52px;border-radius:50%;
+  border:1.5px solid var(--line);background:transparent;color:var(--ink);
+  display:grid;place-items:center;cursor:pointer;flex:0 0 auto;
+  transition:background-color var(--dur-hover) var(--ease-hover),
+             color var(--dur-hover) var(--ease-hover),
+             border-color var(--dur-hover) var(--ease-hover);
+}
+.iconbtn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.iconbtn--on-dark{border-color:var(--line-on-dark);color:#fff}
+.iconbtn--on-dark:hover{background:#fff;color:var(--navy);border-color:#fff}
+
+/* a centred CTA row under a section */
+.sec-cta{display:flex;justify-content:center;margin-top:clamp(34px,4vw,54px)}
+.sec-cta--left{justify-content:flex-start}
+
+/* ---- motion primitives -------------------------------------------------- */
+[data-reveal]{
+  opacity:0;transform:translateY(40px);
+  transition:opacity var(--dur-reveal) var(--ease),
+             transform var(--dur-reveal) var(--ease);
+}
+[data-reveal].is-in{opacity:1;transform:none}
+
+[data-pop]{
+  opacity:0;transform:scale(.72);
+  transition:opacity 700ms var(--ease),transform 700ms var(--ease);
+}
+[data-pop].is-in{opacity:1;transform:none}
+
+[data-float]{transform:translateY(var(--float-y,0));will-change:transform}
+
+.visually-hidden{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important;
+  }
+  [data-reveal],[data-pop]{opacity:1!important;transform:none!important}
+  [data-float]{transform:none!important}
+}
+
+/* ===========================================================================
+   HERO — the search stage.
+
+   The visual column is not a photograph. It is the page's subject rendered as
+   a working object: a query types itself, an AI answer resolves beneath it,
+   and the brand's own result climbs from position four to position one. That
+   is the whole pitch, before a word of body copy.
+=========================================================================== */
+
+.hero{
+  position:relative;
+  isolation:isolate;
+  background:var(--grad-climb);
+  color:#fff;
+  padding-top:clamp(112px,10vw,176px);
+  padding-bottom:clamp(72px,8vw,116px);
+  overflow:hidden;
+}
+
+/* the ascent ribbon. The global `svg{max-width:100%}` reset would silently
+   clamp this and kill the bleed, so it is explicitly released. */
+.hero__bg{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.hero__bg svg{
+  position:absolute;inset:0;
+  width:100%;height:100%;max-width:none;
+  display:block;
+}
+/* a soft dark veil at the top so the fixed header always has something to sit
+   on, whatever slice of the ribbon happens to be showing */
+.hero::before{
+  content:'';position:absolute;inset:0 0 auto;height:220px;z-index:-1;
+  background:linear-gradient(180deg,rgba(0,17,77,.55),transparent);
+  pointer-events:none;
+}
+
+.hero__inner{
+  display:grid;
+  grid-template-columns:1.02fr .98fr;
+  gap:clamp(28px,4vw,64px);
+  align-items:center;
+  min-height:min(78vh,760px);
+}
+/* Grid items default to min-width:auto, so the SERP rows' `white-space:nowrap`
+   titles set the column's minimum and stretched the whole hero past the
+   viewport on a phone. It reads as a broken layout and is invisible to a
+   scrollWidth check, because the body clips its own overflow. */
+.hero__inner > *{min-width:0}
+
+.hero__copy{display:flex;flex-direction:column;align-items:flex-start}
+.hero__badge{margin-bottom:22px}
+.hero__title{margin:0 0 20px}
+.hero__title .line{display:block}
+.hero__sub{color:var(--muted-on-dark);max-width:36ch;margin-bottom:26px}
+
+.hero__checks{
+  list-style:none;margin:0 0 32px;padding:0;
+  display:flex;flex-direction:column;gap:11px;
+}
+.hero__checks li{
+  position:relative;padding-left:30px;
+  font-size:15px;font-weight:600;color:rgba(255,255,255,.94);
+}
+.hero__checks li::before{
+  content:'';position:absolute;left:0;top:2px;
+  width:19px;height:19px;border-radius:50%;
+  background:var(--yellow);
+}
+.hero__checks li::after{
+  content:'';position:absolute;left:5.5px;top:8px;
+  width:8px;height:4px;
+  border-left:2px solid var(--ink);border-bottom:2px solid var(--ink);
+  transform:rotate(-45deg);
+}
+
+.hero__cta{display:flex;flex-wrap:wrap;gap:14px}
+.hero__reply{margin-top:16px;font-size:14px;font-weight:500;color:rgba(255,255,255,.58)}
+
+/* the H1's second line carries a stroke that is flat, then rises: the page's
+   argument in six pixels. It is sized off the line, not the column. */
+.hero__title .line:last-child{position:relative;display:inline-block}
+.hero__rule{
+  position:absolute;left:0;right:-2%;bottom:-.14em;
+  width:104%;height:auto;max-width:none;
+  pointer-events:none;
+}
+
+/* ------------------------------- the stage ------------------------------
+   A search results page. Everything here is in service of one thing: that it
+   reads as a page of results and not as a form.
+
+   The three things that made the previous version read as a form, all removed:
+     1. rank badges (#1 #2 #3) beside every entry  -> an annotated diagram;
+     2. an "Organic search results / Your brand" legend -> a diagram again;
+     3. entries as identical bordered boxes of a fixed height -> a field list.
+   Results are now plain text of naturally different heights on a white page,
+   with no box, no border and no fill. The visitor's site is simply first.
+
+   The layout convention (query field, tabs, count, overview, favicon + site +
+   URL + link title + snippet) is the universal one. No search engine's logo,
+   wordmark or brand colours are reproduced.
+------------------------------------------------------------------------- */
+.hero__stage{position:relative;padding-block:34px}
+
+.stage{
+  background:#fff;
+  border-radius:26px;
+  /* the extra bottom padding is not decoration: the 96% chip hooks over this
+     corner and is 85px tall once its label wraps, so without clear white here
+     it lands on the last result's snippet and reads as a rendering fault */
+  padding:clamp(15px,1.5vw,19px) clamp(15px,1.6vw,20px) clamp(40px,3.8vw,46px);
+  box-shadow:0 40px 90px rgba(0,17,77,.42);
+  color:var(--ink);
+  max-width:516px;margin-inline:auto;
+}
+
+/* --- the query field ---
+   A search field, with the tools a search engine puts in one. The old version
+   was a bare filled rectangle with a caret, which is an input on a form; the
+   clear button, the divider and the mic are what make this one read as the
+   search box of a search engine instead. */
+.srch{
+  display:flex;align-items:center;gap:11px;
+  background:#fff;
+  border:1px solid rgba(11,19,57,.14);
+  border-radius:var(--r-pill);
+  box-shadow:0 1px 5px rgba(11,19,57,.07);
+  padding:11px 15px;
+}
+.srch__glass{color:var(--muted-2);display:flex;flex:0 0 auto}
+.srch__q{
+  font-size:15.5px;font-weight:500;color:var(--ink);
+  display:flex;align-items:center;min-width:0;flex:1 1 auto;
+  white-space:nowrap;overflow:hidden;
+}
+.srch__caret{
+  display:inline-block;width:1.5px;height:17px;margin-left:2px;
+  background:var(--ink);border-radius:1px;flex:0 0 auto;
+  animation:caret 1.05s steps(1) infinite;
+}
+@keyframes caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+.srch__tools{display:flex;align-items:center;gap:11px;flex:0 0 auto}
+.srch__x{color:var(--muted-2);display:flex}
+.srch__div{width:1px;height:19px;background:rgba(11,19,57,.14);display:block}
+.srch__mic{color:var(--blue);display:flex}
+
+/* --- result tabs ---
+   Cheap in height and instantly legible as a search engine. Sentence case, no
+   letter-spacing, per the page's label rule. */
+.tabs{
+  display:flex;align-items:center;gap:clamp(14px,2vw,24px);
+  margin-top:13px;padding:0 4px;
+  border-bottom:1px solid rgba(11,19,57,.09);
+}
+.tabs__t{
+  font-size:12.5px;font-weight:500;color:var(--muted);
+  padding-bottom:9px;position:relative;white-space:nowrap;
+}
+.tabs__t.is-on{color:var(--blue);font-weight:700}
+.tabs__t.is-on::after{
+  content:'';position:absolute;left:0;right:0;bottom:-1px;height:2.5px;
+  background:var(--blue);border-radius:2px 2px 0 0;
+}
+
+.stage__meta{
+  font-size:11.5px;font-weight:400;color:var(--muted-2);
+  padding:0 4px;margin:11px 0 0;
+}
+.stage__meta b{font-weight:400}
+
+/* --- the results ---
+   Plain text on white. No box, no border, no fill, no fixed height: entries
+   are as tall as their own copy, which is the single clearest difference
+   between a page of results and a stack of form fields. */
+.res{list-style:none;margin:16px 0 0;padding:0 4px}
+.res__i{
+  display:flex;flex-direction:column;
+  opacity:1;transform:none;
+  transition:opacity .34s var(--ease),transform .34s var(--ease);
+}
+.res__i + .res__i{margin-top:19px}
+
+.res__site{display:flex;align-items:center;gap:9px;min-width:0}
+.res__fav{
+  flex:0 0 auto;width:23px;height:23px;border-radius:50%;
+  display:grid;place-items:center;
+  background:#EDEFF6;color:var(--muted-2);
+  font-family:var(--display);font-weight:800;font-size:10.5px;
+}
+/* the visitor's own site is the only coloured mark, the way a real favicon is
+   coloured among plainer ones. It is a cue, not an annotation. */
+.res__fav--me{background:var(--grad-climb-soft);color:#fff}
+.res__id{display:flex;flex-direction:column;gap:1px;min-width:0}
+.res__host{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.25}
+.res__url{
+  font-size:11.5px;color:var(--muted-2);line-height:1.25;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.res__url i{font-style:normal;padding:0 4px}
+
+/* the title wraps to two lines the way a real result's does. Nothing pins the
+   rows to a shared height any more, so entries are naturally different sizes —
+   which is most of what stops a list of them reading as a column of fields. */
+.res__t{
+  margin-top:5px;
+  font-size:15.5px;font-weight:600;color:var(--blue);
+  line-height:1.3;letter-spacing:-.005em;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;
+}
+.res__s{
+  margin-top:3px;
+  font-size:12.5px;line-height:1.5;color:var(--muted);
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;
+}
+/* a results page bolds the query terms it matched */
+.res__s b{font-weight:700;color:var(--ink-2)}
+
+/* --- swapping one result set for the next ---
+   Out together, back in top to bottom, the way a page paints. */
+.stage__meta{transition:opacity .26s var(--ease),transform .26s var(--ease)}
+.res__i:nth-child(2){transition-delay:70ms}
+.res__i:nth-child(3){transition-delay:140ms}
+.stage.is-swapping .stage__meta,
+.stage.is-swapping .res__i{
+  opacity:0;transform:translateY(8px);
+  transition-duration:.2s;transition-delay:0ms;
+}
+
+/* --- floating chips ---
+   Offset down-right shadow, same device as the DM landing page's hero chips. */
+.chip{
+  position:absolute;
+  background:#fff;color:var(--ink);
+  border-radius:var(--r-chip);
+  padding:14px 18px;
+  box-shadow:var(--sh-chip);
+  display:flex;flex-direction:column;gap:2px;
+  transform:translateY(var(--float-y,0));
+  max-width:200px;
+}
+.chip__n{
+  font-family:var(--display);font-weight:900;font-size:24px;
+  letter-spacing:-.03em;line-height:1;color:var(--blue);
+}
+.chip__l{font-size:11.5px;font-weight:600;color:var(--muted);line-height:1.35}
+/* the chips sit OUTSIDE the stage's text, hooked over its top-left and
+   bottom-right corners. Anything that overlaps the search bar or a result row
+   reads as a rendering bug rather than a flourish. */
+.chip--a{left:-30px;top:-34px}
+.chip--b{right:-26px;bottom:-30px}
+.chip--b .chip__n{color:var(--pink)}
+
+/* ------------------------------ responsive ------------------------------ */
+@media (max-width:1100px){
+  .chip--a{left:-12px}
+  .chip--b{right:-10px}
+}
+@media (max-width:940px){
+  .hero__inner{grid-template-columns:1fr;gap:44px;min-height:0}
+  .hero__copy{align-items:flex-start}
+  .hero__sub{max-width:52ch}
+  .hero__stage{max-width:560px;margin-inline:auto;width:100%}
+  .chip--a{left:-6px;top:-30px}
+  .chip--b{right:-6px;bottom:-26px}
+}
+@media (max-width:600px){
+  /* The card was 518px on a 390x844 phone - about 72% of the usable screen once
+     browser chrome is counted, which the client flagged. Everything below is
+     that reduction: tighter frame, smaller type, and two results instead of
+     three. A real results page is cut off by the fold on a phone anyway, so
+     showing two is more faithful, not less. */
+  .stage{padding:13px 13px 30px;border-radius:22px}
+  .srch{padding:9px 12px}
+  .srch__q{font-size:14.5px}
+  .tabs{gap:14px;margin-top:11px}
+  .tabs__t{font-size:12px;padding-bottom:8px}
+  .stage__meta{margin-top:9px}
+  .res{margin-top:13px}
+  .res__i:nth-child(3){display:none}
+  .res__i + .res__i{margin-top:14px}
+  .res__fav{width:21px;height:21px;font-size:10px}
+  .res__host{font-size:12px}
+  .res__url{font-size:11px}
+  .res__t{font-size:14px}
+  .res__s{font-size:11.5px}
+  .chip{padding:11px 13px;max-width:154px;border-radius:14px}
+  .chip__n{font-size:19px}
+  .chip__l{font-size:10.5px}
+  .chip--a{left:-4px;top:-24px}
+  .chip--b{right:-4px;bottom:-22px}
+  .hero__cta{width:100%}
+  .hero__cta .btn{flex:1 1 auto}
+}
+@media (max-width:380px){
+  .chip--a,.chip--b{display:none}
+}
+
+/* ===========================================================================
+   Section styles. One card treatment per section on purpose: the page should
+   read as one family without ever repeating a layout.
+
+     brands   logo rails, two speeds, opposite directions
+     numbers  count-up figures on the dark gradient
+     cases    split card, image left, evidence right
+     journey  a track with a scroll-filled progress line
+     whyus    bubble-masked photo above the text (the DM page's device)
+     reviews  two counter-drifting rails of flat quote cards
+     faq      accordion on the dark ground
+     plan     two-column closer, contact left, form right
+=========================================================================== */
+
+/* ---------------------------- 2. BRANDS --------------------------------- */
+.brands{background:var(--page);position:relative;overflow:hidden}
+/* corner washes so a white-ish band is not a flat slab between two dark ones */
+.brands::before,.brands::after{
+  content:'';position:absolute;width:520px;height:520px;border-radius:50%;
+  pointer-events:none;z-index:0;
+}
+.brands::before{left:-220px;top:-260px;background:radial-gradient(circle,rgba(0,48,176,.10),transparent 68%)}
+.brands::after{right:-240px;bottom:-300px;background:radial-gradient(circle,rgba(65,206,226,.20),transparent 68%)}
+.brands > *{position:relative;z-index:1}
+
+.logorail{
+  display:flex;flex-direction:column;gap:clamp(12px,1.4vw,18px);
+  margin-block:clamp(6px,1vw,14px);
+  /* fade both ends so the loop has no hard edge */
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+}
+.logorail__rail{display:flex;width:max-content;transform:translateX(var(--marquee-x,0))}
+.logorail__set{display:flex;align-items:center;gap:clamp(12px,1.4vw,18px);padding-right:clamp(12px,1.4vw,18px)}
+/* Transparent cells, full colour, no card and no hover effect: the client
+   wants the logo band to read exactly like the IM and DM pages' bands, which
+   show the artwork and nothing else. */
+.logocell{
+  flex:0 0 auto;
+  width:clamp(140px,14vw,200px);height:clamp(72px,7.4vw,104px);
+  display:flex;align-items:center;justify-content:center;
+  background:transparent;border:0;padding:0;
+}
+.logocell img{
+  width:100%;height:100%;min-width:0;min-height:0;
+  object-fit:contain;
+}
+/* Brother's artwork is white on transparent, so on a light ground it is
+   literally invisible. Recolouring it to near-black is a legibility fix, not a
+   styling effect, and it is what the IM page does with the same file. */
+.logocell--ink img{filter:brightness(0);opacity:.82}
+
+/* ---- awards plaque -------------------------------------------------------
+   A dark inset inside the light trust section. Both marks are the client's own
+   artwork: the a+m trophy is light silver and the Malaysia Book of Records mark
+   is supplied black-or-white, so a single dark ground is the only surface that
+   carries both. */
+.awards{
+  margin:clamp(30px,3.6vw,48px) auto 0;
+  max-width:940px;
+  background:var(--grad-climb-soft);
+  border-radius:var(--r-panel);
+  padding:clamp(24px,3vw,38px) clamp(22px,3vw,40px);
+  box-shadow:0 26px 60px rgba(0,27,118,.24);
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(22px,3vw,44px);
+  position:relative;overflow:hidden;
+}
+/* one cyan wash so the plaque is not a flat navy rectangle */
+.awards::before{
+  content:'';position:absolute;right:-140px;top:-180px;
+  width:460px;height:460px;border-radius:50%;
+  background:radial-gradient(circle,rgba(65,206,226,.30),transparent 68%);
+  pointer-events:none;
+}
+.award{
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:clamp(16px,2vw,26px);
+}
+.award + .award{
+  border-left:1px solid rgba(255,255,255,.18);
+  padding-left:clamp(22px,3vw,44px);
+}
+.award__mark{flex:0 0 auto;display:grid;place-items:center}
+.award__mark img{width:auto;object-fit:contain}
+/* the two marks are sized optically, not to a shared box: the trophy is
+   portrait and the records mark is a wide wordmark */
+.award__mark--trophy img{height:clamp(78px,7.6vw,104px)}
+.award__mark--mbor img{height:clamp(52px,5.2vw,70px)}
+
+.award__text{min-width:0}
+.award__t{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(15px,1.3vw,17.5px);line-height:1.2;letter-spacing:-.015em;
+  color:#fff;margin:0 0 6px;
+}
+/* the a+m award carries no subline (client, 4 Sep), so the title is then the
+   only child and its 6px trailing margin would push the block off centre */
+.award__t:last-child{margin-bottom:0}
+.award__d{font-size:13.5px;line-height:1.5;color:rgba(255,255,255,.76)}
+.award__d b{color:var(--yellow);font-weight:800}
+
+@media (max-width:820px){
+  .awards{grid-template-columns:1fr;gap:22px}
+  .award + .award{
+    border-left:0;padding-left:0;
+    border-top:1px solid rgba(255,255,255,.18);padding-top:22px;
+  }
+}
+@media (max-width:460px){
+  /* stacked, the mark and its caption read better centred on the plaque than
+     hard left against a wide dark panel (client, 4 Sep) */
+  .award{flex-direction:column;align-items:center;text-align:center}
+  .award__text{text-align:center}
+}
+
+.badges{
+  list-style:none;margin:clamp(26px,3vw,40px) 0 0;padding:0;
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:12px clamp(18px,2.4vw,34px);
+}
+.badges li{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:14px;font-weight:700;color:var(--navy);
+}
+.badges__dot{
+  width:8px;height:8px;border-radius:50%;flex:0 0 auto;
+  background:var(--grad-line);
+}
+
+/* ---------------------------- 3. NUMBERS -------------------------------- */
+.numbers{
+  position:relative;overflow:hidden;
+  background:var(--grad-climb);color:#fff;
+}
+.numbers__glow{
+  position:absolute;right:-180px;top:-220px;width:640px;height:640px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,204,0,.22),transparent 66%);
+  pointer-events:none;
+}
+.numbers .wrap{position:relative;z-index:1}
+.numgrid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:clamp(14px,1.8vw,22px);
+}
+.numcard{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:var(--r-card);
+  padding:clamp(22px,2.6vw,34px) clamp(18px,2vw,26px);
+  display:flex;flex-direction:column;gap:8px;
+  position:relative;overflow:hidden;
+  transition:background .4s var(--ease),transform .4s var(--ease);
+}
+.numcard::after{
+  content:'';position:absolute;left:0;right:0;top:0;height:3px;
+  background:var(--grad-line);opacity:.85;
+}
+.numcard:hover{background:rgba(255,255,255,.13);transform:translateY(-4px)}
+.numcard__n{
+  font-family:var(--display);font-weight:900;
+  font-size:clamp(32px,3.6vw,50px);line-height:1;
+  letter-spacing:-.04em;color:var(--yellow);
+}
+.numcard__l{font-size:14px;font-weight:600;color:rgba(255,255,255,.84);line-height:1.4}
+
+@media (max-width:900px){.numgrid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.numgrid{grid-template-columns:1fr}}
+
+/* ---------------------------- 7. CASES ---------------------------------- */
+.cases{background:var(--page)}
+.casegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,2.4vw,30px)}
+.case{
+  background:#fff;border-radius:var(--r-panel);overflow:hidden;
+  border:1px solid var(--line);
+  display:flex;flex-direction:column;
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease);
+}
+.case:hover{transform:translateY(-6px);box-shadow:var(--sh-lift)}
+.case__media{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--navy-deep)}
+.case__media img{width:100%;height:100%;object-fit:cover;
+  transition:transform .8s var(--ease)}
+.case:hover .case__media img{transform:scale(1.045)}
+.case__tag{
+  position:absolute;left:16px;bottom:16px;
+  background:rgba(0,17,77,.86);color:#fff;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  font-size:12.5px;font-weight:700;border-radius:var(--r-pill);padding:7px 14px;
+}
+.case__body{padding:clamp(22px,2.4vw,32px);display:flex;flex-direction:column;gap:6px}
+.case__name{margin-bottom:8px;color:var(--navy)}
+.case__lbl{font-size:12.5px;font-weight:800;color:var(--blue);margin-top:10px}
+.case__p{font-size:14.5px;line-height:1.6;color:var(--muted)}
+.case__pills{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0}
+.case__pills li{
+  font-size:12.5px;font-weight:800;color:#fff;
+  background:var(--navy);border-radius:var(--r-pill);padding:8px 14px;
+}
+.case__pills li:nth-child(2){background:var(--pink)}
+
+@media (max-width:820px){.casegrid{grid-template-columns:1fr}}
+
+/* ---------------------------- 8. JOURNEY -------------------------------- */
+.journey{
+  position:relative;overflow:clip;
+  background:var(--ink);color:#fff;
+}
+.journey::before{
+  content:'';position:absolute;left:-200px;bottom:-260px;
+  width:620px;height:620px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,48,176,.55),transparent 68%);
+  pointer-events:none;
+}
+.journey .wrap{position:relative;z-index:1}
+
+.track{
+  list-style:none;margin:0;padding:0;
+  --tgap:clamp(12px,1.6vw,22px);
+  --tpad:20px;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:var(--tgap);
+  position:relative;
+}
+/* The rail runs dot centre to dot centre, not edge to edge: a line that
+   overshoots the last step reads as an unfinished process. The right-hand
+   inset has to account for the grid gap as well as the column, or the rail
+   stops short of the fifth dot by four fifths of a gap. */
+.track::before,.track::after{
+  content:'';position:absolute;
+  left:calc(var(--tpad) + 11px);
+  right:calc(20% - var(--tpad) - 11px - .8 * var(--tgap));
+  top:26px;height:2px;border-radius:2px;
+}
+.track::before{background:rgba(255,255,255,.16)}
+.track::after{
+  background:var(--grad-line);
+  transform:scaleX(var(--track-p,0));transform-origin:left;
+  transition:transform .18s linear;
+}
+
+.jstep{
+  position:relative;
+  padding:52px var(--tpad) 24px;
+  display:flex;flex-direction:column;gap:7px;
+}
+/* a glass panel behind each step, starting below the dot so the rail passes
+   over open ground rather than across a card */
+.jstep::before{
+  content:'';position:absolute;left:0;right:0;top:40px;bottom:0;z-index:0;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--r-card);
+  transition:background .45s var(--ease),border-color .45s var(--ease);
+}
+.jstep.is-done::before{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.20)}
+.jstep > *{position:relative;z-index:1}
+
+.jstep__dot{
+  position:absolute;left:var(--tpad);top:16px;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--ink);border:2px solid rgba(255,255,255,.3);
+  display:block;z-index:2;
+  transition:background .4s var(--ease),border-color .4s var(--ease),
+             box-shadow .4s var(--ease);
+}
+.jstep.is-done .jstep__dot{
+  background:var(--yellow);border-color:var(--yellow);
+  box-shadow:0 0 0 7px rgba(255,204,0,.16);
+}
+.jstep__step{font-size:12.5px;font-weight:700;color:var(--cyan)}
+.jstep__t{color:#fff}
+.jstep__b{font-size:14px;line-height:1.55;color:rgba(255,255,255,.76)}
+
+/* No rail at three-up, so the dot has nothing to sit on: it moves inside the
+   panel rather than floating above a card it is no longer connected to. */
+@media (max-width:1024px){
+  .track{grid-template-columns:repeat(3,1fr);row-gap:20px}
+  .track::before,.track::after{display:none}
+  .jstep{padding-top:24px}
+  .jstep::before{top:0}
+  .jstep__dot{position:static;margin-bottom:6px}
+}
+/* below the tablet breakpoint the five steps become a sticky stack: each card
+   pins under the header and the next one slides over it. initStack() adds the
+   settle-back scale and dim on the covered cards. */
+@media (max-width:767px){
+  .track{display:block}
+  /* Stacked cards must be OPAQUE. A translucent card with a backdrop blur
+     samples the card pinned underneath it, which smears the yellow dot's glow
+     across the whole panel and reads as a rendering fault. */
+  .jstep{
+    position:sticky;top:calc(72px + var(--i,0) * 12px);
+    background:#141D47;
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:var(--r-card);
+    padding:22px 20px 24px 20px;
+    margin-bottom:14px;
+    box-shadow:0 -10px 26px rgba(0,0,0,.35);
+    overflow:hidden;
+    transform:scale(var(--stack-s,1));transform-origin:top center;
+    transition:transform .2s linear;
+  }
+  .jstep::after{
+    content:'';position:absolute;inset:0;border-radius:inherit;z-index:3;
+    background:var(--ink);opacity:var(--stack-d,0);
+    pointer-events:none;transition:opacity .2s linear;
+  }
+  .jstep::before{display:none}
+  .jstep__dot{position:static;margin-bottom:4px}
+  .jstep:nth-child(1){--i:0}
+  .jstep:nth-child(2){--i:1}
+  .jstep:nth-child(3){--i:2}
+  .jstep:nth-child(4){--i:3}
+  .jstep:nth-child(5){--i:4}
+}
+
+/* ---------------------------- 9. WHY US --------------------------------- */
+.whyus{background:var(--page)}
+.whygrid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,30px)}
+.wcard{
+  position:relative;
+  background:#fff;border:1px solid var(--line);border-radius:var(--r-panel);
+  padding:clamp(16px,1.6vw,20px) clamp(18px,2vw,26px) clamp(26px,2.8vw,34px);
+  display:flex;flex-direction:column;
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease);
+}
+.wcard:hover{transform:translateY(-6px);box-shadow:var(--sh-lift)}
+/* the bubble mask: a rounded rectangle with one corner bitten out, so the
+   coloured dot below can sit inside the notch */
+.wcard__media{
+  aspect-ratio:4/3;border-radius:20px;overflow:hidden;
+  /* a semicircular bite out of the bottom edge, with the colour dot nesting
+     inside it. Third card treatment on this page, deliberately unlike the
+     problem tiles and the offer slats. */
+  -webkit-mask-image:radial-gradient(circle 27px at 40px 100%,transparent 98%,#000 100%);
+  mask-image:radial-gradient(circle 27px at 40px 100%,transparent 98%,#000 100%);
+}
+.wcard__media img{width:100%;height:100%;object-fit:cover;
+  transition:transform .8s var(--ease)}
+.wcard:hover .wcard__media img{transform:scale(1.05)}
+/* The dot is a flex sibling pulled back over the photo's bottom edge, so it
+   lands in the bite at any card height without needing a measured offset. */
+.wcard__dot{
+  position:relative;z-index:2;
+  width:26px;height:26px;border-radius:50%;display:block;
+  margin:-13px 0 20px 40px;
+  transform:translateX(-50%);
+  box-shadow:0 4px 14px rgba(11,19,57,.22);
+}
+.wcard__dot--purple{background:var(--purple)}
+.wcard__dot--blue{background:var(--blue)}
+.wcard__dot--pink{background:var(--pink)}
+.wcard__t{color:var(--navy);margin:0 0 10px}
+.wcard__b{font-size:14.5px;line-height:1.62;color:var(--muted)}
+
+@media (max-width:900px){.whygrid{grid-template-columns:1fr}}
+
+/* ---------------------------- 10. REVIEWS -------------------------------- */
+.reviews{background:#fff;overflow:hidden}
+.rating{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:15px;font-weight:700;color:var(--navy);
+}
+.rating__stars{color:var(--yellow);letter-spacing:2px;font-size:16px}
+
+.rrails{
+  display:flex;flex-direction:column;gap:clamp(12px,1.4vw,18px);
+  margin-block:clamp(6px,1vw,12px);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+}
+.rrail{display:flex;width:max-content;transform:translateX(var(--marquee-x,0))}
+.rrail__set{display:flex;gap:clamp(12px,1.4vw,18px);padding-right:clamp(12px,1.4vw,18px)}
+.rcard{
+  flex:0 0 auto;width:clamp(280px,26vw,364px);
+  background:var(--page);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:24px 24px 20px;
+  display:flex;flex-direction:column;gap:12px;position:relative;
+}
+.rcard__q{
+  font-family:var(--display);font-size:44px;line-height:.6;color:var(--cyan);
+  font-weight:900;display:block;height:22px;
+}
+.rcard__b{font-size:14px;line-height:1.62;color:var(--muted)}
+.rcard__w{
+  margin-top:auto;padding-top:12px;border-top:1px solid var(--line);
+  display:flex;flex-direction:column;gap:2px;
+}
+.rcard__w b{font-size:14px;font-weight:800;color:var(--navy)}
+.rcard__w span{font-size:12px;color:var(--muted-2)}
+
+/* ---------------------------- 11. FAQ ------------------------------------
+   On the light ground on purpose. This is the one section people read word for
+   word, and it also used to sit dark-against-dark with the closing CTA. */
+.faq{background:var(--page)}
+.acc{display:flex;flex-direction:column;gap:10px}
+.acc__item{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;overflow:hidden;
+  transition:border-color .4s var(--ease),box-shadow .4s var(--ease);
+}
+.acc__item.is-open{border-color:rgba(0,48,176,.34);box-shadow:var(--sh-card)}
+.acc__btn{
+  width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  background:none;border:0;cursor:pointer;text-align:left;
+  padding:20px 22px;
+  font-family:var(--display);font-weight:800;font-size:clamp(15px,1.3vw,18px);
+  color:var(--navy);letter-spacing:-.01em;
+}
+.acc__btn i{
+  flex:0 0 auto;width:30px;height:30px;border-radius:50%;
+  background:rgba(0,48,176,.09);position:relative;
+  transition:background .4s var(--ease),transform .4s var(--ease);
+}
+.acc__btn i::before,.acc__btn i::after{
+  content:'';position:absolute;left:50%;top:50%;background:var(--blue);border-radius:2px;
+  transform:translate(-50%,-50%);transition:opacity .3s var(--ease),background .3s var(--ease);
+}
+.acc__btn i::before{width:12px;height:2px}
+.acc__btn i::after{width:2px;height:12px}
+.acc__item.is-open .acc__btn i{background:var(--blue);transform:rotate(90deg)}
+.acc__item.is-open .acc__btn i::before,
+.acc__item.is-open .acc__btn i::after{background:#fff}
+.acc__item.is-open .acc__btn i::before{opacity:0}
+.acc__panel{
+  height:0;overflow:hidden;
+  transition:height .44s var(--ease);
+}
+.acc__panel p{
+  padding:0 22px 22px;
+  font-size:15px;line-height:1.65;color:var(--muted);
+  max-width:68ch;
+}
+
+/* ---------------------------- 12. PLAN ----------------------------------- */
+.plan{
+  position:relative;overflow:clip;
+  background:var(--grad-climb);color:#fff;
+  padding-block:var(--sec-y);
+}
+.plan__glow{
+  position:absolute;left:-200px;bottom:-280px;width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(242,66,119,.30),transparent 66%);
+  pointer-events:none;
+}
+/* start-aligned, not centred: the real HubSpot form is far taller than the
+   copy beside it, and centring left the heading floating in the middle of a
+   very tall row. */
+.plan__grid{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);
+  gap:clamp(30px,4vw,64px);align-items:start;
+}
+/* The HubSpot form runs to about 1,650px, roughly a thousand taller than the
+   copy beside it. Sticking the copy keeps the offer and the phone number next
+   to the fields the whole way down instead of leaving a navy void. */
+.plan__copy{
+  display:flex;flex-direction:column;align-items:flex-start;gap:16px;
+  position:sticky;top:clamp(92px,10vw,120px);
+}
+@media (max-width:900px){
+  .plan__copy{position:static}
+}
+.plan__t{margin:6px 0 0}
+.plan__t em{font-style:normal;color:var(--yellow)}
+.plan__lede{font-size:clamp(15px,1.3vw,17px);line-height:1.6;color:var(--muted-on-dark);max-width:50ch}
+.plan__note{font-size:14px;color:rgba(255,255,255,.66)}
+.plan__meta{
+  margin:14px 0 0;display:grid;gap:14px;width:100%;
+  padding-top:22px;border-top:1px solid rgba(255,255,255,.18);
+}
+.plan__meta div{display:flex;flex-direction:column;gap:2px}
+.plan__meta dt{font-size:12.5px;font-weight:700;color:var(--cyan)}
+.plan__meta dd{margin:0;font-size:16px;font-weight:600;color:#fff}
+
+.plan__form{position:relative;z-index:1}
+/* The card shell is ours; the fields inside it are HubSpot's own markup and
+   are left alone deliberately. Overriding a third-party form's internals is how
+   you end up with a broken layout after their next embed release. */
+.pform{
+  background:#fff;color:var(--ink);
+  border-radius:var(--r-panel);
+  padding:clamp(22px,2.4vw,30px);
+  box-shadow:0 34px 74px rgba(0,17,77,.34);
+  min-width:0;
+}
+.hsslot{min-height:400px}
+
+.pform__switch{text-align:center;padding:18px 10px 4px}
+.pform__switch p{margin:0 0 6px;font-size:14px;color:var(--muted)}
+.pform__switch a{
+  font-size:15px;font-weight:700;color:var(--navy);
+  text-decoration:underline;text-underline-offset:3px;
+  transition:color .3s var(--ease);
+}
+.pform__switch a:hover{color:var(--blue)}
+
+.pform__back{
+  margin:0 0 12px;font-size:13px;line-height:1.55;color:var(--muted);
+}
+.pform__back a{color:var(--blue);font-weight:600}
+.pform__back a:hover{text-decoration:underline}
+
+@media (max-width:900px){
+  .plan__grid{grid-template-columns:1fr}
+}
+
+/* -------------------- closing discipline marquee ------------------------- */
+.band{
+  background:var(--yellow);color:var(--ink);
+  padding-block:clamp(16px,1.8vw,24px);
+  overflow:hidden;display:flex;width:100%;
+}
+.band > div{
+  display:flex;align-items:center;gap:clamp(20px,2.6vw,38px);
+  padding-right:clamp(20px,2.6vw,38px);
+  width:max-content;flex:0 0 auto;
+  transform:translateX(var(--marquee-x,0));
+}
+.band span{
+  font-family:var(--display);font-weight:800;text-transform:uppercase;
+  font-size:clamp(16px,2vw,26px);letter-spacing:-.02em;
+  white-space:nowrap;color:var(--ink);
+}
+.band i{
+  width:9px;height:9px;border-radius:50%;flex:0 0 auto;
+  background:var(--navy);display:block;
+}
+
+/* ===========================================================================
+   The three title-first / comparison mechanics.
+
+   Both reveal sections work the same way conceptually — the heading is what
+   you see at rest, the body is what you earn — but they must not look alike,
+   so they use opposite mechanics:
+
+     problem cards   the card KEEPS its size and a coloured sheet rises over
+                     the photograph to make room for the copy
+     offer slats     the panel TAKES space from its neighbours and the copy
+                     arrives in the space it won
+
+   Both are hover-driven where there is a fine pointer and tap-driven where
+   there is not; `html.is-touch` is set by the engine at boot, so the "Tap to
+   read" affordance is pure CSS and never appears on a mouse.
+=========================================================================== */
+
+/* ==================== 4. PROBLEM CARDS ================================== */
+.problem{background:var(--page)}
+.pcards{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:clamp(16px,2vw,26px);
+}
+
+.pcard{
+  position:relative;isolation:isolate;
+  aspect-ratio:3/4;
+  border-radius:var(--r-panel);
+  overflow:hidden;
+  background:var(--navy-deep);
+  box-shadow:var(--sh-card);
+  transition:transform .6s var(--ease),box-shadow .6s var(--ease);
+}
+
+/* the whole tile is the control. A real <button> so it is focusable, keyboard
+   operable and announced, rather than a div with a click handler. */
+.pcard__hit{
+  position:absolute;inset:0;z-index:5;
+  background:none;border:0;padding:0;cursor:pointer;
+}
+.pcard__hit:focus-visible{outline:3px solid var(--cyan);outline-offset:-6px;border-radius:inherit}
+
+.pcard__media{position:absolute;inset:0;z-index:0;display:block}
+.pcard__media img{
+  width:100%;height:100%;object-fit:cover;
+  transform:scale(1.02);
+  transition:transform 1s var(--ease),filter .6s var(--ease);
+}
+
+/* resting scrim: enough to carry the title, not so much that the photo dies */
+.pcard::before{
+  content:'';position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(11,19,57,0) 34%,rgba(11,19,57,.55) 62%,rgba(11,19,57,.88) 100%);
+  pointer-events:none;
+}
+
+/* the sheet that rises on reveal */
+.pcard__sheet{
+  position:absolute;inset:0;z-index:2;
+  background:linear-gradient(158deg,rgba(0,27,118,.95) 0%,rgba(0,48,176,.94) 52%,rgba(31,168,188,.92) 100%);
+  clip-path:inset(100% 0 0 0);
+  transition:clip-path .66s var(--ease);
+  pointer-events:none;
+}
+
+.pcard__inner{
+  position:relative;z-index:3;
+  height:100%;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:clamp(20px,2.2vw,28px);
+  gap:12px;pointer-events:none;
+}
+
+.pcard__mark{
+  width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.16);color:#fff;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  margin-bottom:auto;
+  transition:transform .55s var(--ease),background .45s var(--ease),color .45s var(--ease);
+}
+
+.pcard__t{
+  color:#fff;
+  transition:transform .55s var(--ease);
+}
+
+.pcard__b{
+  font-size:14.5px;line-height:1.62;color:rgba(255,255,255,.90);
+  max-height:0;opacity:0;overflow:hidden;
+  transform:translateY(12px);
+  transition:max-height .62s var(--ease),opacity .42s var(--ease),
+             transform .62s var(--ease);
+}
+
+.pcard__tap{
+  display:none;
+  align-self:flex-start;
+  font-size:12px;font-weight:700;color:var(--ink);
+  background:var(--yellow);border-radius:var(--r-pill);
+  padding:6px 12px;margin-top:4px;
+}
+
+/* ---- the revealed state, reached by hover, focus or an explicit open ---- */
+.pcard.is-open{transform:translateY(-6px);box-shadow:var(--sh-lift)}
+.pcard.is-open .pcard__sheet{clip-path:inset(0 0 0 0)}
+.pcard.is-open .pcard__media img{transform:scale(1.08);filter:saturate(.55)}
+.pcard.is-open .pcard__mark{transform:rotate(135deg);background:var(--yellow);color:var(--ink)}
+.pcard.is-open .pcard__b{max-height:18em;opacity:1;transform:none}
+.pcard.is-open .pcard__tap{opacity:0;transform:translateY(4px)}
+
+@media (hover:hover) and (pointer:fine){
+  .pcard:hover{transform:translateY(-6px);box-shadow:var(--sh-lift)}
+  .pcard:hover .pcard__sheet{clip-path:inset(0 0 0 0)}
+  .pcard:hover .pcard__media img{transform:scale(1.08);filter:saturate(.55)}
+  .pcard:hover .pcard__mark{transform:rotate(135deg);background:var(--yellow);color:var(--ink)}
+  .pcard:hover .pcard__b{max-height:18em;opacity:1;transform:none}
+}
+
+/* the tap affordance exists only where there is no pointer to hover with */
+.is-touch .pcard__tap{
+  display:inline-block;
+  transition:opacity .3s var(--ease),transform .3s var(--ease);
+  animation:tapPulse 2.6s var(--ease) 3;
+}
+@keyframes tapPulse{
+  0%,72%,100%{transform:translateY(0)}
+  80%{transform:translateY(-3px)}
+  88%{transform:translateY(0)}
+}
+
+@media (max-width:900px){
+  .pcards{grid-template-columns:1fr 1fr}
+}
+@media (max-width:620px){
+  .pcards{grid-template-columns:1fr}
+  .pcard{aspect-ratio:4/3}
+}
+
+
+/* ==================== 5. THE COMPARISON TABLE =========================== */
+.method{
+  position:relative;overflow:hidden;
+  background:var(--navy);color:#fff;
+}
+.method__glow{
+  position:absolute;right:-240px;top:-220px;width:720px;height:720px;border-radius:50%;
+  background:radial-gradient(circle,rgba(65,206,226,.26),transparent 66%);
+  pointer-events:none;
+}
+.method .wrap{position:relative;z-index:1}
+
+.cmp{
+  display:flex;flex-direction:column;
+  border-radius:26px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.15);
+  overflow:hidden;
+  --cols:.8fr 1.05fr 1.5fr;
+}
+.cmp__head,.cmp__row{
+  display:grid;grid-template-columns:var(--cols);align-items:stretch;
+}
+.cmp__row{
+  opacity:0;transform:translateY(22px);
+  transition:opacity .7s var(--ease),transform .7s var(--ease);
+}
+.cmp__row.is-in{opacity:1;transform:none}
+
+.cmp__c{
+  padding:clamp(18px,1.9vw,26px) clamp(16px,1.6vw,24px);
+  font-size:14.5px;line-height:1.55;
+  display:flex;align-items:flex-start;gap:10px;
+  border-top:1px solid rgba(255,255,255,.10);
+  transition:background .4s var(--ease),color .4s var(--ease);
+}
+.cmp__head .cmp__c{border-top:0}
+
+.cmp__c--lbl{
+  font-family:var(--display);font-weight:800;font-size:14.5px;
+  letter-spacing:-.01em;color:rgba(255,255,255,.94);
+  background:rgba(0,0,0,.20);
+  align-items:center;
+}
+/* the middle column is deliberately RECESSED and the right one LIT. Elevation
+   here is done with contrast rather than shadow, because the panel clips its
+   own overflow and a real raised slab would need the column to break out. */
+.cmp__c--them{color:rgba(255,255,255,.66);background:rgba(0,0,0,.10)}
+
+/* the MYSense column is one continuous raised slab: a shared gradient, a cyan
+   edge and a shadow thrown left over the column beside it */
+.cmp__c--us{
+  color:#fff;font-weight:600;
+  background:linear-gradient(180deg,rgba(0,48,176,.72),rgba(31,168,188,.30));
+  box-shadow:inset 4px 0 0 var(--cyan), -30px 0 50px rgba(0,10,45,.45);
+  position:relative;overflow:hidden;
+}
+/* a light sweep crosses the winning cell as the pointer arrives */
+.cmp__c--us::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(104deg,transparent 32%,rgba(255,255,255,.20) 50%,transparent 68%);
+  transform:translateX(-70%);opacity:0;
+  transition:transform 1s var(--ease),opacity .3s var(--ease);
+}
+.cmp__row.is-hot .cmp__c--us::after{opacity:1;transform:translateX(70%)}
+
+.cmp__head .cmp__c{
+  padding-block:clamp(15px,1.5vw,19px);
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(13.5px,1.15vw,16px);
+  text-transform:none;letter-spacing:-.01em;
+  align-items:center;
+}
+.cmp__head .cmp__c--them{background:rgba(0,0,0,.18);color:rgba(255,255,255,.62)}
+.cmp__head .cmp__c--us{
+  background:linear-gradient(120deg,var(--blue),var(--cyan-deep));
+  color:#fff;flex-direction:column;align-items:flex-start;gap:4px;
+  padding-block:clamp(17px,1.8vw,23px);
+}
+.cmp__flag{
+  font-family:var(--body);font-style:normal;font-weight:600;font-size:12px;
+  color:rgba(255,255,255,.86);
+}
+
+/* the two verdict marks, drawn rather than iconised so they inherit colour */
+.cmp__x,.cmp__v{flex:0 0 auto;width:21px;height:21px;border-radius:50%;position:relative;margin-top:1px}
+.cmp__x{background:rgba(255,255,255,.13)}
+.cmp__x::before,.cmp__x::after{
+  content:'';position:absolute;left:50%;top:50%;width:9px;height:1.8px;border-radius:2px;
+  background:rgba(255,255,255,.62);
+}
+.cmp__x::before{transform:translate(-50%,-50%) rotate(45deg)}
+.cmp__x::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.cmp__v{background:var(--yellow)}
+.cmp__v::after{
+  content:'';position:absolute;left:6px;top:6.5px;width:9px;height:4.5px;
+  border-left:2px solid var(--ink);border-bottom:2px solid var(--ink);
+  transform:rotate(-45deg);
+}
+
+/* hover focus: the table dims, the pointed-at row does not */
+.cmp.is-focusing .cmp__row{opacity:.40}
+.cmp.is-focusing .cmp__row.is-hot{opacity:1}
+.cmp__row.is-hot .cmp__c--us{
+  background:linear-gradient(180deg,rgba(0,48,176,.85),rgba(31,168,188,.55));
+  box-shadow:inset 3px 0 0 var(--yellow), -26px 0 50px rgba(0,10,45,.44);
+}
+.cmp__row.is-hot .cmp__c--lbl{background:rgba(0,0,0,.24);color:#fff}
+
+.method__close{
+  text-align:center;
+  margin:clamp(24px,3vw,36px) auto 0;max-width:44ch;
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(17px,1.7vw,23px);letter-spacing:-.02em;line-height:1.25;
+  color:#fff;
+}
+.method__close em{font-style:normal;color:var(--yellow)}
+
+/* --- mobile: the three columns become five stacked comparison cards ------ */
+@media (max-width:860px){
+  .cmp{background:none;border:0;gap:12px;overflow:visible}
+  .cmp__head{display:none}
+  .cmp__row{
+    grid-template-columns:1fr;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:20px;overflow:hidden;
+  }
+  .cmp__c{border-top:0}
+  .cmp__c--lbl{
+    background:rgba(0,0,0,.20);font-size:15px;
+    padding-block:14px;
+  }
+  .cmp__c--them,.cmp__c--us{flex-direction:column;gap:6px;position:relative;padding-left:clamp(16px,4vw,22px)}
+  .cmp__c--them::before,.cmp__c--us::before{
+    font-family:var(--body);font-weight:700;font-size:11.5px;
+  }
+  .cmp__c--them::before{content:'The usual approach';color:rgba(255,255,255,.5)}
+  .cmp__c--us::before{content:'MYSense';color:var(--cyan)}
+  .cmp__c--us{box-shadow:inset 0 3px 0 var(--cyan)}
+  .cmp__x,.cmp__v{display:none}
+  .cmp.is-focusing .cmp__row{opacity:1}
+}
+
+
+/* ==================== 6. THE OFFER SLATS ================================ */
+.offers{background:var(--page)}
+
+.slats{
+  display:flex;gap:clamp(10px,1.2vw,16px);
+  height:clamp(380px,42vw,540px);
+}
+.slat{
+  position:relative;isolation:isolate;
+  flex:1 1 0;min-width:0;
+  border-radius:var(--r-panel);
+  overflow:hidden;
+  background:var(--navy-deep);
+  transition:flex-grow .66s var(--ease),box-shadow .5s var(--ease);
+}
+.slat.is-open{flex-grow:3.4;box-shadow:var(--sh-lift)}
+
+.slat__img{
+  position:absolute;inset:0;z-index:0;
+  width:100%;height:100%;object-fit:cover;
+  filter:grayscale(.72) brightness(.62);
+  transform:scale(1.04);
+  transition:filter .7s var(--ease),transform 1.1s var(--ease);
+}
+.slat.is-open .slat__img{filter:grayscale(0) brightness(.78);transform:scale(1)}
+
+/* a colour wash so six warm photographs still read as one blue page */
+.slat::before{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,27,118,.42) 0%,rgba(0,17,77,.30) 40%,rgba(0,17,77,.94) 100%);
+  transition:opacity .6s var(--ease);
+}
+.slat.is-open::before{
+  background:linear-gradient(180deg,rgba(0,27,118,.20) 0%,rgba(0,17,77,.42) 42%,rgba(0,17,77,.95) 100%);
+}
+
+.slat__hit{
+  position:absolute;inset:0;z-index:4;
+  background:none;border:0;padding:0;cursor:pointer;
+}
+.slat__hit:focus-visible{outline:3px solid var(--cyan);outline-offset:-6px;border-radius:inherit}
+
+/* While a panel is closed its title runs up the left edge. Six titles across
+   a 1176px row leaves each closed panel about 90px wide, and "Live competitor
+   analysis" cannot be set horizontally in 90px without shredding. The spine
+   solves that and is the reason this section can hold six panels at all. */
+.slat__spine{
+  position:absolute;left:0;bottom:0;z-index:3;
+  padding:clamp(16px,1.7vw,24px);
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(14px,1.15vw,17px);letter-spacing:-.01em;line-height:1;
+  color:#fff;white-space:nowrap;pointer-events:none;
+  transition:opacity .3s var(--ease);
+}
+.slat.is-open .slat__spine{opacity:0}
+
+.slat__face{
+  position:absolute;inset:auto 0 0 0;z-index:3;
+  padding:clamp(16px,1.7vw,26px);
+  display:flex;flex-direction:column;gap:10px;
+  pointer-events:none;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .38s var(--ease),transform .55s var(--ease);
+}
+.slat.is-open .slat__face{opacity:1;transform:none}
+/* the rule above the title widens as the panel opens: a small, quiet cue that
+   the panel is the live one */
+.slat__face::before{
+  content:'';display:block;height:3px;width:26px;border-radius:2px;
+  background:var(--grad-line);
+  transition:width .6s var(--ease);
+}
+.slat.is-open .slat__face::before{width:78px}
+
+.slat__t{color:#fff;letter-spacing:-.015em}
+.slat__b{
+  font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.88);
+  max-width:46ch;
+  max-height:0;opacity:0;overflow:hidden;
+  transform:translateY(12px);
+  transition:max-height .62s var(--ease),opacity .42s .1s var(--ease),
+             transform .62s var(--ease);
+}
+.slat.is-open .slat__b{max-height:20em;opacity:1;transform:none}
+
+.slat__tap{
+  display:none;align-self:flex-start;
+  font-size:12px;font-weight:700;color:var(--ink);
+  background:var(--yellow);border-radius:var(--r-pill);padding:6px 12px;
+}
+.is-touch .slat__tap{display:inline-block}
+.is-touch .slat.is-open .slat__tap{display:none}
+
+/* --- tablet and mobile: a vertical accordion, opened by tap -------------- */
+@media (min-width:1025px){
+  .slat__b{max-height:none;opacity:1;transform:none;transition:none}
+}
+
+/* --- tablet and mobile: the spine goes away and it becomes a tap accordion */
+@media (max-width:1024px){
+  .slat__spine{display:none}
+  .slat__face{opacity:1;transform:none}
+  .slats{
+    flex-direction:column;height:auto;
+    gap:clamp(10px,1.4vw,14px);
+  }
+  .slat{
+    flex:0 0 auto;height:104px;
+    transition:height .6s var(--ease),box-shadow .5s var(--ease);
+  }
+  .slat.is-open{height:min(430px,66vw);flex-grow:0}
+  .slat__face{padding:18px 20px}
+  .slat__b{max-width:none}
+}
+@media (max-width:560px){
+  .slat{height:96px}
+  .slat.is-open{height:400px}
+}
+
+/* ===========================================================================
+   Header + footer. Same shape as the DM and IM landing pages so the three
+   siblings share one chrome; only the accent tokens differ (yellow underline
+   stays, hover colour moves from purple to blue).
+=========================================================================== */
+
+/* ---------------------------- HEADER ------------------------------------ */
+/* Transparent over the hero, solid once the page scrolls. The hero is a dark
+   navy-to-cyan ground, so a solid bar at the top would cut it in half. */
+.site-head{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  padding-block:clamp(14px,1.6vw,22px);
+  transition:background .32s var(--ease),box-shadow .32s var(--ease),
+             padding .32s var(--ease);
+}
+.site-head.is-stuck{
+  background:rgba(0,17,77,.84);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 10px 30px rgba(0,27,118,.30);
+  padding-block:clamp(10px,1.1vw,14px);
+}
+.site-head__inner{display:flex;align-items:center;gap:clamp(16px,2.4vw,40px)}
+.site-head__logo{flex:0 0 auto;display:block}
+.site-head__logo img{width:auto;height:clamp(30px,3.2vw,42px);display:block}
+
+.site-nav{
+  display:flex;align-items:center;gap:clamp(16px,2vw,30px);
+  margin-left:auto;
+}
+.site-nav a{
+  color:#fff;font-weight:600;font-size:15px;text-decoration:none;
+  position:relative;padding-block:6px;
+}
+/* underline grows from the left rather than fading in */
+.site-nav a::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:var(--yellow);border-radius:2px;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .28s var(--ease);
+}
+.site-nav a:hover::after,.site-nav a:focus-visible::after{transform:scaleX(1)}
+
+.btn--dark{background:var(--ink);color:#fff;display:inline-flex;align-items:center;gap:9px}
+.btn--dark:hover{background:#000}
+.site-head__cta{flex:0 0 auto;padding:12px 22px;font-size:14px}
+
+.site-head__burger{
+  display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:44px;height:44px;padding:0 10px;flex:0 0 auto;
+  background:rgba(255,255,255,.14);border:0;border-radius:12px;cursor:pointer;
+}
+.site-head__burger span{
+  display:block;height:2px;width:100%;background:#fff;border-radius:2px;
+  transition:transform .3s var(--ease),opacity .2s var(--ease);
+}
+.site-head__burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.site-head__burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.site-head__burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* --- full-screen mobile menu ---------------------------------------------
+   Lifted from the influencer landing page's `.sitebar__menu` so the siblings
+   share one chrome. The panel is fixed over everything and floods open on a
+   clip-path circle grown from the burger; the links stagger in behind it.
+   The IM page's --ms-navy is the same #001B76 as this page's --navy, so the
+   only real change is the nav items and the CTA label.
+------------------------------------------------------------------------- */
+.site-menu{
+  display:none;position:fixed;inset:0;z-index:800;
+  background:var(--navy);
+  flex-direction:column;
+  padding:14px clamp(20px,5vw,26px) calc(20px + env(safe-area-inset-bottom,0px));
+}
+.site-menu[hidden]{display:none!important}
+.site-head.is-open .site-menu:not([hidden]){
+  display:flex;
+  animation:smflood .6s var(--ease) both;
+}
+/* the circle is centred on the burger, so the panel appears to come out of it */
+@keyframes smflood{
+  from{clip-path:circle(30px at calc(100% - 42px) 40px)}
+  to{clip-path:circle(180% at calc(100% - 42px) 40px)}
+}
+
+.site-menu__top{display:flex;align-items:center;justify-content:space-between;min-height:44px}
+.site-menu__logo{display:block;height:26px;width:auto}
+.site-menu__close{
+  background:none;border:0;cursor:pointer;color:#fff;padding:12px 0 12px 16px;
+  font-family:var(--display);font-size:12px;font-weight:800;letter-spacing:.16em;
+  text-transform:uppercase;opacity:.85;transition:opacity .3s;
+}
+.site-menu__close:hover{opacity:.5}
+
+.site-menu__links{display:flex;flex-direction:column;margin-top:30px}
+.site-menu__links a{
+  color:#fff;font-family:var(--display);font-weight:800;
+  text-transform:uppercase;font-size:clamp(28px,7.4vw,56px);line-height:1.14;
+  letter-spacing:-.02em;padding:2px 0;transition:opacity .3s;
+  animation:smfade .45s var(--ease) both;
+}
+.site-menu__links a:hover{opacity:.55}
+.site-menu__links a:nth-child(1){animation-delay:.16s}
+.site-menu__links a:nth-child(2){animation-delay:.22s}
+.site-menu__links a:nth-child(3){animation-delay:.28s}
+.site-menu__links a:nth-child(4){animation-delay:.34s}
+.site-menu__links a:nth-child(5){animation-delay:.40s}
+@keyframes smfade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.site-menu__foot{
+  margin-top:auto;display:flex;align-items:flex-end;
+  justify-content:space-between;gap:20px;padding-bottom:18px;
+}
+.site-menu__label{
+  color:rgba(255,255,255,.5);font-family:var(--display);
+  font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+}
+.site-menu__contact{display:flex;flex-direction:column;gap:7px;text-align:right}
+.site-menu__contact a{color:#fff;font-size:15px;font-weight:600;transition:opacity .3s}
+.site-menu__contact a:hover{opacity:.55}
+
+.site-menu__cta{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  border-top:1px solid rgba(255,255,255,.18);padding-top:18px;color:#fff;
+  font-family:var(--display);font-weight:800;text-transform:uppercase;
+  font-size:clamp(16px,4.6vw,22px);letter-spacing:-.01em;transition:opacity .3s;
+}
+.site-menu__cta:hover{opacity:.6}
+.site-menu__cta em{font-style:normal;font-size:1.2em;line-height:1}
+
+@media (max-width:1024px){
+  .site-head__burger{display:flex;margin-left:auto}
+  .site-head__cta{display:none}
+  .site-nav{display:none}
+}
+@media (min-width:1025px){
+  .site-menu{display:none!important}
+}
+
+/* ---------------------------- FOOTER ------------------------------------ */
+/* Same structure as the DM and IM footers: logo and headline on one row,
+   three detail columns under a hairline, a closing line at the bottom.
+   Deliberately light on links. Contact details are plain text and there are no
+   socials or legal links, because every exit from a landing page is a lost
+   conversion. The quick links are the only anchors and all scroll in-page. */
+.site-foot{
+  background:#fff;color:var(--ink);
+  padding-block:clamp(56px,7vw,104px) clamp(26px,3vw,40px);
+  border-top:1px solid var(--line);
+  position:relative;overflow:hidden;
+}
+/* one soft cyan wash in the bottom-left corner so the footer is not a flat
+   white slab under a very colourful page */
+.site-foot::before{
+  content:'';position:absolute;left:-160px;bottom:-220px;
+  width:620px;height:620px;border-radius:50%;
+  background:radial-gradient(circle,rgba(65,206,226,.22),transparent 68%);
+  pointer-events:none;
+}
+.site-foot .wrap{position:relative;z-index:1}
+
+.foot__top{
+  display:flex;flex-direction:row;align-items:flex-start;
+  justify-content:space-between;gap:clamp(28px,4vw,56px);flex-wrap:wrap;
+}
+.foot__logo{display:inline-flex;align-items:center}
+.foot__logo img{display:block;height:clamp(34px,3.4vw,46px);width:auto}
+.foot__lead{display:flex;flex-direction:column;align-items:flex-start;max-width:640px}
+.foot__t{max-width:16ch;margin:0}
+.foot__t em{font-style:normal;background:linear-gradient(96deg,var(--blue),var(--cyan-deep));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.foot__cta{margin-top:clamp(24px,3vw,38px)}
+
+.foot__cols{
+  display:grid;grid-template-columns:1.2fr 1.2fr .9fr;
+  gap:clamp(24px,3.2vw,40px);
+  margin-top:clamp(48px,6vw,76px);padding-top:clamp(30px,3.4vw,44px);
+  border-top:1px solid var(--line);
+}
+.foot__col{display:flex;flex-direction:column;align-items:flex-start;gap:11px}
+.foot__label{
+  display:inline-block;padding:7px 14px;border-radius:var(--r-pill);
+  background:rgba(11,19,57,.05);border:1px solid var(--line);
+  font-size:13px;font-weight:500;color:var(--muted);margin-bottom:6px;
+}
+.foot__big{
+  font-size:clamp(17px,1.7vw,24px);font-weight:600;
+  letter-spacing:-.03em;line-height:1.25;color:var(--ink);margin:0;
+}
+.foot__note{font-size:15px;line-height:1.6;color:var(--muted);margin:0}
+.foot__col a{
+  color:var(--muted);text-decoration:none;font-size:15px;
+  transition:color .22s var(--ease);
+}
+.foot__col a:hover,.foot__col a:focus-visible{color:var(--blue)}
+
+.foot__end{
+  display:flex;flex-direction:row;justify-content:space-between;
+  gap:20px;flex-wrap:wrap;
+  margin-top:clamp(36px,4.5vw,56px);padding-top:24px;
+  border-top:1px solid var(--line);
+  font-size:13px;color:var(--muted-2);
+}
+
+@media (max-width:900px){
+  .foot__cols{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .foot__cols{grid-template-columns:1fr}
+  .foot__top{flex-direction:column}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .site-head,.site-nav{transition:none}
+}
+
+
+/* ---------- Elementor host compatibility ----------
+   Two different jobs here, and they need OPPOSITE specificity.
+
+   These first rules must BEAT Elementor's own defaults, so they are written
+   plainly. They only ever target Elementor's classes, which the page's own
+   stylesheet never styles, so there is nothing of ours for them to outrank.
+   (Wrapping these in :where() was the first build's bug: at zero specificity
+   the padding reset lost to Elementor's `.e-con` and every section sat in a
+   10px band of page background.) */
+
+/* Elementor containers carry their own padding and min-height. The page's
+   sections bring all their own spacing, so container padding shows up as a
+   stripe of the wrong colour between two sections. */
+.e-con:has(> .elementor-widget-html .seo){padding:0;min-height:0}
+/* the engine and boot containers hold only a <style> and a <script>, so they
+   must take up no room at all. A display:none ancestor does not stop a
+   stylesheet applying or a script executing. */
+.e-con:has(#seo-css),.e-con:has(#seo-js){display:none}
+
+/* The widget wrapper sits between the container and our markup and would break
+   every parent>child rule in the page, so it is collapsed out of the box tree. */
+.elementor-widget-html:has(> .elementor-widget-container > .seo),
+.elementor-widget-html:has(> .elementor-widget-container > .seo) > .elementor-widget-container{
+  display:contents}
+
+/* Nothing above a sticky element may create a scroll container, or the sticky
+   silently stops working. This page has two: the .plan copy column and the
+   .journey step stack. */
+.e-con:has(.seo),.e-con:has(.seo) .e-con-inner,
+.elementor-widget-html:has(.seo),
+.elementor-widget-html:has(.seo) > .elementor-widget-container{overflow:visible}
+
+/* From here down the rules touch OUR elements, so they are wrapped in :where()
+   to contribute zero specificity and never outrank the page's own stylesheet. */
+
+/* Undo the theme's own element defaults (Hello Elementor sets margins on
+   headings, paragraphs and lists). These sit at exactly (0,0,1) — the same
+   weight as the theme rules they replace, winning only on source order — so
+   they can never outrank a class in the page's own stylesheet. */
+:where(.seo) h1,:where(.seo) h2,:where(.seo) h3,
+:where(.seo) h4,:where(.seo) h5,:where(.seo) h6,
+:where(.seo) p,:where(.seo) ul,:where(.seo) ol,
+:where(.seo) li,:where(.seo) figure,:where(.seo) dl,
+:where(.seo) dd,:where(.seo) dt{margin:0;padding:0}
+:where(.seo) ul,:where(.seo) ol{list-style:none}
+:where(.seo) a{text-decoration:none;box-shadow:none}
+:where(.seo) button,:where(.seo) input,:where(.seo) select,
+:where(.seo) textarea{font-family:inherit}
+:where(.seo) img{height:auto;border-radius:0}
+
+/* The page relies on the document scroller for its own horizontal clipping,
+   which the scoped rule above had to give up. Put it back at the one level that
+   is guaranteed not to sit above a sticky element. */
+.seo-clip{overflow-x:clip}
+
+</style>
