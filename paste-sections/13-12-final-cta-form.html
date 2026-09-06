@@ -54,8 +54,35 @@
               document.head.appendChild(s);
             }
 
-            ensureScript(function () {
-              window.hbspt.forms.create({ region: REGION, portalId: PORTAL, formId: FORM_A, target: '#ms-form-a-slot' });
+            /* The form sits at the very bottom of a ~14,000px page, but embedding
+               it eagerly pulled in HubSpot's script AND the reCAPTCHA bundle it
+               depends on — 345 KB of gstatic plus HubSpot's own tracking — during
+               the initial load, on the critical path for a hero the visitor is
+               still looking at. Measured on a throttled phone that was over half
+               the page's third-party weight.
+
+               So it is built only when the visitor is within a screen or so of
+               it, with a fallback on first interaction in case IntersectionObserver
+               is unavailable. Anyone who never scrolls that far never pays for it. */
+            var built = false;
+            function buildA() {
+              if (built) return;
+              built = true;
+              ensureScript(function () {
+                window.hbspt.forms.create({ region: REGION, portalId: PORTAL, formId: FORM_A, target: '#ms-form-a-slot' });
+              });
+            }
+            var host = document.getElementById('ms-form-chooser');
+            if ('IntersectionObserver' in window && host) {
+              new IntersectionObserver(function (es, obs) {
+                es.forEach(function (e) { if (e.isIntersecting) { buildA(); obs.disconnect(); } });
+              }, { rootMargin: '800px 0px' }).observe(host);
+            } else {
+              buildA();
+            }
+            /* belt: any deliberate interaction warms it early */
+            ['pointerdown', 'keydown'].forEach(function (ev) {
+              window.addEventListener(ev, buildA, { once: true, passive: true });
             });
 
             window.msShowB = function () {
