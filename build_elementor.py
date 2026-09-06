@@ -319,10 +319,21 @@ css += f"""
 :where(.{SCOPE}) textarea{{font-family:inherit}}
 :where(.{SCOPE}) img{{height:auto;border-radius:0}}
 
-/* The page relies on the document scroller for its own horizontal clipping,
-   which the scoped rule above had to give up. Put it back at the one level that
-   is guaranteed not to sit above a sticky element. */
-.{SCOPE}-clip{{overflow-x:clip}}
+/* THE SECTION WRAPPER MUST BE PINNED TO ITS CONTAINER'S WIDTH.
+   Elementor's real containers compute `align-items:normal`, not `stretch`, and
+   under that our block-level wrapper sized itself to its widest CONTENT instead
+   of to the container. The logo marquee is `width:max-content`, so on a phone
+   the wrapper became 3648px against a 390px viewport, the document overflowed
+   ~9x, and mobile browsers zoomed out to fit. That in turn broke the menu:
+   `position:fixed;inset:0` resolves against the VISUAL viewport, so the panel
+   rendered 4x oversized and its Close button, contact block and CTA all fell
+   off the bottom of the screen. One symptom, two layers away from its cause.
+
+   `overflow-x:clip` is what the page's own `body` rule did before scoping. It
+   is safe above `position:sticky` — unlike `hidden`, `clip` creates no scroll
+   container — and this page depends on sticky in the closing CTA and the
+   journey stack, so it is asserted after every build. */
+.{SCOPE}{{width:100%;max-width:100%;min-width:0;overflow-x:clip}}
 """
 
 # ---------------------------------------------------------------------------
@@ -515,7 +526,7 @@ with zipfile.ZipFile(apath, 'w', zipfile.ZIP_DEFLATED) as z:
             missing.append(f)
 
 # ---------------------------------------------------------------------------
-print(f"scoped body   : dropped {dropped} (kills position:sticky under a scoped div)")
+print(f"scoped body   : {dropped} moved off body, re-applied on the .{SCOPE} wrapper")
 print(f"sections      : {len(sections)}")
 for t, s, n in slugs:
     print(f"   {s:<34} {n/1024:6.1f} KB")

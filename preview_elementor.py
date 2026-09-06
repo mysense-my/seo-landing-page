@@ -60,7 +60,12 @@ body{background:#fff}
 .e-con{
   --container-max-width:1140px;
   --padding-top:10px;--padding-bottom:10px;--padding-left:0px;--padding-right:0px;
-  position:relative;display:flex;flex-direction:column;align-items:stretch;
+  /* `normal`, NOT `stretch` — this is what Elementor's real containers compute,
+     and the difference is not cosmetic: under `normal` a block-level child sizes
+     to its widest CONTENT rather than to the container, which is how a
+     max-content marquee blew the page out to 3648px on a 390px phone while this
+     harness rendered it perfectly at `stretch`. */
+  position:relative;display:flex;flex-direction:column;align-items:normal;
   width:100%;max-width:100%;min-height:0;
   padding:var(--padding-top) var(--padding-right) var(--padding-bottom) var(--padding-left);
 }
