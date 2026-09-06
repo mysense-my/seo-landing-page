@@ -57,9 +57,19 @@ motion = open(os.path.join(ROOT, 'js', 'motion.js'), encoding='utf-8').read()
 # and POSTing it to /wp-json/wp/v2/media, so the resulting URLs were read back
 # from the API rather than assumed.
 # ---------------------------------------------------------------------------
+# Filenames whose media-library URL is NOT ASSET_BASE + the local name. The two
+# logos were re-uploaded on 6 Sep after the R-04/R-05 artwork was swapped back to
+# the mark the main site actually uses, so WordPress found the old name taken and
+# appended -1. Read back from the API, not assumed.
+EXPLICIT = {
+    'mysense-logo-white.webp': f'{ASSET_BASE}/mysense-logo-white-1.webp',
+    'mysense-logo-black.webp': f'{ASSET_BASE}/mysense-logo-black-1.webp',
+}
+
+
 def rewrite(s):
     s = re.sub(r'assets/([A-Za-z0-9._-]+\.(?:jpe?g|png|webp|svg))',
-               lambda m: f'{ASSET_BASE}/{m.group(1)}', s)
+               lambda m: EXPLICIT.get(m.group(1), f'{ASSET_BASE}/{m.group(1)}'), s)
     if 'assets/' in s:
         i = s.index('assets/')
         raise SystemExit("BUILD STOPPED: unresolved 'assets/' path -> " + s[max(0, i-60):i+60])
