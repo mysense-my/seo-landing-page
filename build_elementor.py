@@ -339,15 +339,20 @@ css += f"""
    rendered 4x oversized and its Close button, contact block and CTA all fell
    off the bottom of the screen. One symptom, two layers away from its cause.
 
-   The width pinning is the WHOLE fix. An earlier version also put
-   `overflow-x:clip` here, reasoning that it replaced what the page's `body` rule
-   used to do. It did not: on the live site it broke `position:sticky` in the
-   closing CTA outright (the column scrolled away instead of pinning), even
-   though the local harness reported sticky working. It is also unnecessary —
-   `.brands`, `.reviews` and `.band` each carry their own `overflow:hidden`, and
+   The width pinning is the WHOLE fix, and no `overflow-x:clip` is needed here:
+   `.brands`, `.reviews` and `.band` each carry their own `overflow:hidden`, so
    once the wrapper is pinned to the container width those sections are
-   viewport-width and clip their own marquees. So: pin the width, clip nothing,
-   and assert sticky against the LIVE page rather than the harness. */
+   viewport-width and clip their own marquees. Verified at 320-1440: zero
+   document overflow without any clip on the wrapper.
+
+   A note for whoever measures this next. A clip WAS briefly added here and then
+   removed because sticky looked broken on the live page. That reading was
+   wrong: the live site has smooth scrolling, so `scrollTo` animates and any
+   sample taken a few hundred ms later is read mid-flight. Measured properly —
+   smooth scrolling forced off, page settled first, the column's viewport top
+   sampled across its whole pinning range — sticky holds at exactly its 120px
+   offset on the live page, spread 0, identical to the standalone build. Kill
+   `scroll-behavior` before asserting anything about scroll position. */
 .{SCOPE}{{width:100%;max-width:100%;min-width:0}}
 """
 
