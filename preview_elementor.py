@@ -50,7 +50,15 @@ ELEMENTOR_CSS = """
 .elementor-kit-50 p{margin-bottom:1.2em;color:#4a4a4a;font-family:"Nunito Sans",serif}
 .elementor-kit-50 a{color:#c36;text-decoration:underline}
 .elementor-kit-50 ul,.elementor-kit-50 ol{margin:0 0 1.2em 2em;list-style:disc}
-.elementor-kit-50 button{font-family:"Nunito Sans",serif;text-transform:uppercase}
+/* The kit skins BARE <button> in every state. This is what painted a #FFC670
+   rounded rectangle over an opened card: the full-card invisible hit target is a
+   <button>, so tapping it focused it. Reproduced here verbatim, because
+   element.click() does not focus and this therefore never showed up otherwise. */
+.elementor-kit-50 button{font-family:"Nunito Sans",serif;text-transform:uppercase;
+  background-color:var(--e-global-color-primary,#0046A0);border-radius:100px}
+.elementor-kit-50 button:hover,.elementor-kit-50 button:focus,
+.elementor-kit-50 button:focus-visible,.elementor-kit-50 button:active{
+  background-color:var(--e-global-color-secondary,#FFC670);border-style:none;border-radius:100px}
 .elementor-kit-50{font-family:"Nunito Sans",serif;color:#4a4a4a;line-height:1.7}
 
 *,*::before,*::after{box-sizing:border-box}

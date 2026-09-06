@@ -259,6 +259,58 @@ css += ("\n\n/* ---- shield against Elementor container lazy-loading (see build 
 print(f"lazy shield   : {_shield_count} background declarations protected")
 
 # ---------------------------------------------------------------------------
+# Hold our own button styling through :hover / :focus / :active.
+#
+# The kit styles BARE <button> in every interaction state:
+#   .elementor-kit-50 button:hover, .elementor-kit-50 button:focus
+#     { background-color: var(--e-global-color-secondary);   /* #FFC670 */
+#       border-radius: 100px }
+# That is (0,2,1) and beats any of our component rules at (0,2,0). The page's
+# problem cards and offer slats are opened by an invisible full-card <button>
+# (.pcard__hit / .slat__hit at z-index 5 and 4), so TAPPING one focused it and
+# the kit painted a #FFC670 rounded rectangle straight over the card's text —
+# the "yellow blob". It never showed in testing because `element.click()` does
+# not move focus; only a real tap or click does.
+#
+# So every rule of ours that targets a <button> class is re-emitted with the
+# interaction states appended, which lands at (0,3,0) and holds. The button
+# classes are read out of the markup rather than hard-coded, so a new button
+# picks this up automatically.
+# ---------------------------------------------------------------------------
+BUTTON_CLASSES = sorted({c for m in re.finditer(r'<button[^>]*class="([^"]+)"', html)
+                         for c in m.group(1).split()})
+STATES = (':hover', ':focus', ':focus-visible', ':active')
+
+def button_state_guard(scoped):
+    out, n = [], 0
+    for header, body in _split_rules(scoped):
+        h = header.strip()
+        if body is None or h.startswith('@'):
+            if body is not None and AT_NESTED.match(h):
+                inner = button_state_guard(body)
+                if inner:
+                    out.append(h + '{' + inner + '}')
+            continue
+        parts = _split_commas(h)
+        # only plain rules that end on one of our button classes, and that do
+        # not already carry a pseudo-class of their own
+        hits = [p for p in parts
+                if any(p.rstrip().endswith('.' + c) for c in BUTTON_CLASSES) and ':' not in p]
+        if not hits:
+            continue
+        sel = ','.join(p + st for p in hits for st in STATES)
+        out.append(sel + '{' + body.strip() + '}')
+        n += 1
+    return '\n'.join(out)
+
+_guard = button_state_guard(css)
+if not _guard or 'pcard__hit:focus' not in _guard:
+    raise SystemExit("BUILD STOPPED: button state guard did not cover .pcard__hit")
+css += ("\n\n/* ---- hold button styling through hover/focus/active (see build script) ---- */\n"
+        + _guard + "\n")
+print(f"button guard  : {len(BUTTON_CLASSES)} button classes -> {_guard.count('{')} state rules")
+
+# ---------------------------------------------------------------------------
 # Custom-property collision guard.
 #
 # Elementor's containers define their own custom properties ON `.e-con`, which

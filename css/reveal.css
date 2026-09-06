@@ -37,6 +37,9 @@
 .pcard__hit{
   position:absolute;inset:0;z-index:5;
   background:none;border:0;padding:0;cursor:pointer;
+  /* the host theme's kit styles bare <button> with border-radius:100px; this
+     full-card hit target must follow the CARD's radius, not the theme's */
+  border-radius:inherit;
 }
 .pcard__hit:focus-visible{outline:3px solid var(--cyan);outline-offset:-6px;border-radius:inherit}
 
@@ -332,6 +335,9 @@
 .slat__hit{
   position:absolute;inset:0;z-index:4;
   background:none;border:0;padding:0;cursor:pointer;
+  /* the host theme's kit styles bare <button> with border-radius:100px; this
+     full-card hit target must follow the CARD's radius, not the theme's */
+  border-radius:inherit;
 }
 .slat__hit:focus-visible{outline:3px solid var(--cyan);outline-offset:-6px;border-radius:inherit}
 
