@@ -57,14 +57,11 @@ motion = open(os.path.join(ROOT, 'js', 'motion.js'), encoding='utf-8').read()
 # and POSTing it to /wp-json/wp/v2/media, so the resulting URLs were read back
 # from the API rather than assumed.
 # ---------------------------------------------------------------------------
-# Filenames whose media-library URL is NOT ASSET_BASE + the local name. The two
-# logos were re-uploaded on 6 Sep after the R-04/R-05 artwork was swapped back to
-# the mark the main site actually uses, so WordPress found the old name taken and
-# appended -1. Read back from the API, not assumed.
-EXPLICIT = {
-    'mysense-logo-white.webp': f'{ASSET_BASE}/mysense-logo-white-1.webp',
-    'mysense-logo-black.webp': f'{ASSET_BASE}/mysense-logo-black-1.webp',
-}
+# Filenames whose media-library URL is NOT ASSET_BASE + the local name.
+# Currently empty: the page is back on the R-04/R-05 artwork carrying the
+# registered mark, which still holds the plain filenames in the library. The
+# `-1` copies from the brief revert to the main-site mark are unused.
+EXPLICIT = {}
 
 
 def rewrite(s):
@@ -205,6 +202,61 @@ css = css[:_body.start()] + '\nbody{' + ';'.join(decls) + '}' + css[_body.end():
 # attempt (`.display{` survived exactly once, and half the page lost its styling).
 css = re.sub(r'/\*.*?\*/', '', css, flags=re.S)
 css = scope_css(css, SCOPE)
+
+# ---------------------------------------------------------------------------
+# Shield our background images from Elementor's container lazy-loading.
+#
+# Elementor ships this, inline in the head:
+#   .e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload),
+#   .e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload) *
+#     { background-image: none !important }
+# From the FOURTH container onward it blanks every background image inside,
+# descendants included, until its own observer adds `.e-lazyloaded` on scroll.
+# On this page that wiped 14 of 17 sections' gradients on load — the hero glows,
+# the awards plaque, the comparison column, the slat scrims and the problem
+# cards' navy sheet. With the sheet gone an opened card showed its photograph
+# under `filter:saturate(.55)` instead, which is the washed-out beige blob.
+#
+# `e-no-lazyload` is added to every container too, but Elementor's importer
+# drops container classes so that only lands once the restore script runs. This
+# is the belt: the same declarations re-stated with `!important` at a
+# specificity that outranks Elementor's (0,5,0) selector, so the gradients are
+# never suppressed even for one frame.
+# ---------------------------------------------------------------------------
+BOOST = '.' + '.'.join([SCOPE] * 5)          # (0,5,0) before the element's own class
+
+def shield(scoped):
+    out, n = [], 0
+    for header, body in _split_rules(scoped):
+        h = header.strip()
+        if body is None or AT_KEYFRAMES.match(h):
+            continue
+        if AT_NESTED.match(h):
+            inner = shield(body)
+            if inner:
+                out.append(h + '{' + inner + '}')
+            continue
+        if h.startswith('@'):
+            continue
+        decls = [d.strip() for d in body.split(';')
+                 if re.match(r'background(-image)?\s*:', d.strip())
+                 and re.search(r'gradient|url\(', d)]
+        if not decls:
+            continue
+        sel = ','.join(p.replace('.' + SCOPE, BOOST, 1) if p.strip().startswith('.' + SCOPE) else p
+                       for p in _split_commas(h))
+        out.append(sel + '{' + ';'.join(d + ' !important' for d in decls) + '}')
+        n += 1
+    return '\n'.join(out)
+
+_shield = shield(css)
+_shield_count = _shield.count('!important')
+if _shield_count < 15:
+    raise SystemExit(f"BUILD STOPPED: lazy-load shield only caught {_shield_count} "
+                     "background declarations, expected 18+")
+css += ("\n\n/* ---- shield against Elementor container lazy-loading (see build script) ---- */\n"
+        + _shield + "\n")
+print(f"lazy shield   : {_shield_count} background declarations protected")
 
 # ---------------------------------------------------------------------------
 # Custom-property collision guard.
@@ -418,7 +470,8 @@ engine = (
  f'<style id="{SCOPE}-css">\n' + css + '\n</style>\n'
 )
 content.append(container(eid('engine'), [html_widget(eid('engine-w'), engine)],
-                         {"_element_id": f"{SCOPE}-engine"}))
+                         {"_css_classes": "e-no-lazyload",
+                          "_element_id": f"{SCOPE}-engine"}))
 
 slugs = []
 for title, markup in sections:
@@ -428,7 +481,8 @@ for title, markup in sections:
     content.append(container(
         eid('c-' + slug),
         [html_widget(eid('w-' + slug), wrapped)],
-        {"_css_classes": f"{SCOPE}-sec-con", "_element_id": f"{SCOPE}-{slug}"}))
+        {"_css_classes": f"{SCOPE}-sec-con e-no-lazyload",
+         "_element_id": f"{SCOPE}-{slug}"}))
     slugs.append((title, slug, len(wrapped)))
 
 # --- boot: the motion engine, after every section exists in the DOM ---
@@ -442,7 +496,8 @@ boot = (
  '})();</script>'
 )
 content.append(container(eid('boot'), [html_widget(eid('boot-w'), boot)],
-                         {"_element_id": f"{SCOPE}-boot"}))
+                         {"_css_classes": "e-no-lazyload",
+                          "_element_id": f"{SCOPE}-boot"}))
 
 
 # ---------------------------------------------------------------------------

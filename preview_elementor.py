@@ -73,6 +73,16 @@ body{background:#fff}
 .elementor-element{}
 .elementor-widget{position:relative;width:100%}
 .elementor-widget-container{}
+
+/* Elementor's container lazy-loading, verbatim. From the FOURTH container on it
+   blanks every background image inside until its observer adds .e-lazyloaded on
+   scroll. The harness ships it deliberately and NEVER adds .e-lazyloaded, so the
+   build's shield has to hold on its own — this is the hazard that wiped 14 of 17
+   sections' gradients on the live site and turned an opened problem card into a
+   beige blob. */
+.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload),
+.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload) *{
+  background-image:none!important}
 """
 
 def widgets(el):
@@ -85,7 +95,7 @@ def widgets(el):
     st = el.get('settings', {})
     eid = st.get('_element_id', '')
     cls = st.get('_css_classes', '')
-    return (f'<div class="e-con e-con-full e-flex elementor-element '
+    return (f'<div class="e-con e-con-full e-flex elementor-element e-parent '
             f'elementor-element-{el["id"]} {cls}"'
             + (f' id="{eid}"' if eid else '') +
             f' data-element_type="container">{inner}</div>')

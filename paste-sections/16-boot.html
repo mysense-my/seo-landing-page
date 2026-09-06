@@ -215,13 +215,17 @@
        invisible would trap taps and keep its links in the tab order. */
     const menu = document.getElementById('siteMenu');
     if (burger && menu) {
+      /* `is-open` goes on the MENU, not the header: the panel is a sibling of
+         .site-head now, because a backdrop-filtered header becomes the
+         containing block for its position:fixed children. */
       const setOpen = open => {
+        menu.classList.toggle('is-open', open);
         head.classList.toggle('is-open', open);
         menu.hidden = !open;
         burger.setAttribute('aria-expanded', String(open));
         document.body.style.overflow = open ? 'hidden' : '';
       };
-      burger.addEventListener('click', () => setOpen(!head.classList.contains('is-open')));
+      burger.addEventListener('click', () => setOpen(!menu.classList.contains('is-open')));
       menu.addEventListener('click', e => {
         if (e.target.closest('[data-nav-close]') || e.target.closest('a')) setOpen(false);
       });

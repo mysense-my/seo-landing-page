@@ -1186,7 +1186,7 @@
   padding:14px clamp(20px,5vw,26px) calc(20px + env(safe-area-inset-bottom,0px));
 }
 .seo .site-menu[hidden]{display:none!important}
-.seo .site-head.is-open .site-menu:not([hidden]){
+.seo .site-menu.is-open:not([hidden]){
   display:flex;
   animation:smflood .6s var(--ease) both;
 }
@@ -1296,6 +1296,27 @@
 @media (max-width:560px){.seo .foot__cols{grid-template-columns:1fr}
 .seo .foot__top{flex-direction:column}}
 @media (prefers-reduced-motion:reduce){.seo .site-head,.seo .site-nav{transition:none}}
+
+/* ---- shield against Elementor container lazy-loading (see build script) ---- */
+.seo.seo.seo.seo.seo .hero::before{background:linear-gradient(180deg,rgba(0,17,77,.55),transparent) !important}
+.seo.seo.seo.seo.seo .brands::before{background:radial-gradient(circle,rgba(0,48,176,.10),transparent 68%) !important}
+.seo.seo.seo.seo.seo .brands::after{background:radial-gradient(circle,rgba(65,206,226,.20),transparent 68%) !important}
+.seo.seo.seo.seo.seo .awards::before{background:radial-gradient(circle,rgba(65,206,226,.30),transparent 68%) !important}
+.seo.seo.seo.seo.seo .numbers__glow{background:radial-gradient(circle,rgba(255,204,0,.22),transparent 66%) !important}
+.seo.seo.seo.seo.seo .journey::before{background:radial-gradient(circle,rgba(0,48,176,.55),transparent 68%) !important}
+.seo.seo.seo.seo.seo .plan__glow{background:radial-gradient(circle,rgba(242,66,119,.30),transparent 66%) !important}
+.seo.seo.seo.seo.seo .pcard::before{background:linear-gradient(180deg,rgba(11,19,57,0) 34%,rgba(11,19,57,.55) 62%,rgba(11,19,57,.88) 100%) !important}
+.seo.seo.seo.seo.seo .pcard__sheet{background:linear-gradient(158deg,rgba(0,27,118,.95) 0%,rgba(0,48,176,.94) 52%,rgba(31,168,188,.92) 100%) !important}
+.seo.seo.seo.seo.seo .method__glow{background:radial-gradient(circle,rgba(65,206,226,.26),transparent 66%) !important}
+.seo.seo.seo.seo.seo .cmp__c--us{background:linear-gradient(180deg,rgba(0,48,176,.72),rgba(31,168,188,.30)) !important}
+.seo.seo.seo.seo.seo .cmp__c--us::after{background:linear-gradient(104deg,transparent 32%,rgba(255,255,255,.20) 50%,transparent 68%) !important}
+.seo.seo.seo.seo.seo .cmp__head .cmp__c--us{background:linear-gradient(120deg,var(--blue),var(--cyan-deep)) !important}
+.seo.seo.seo.seo.seo .cmp__row.is-hot .cmp__c--us{background:linear-gradient(180deg,rgba(0,48,176,.85),rgba(31,168,188,.55)) !important}
+.seo.seo.seo.seo.seo .slat::before{background:linear-gradient(180deg,rgba(0,27,118,.42) 0%,rgba(0,17,77,.30) 40%,rgba(0,17,77,.94) 100%) !important}
+.seo.seo.seo.seo.seo .slat.is-open::before{background:linear-gradient(180deg,rgba(0,27,118,.20) 0%,rgba(0,17,77,.42) 42%,rgba(0,17,77,.95) 100%) !important}
+.seo.seo.seo.seo.seo .site-foot::before{background:radial-gradient(circle,rgba(65,206,226,.22),transparent 68%) !important}
+.seo.seo.seo.seo.seo .foot__t em{background:linear-gradient(96deg,var(--blue),var(--cyan-deep)) !important}
+
 
 /* ---------- Elementor host compatibility ----------
    Two different jobs here, and they need OPPOSITE specificity.

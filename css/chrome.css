@@ -59,7 +59,11 @@
 
 /* --- full-screen mobile menu ---------------------------------------------
    Lifted from the influencer landing page's `.sitebar__menu` so the siblings
-   share one chrome. The panel is fixed over everything and floods open on a
+   share one chrome. The panel is a SIBLING of .site-head, never a child:
+   .site-head.is-stuck carries backdrop-filter, and a filtered element becomes
+   the containing block for its position:fixed descendants, so nested inside it
+   this panel sized to the 64px header bar instead of the viewport as soon as
+   the page was scrolled. The panel is fixed over everything and floods open on a
    clip-path circle grown from the burger; the links stagger in behind it.
    The IM page's --ms-navy is the same #001B76 as this page's --navy, so the
    only real change is the nav items and the CTA label.
@@ -71,7 +75,7 @@
   padding:14px clamp(20px,5vw,26px) calc(20px + env(safe-area-inset-bottom,0px));
 }
 .site-menu[hidden]{display:none!important}
-.site-head.is-open .site-menu:not([hidden]){
+.site-menu.is-open:not([hidden]){
   display:flex;
   animation:smflood .6s var(--ease) both;
 }
