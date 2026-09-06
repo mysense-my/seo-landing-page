@@ -34,54 +34,62 @@ container  seo-boot              <script> — the motion engine, display:none
 
 ---
 
-## Step 1 — upload the images FIRST
+## Already done on seo.mysense.com.my (6 Sep 2026)
 
-`elementor/seo-landing-assets.zip` holds all 41 images in a folder called
-`seo-landing/`. Unzip it into:
+Steps 1–3 below have been **carried out on the live site**; they are recorded here
+for a rebuild or a second environment.
 
-```
-/wp-content/uploads/seo-landing/
-```
+- All 41 images are in the media library at `/wp-content/uploads/2026/09/`.
+- The template is in **Templates → Saved Templates** as *MYSense SEO Landing*
+  (id 471). A duplicate from a double-submit was moved to Trash.
+- Page **420** holds the 17 containers and is set to **Elementor Canvas**.
+- The page is still a **DRAFT**. Nothing has been published.
 
-so the files land at `…/uploads/seo-landing/logo-sjmc.png` and so on. I checked:
-**none of these 41 files exist on the server yet**, under that path or under
-`/uploads/2026/09/`.
+Two things worth knowing about what is on the server:
 
-**If you'd rather use the Media Library** (drag all 41 in at once), they'll land in
-`/uploads/2026/09/` instead. That works too — it's one find/replace afterwards.
-Open the **seo-engine** container's HTML widget and swap:
+1. Five images collided with an earlier upload attempt and WordPress appended
+   `-1` to them (`svc-onpage-1.jpg`, `svc-reporting-1.jpg`, `why-data-1.jpg`,
+   `why-expertise-1.jpg`, `why-tailored-1.jpg`). The originals are correct and
+   byte-identical to source, and the page uses the clean names. The five `-1`
+   copies are unused duplicates and can be binned.
+2. The images were uploaded by fetching each one from the GitHub Pages copy
+   inside the logged-in admin page and POSTing it to `/wp-json/wp/v2/media`, so
+   the URLs baked into the template were read back from the API rather than
+   guessed.
 
-```
-/wp-content/uploads/seo-landing/
-```
+---
 
-for
+## Step 1 — upload the images
 
-```
-/wp-content/uploads/2026/09/
-```
+`elementor/seo-landing-assets.zip` holds all 41 images. Either unzip it into
+`/wp-content/uploads/seo-landing/` **or** drag all 41 into the Media Library.
+Whichever you choose, `ASSET_BASE` at the top of `build_elementor.py` must match,
+and the build bakes that base into every image URL.
 
-then do the same in the **seo-2-trusted-by** and **seo-7-case-studies** widgets.
 Watch for WordPress appending `-1` to any filename that collides with something
-already in the library — if a logo is missing, that's why.
+already in the library — if an image is missing, that is why.
 
 ## Step 2 — import the template
 
 1. **Templates → Saved Templates → Import Templates**
 2. Upload `elementor/MYSense-SEO-Landing-template.json`
-3. Open page 420 in Elementor
+3. Open the page in Elementor
 4. Folder icon (Add Template) → **My Templates** → insert **MYSense SEO Landing**
+
+The import posts to `admin-ajax.php` and then redirects, so the list can look
+unchanged for a few seconds. **Reload the Saved Templates list before importing
+again** — submitting twice is what produced the duplicate on this site.
 
 ## Step 3 — set the page layout to Canvas
 
-This page ships its **own header and footer**, so the theme's must be off or you get
-two of each.
+This page ships its **own header and footer**, so the theme's must be off or you
+get two of each.
 
 **Elementor → Page Settings (gear, bottom-left) → Page Layout → Elementor Canvas**
 
-The template file asks for canvas, but Elementor only applies `page_settings` when a
-template is imported *as a page*; inserting it into an existing page does not carry
-them over. So set it by hand.
+The template file asks for canvas, but Elementor only applies `page_settings`
+when a template is imported *as a page*; inserting it into an existing page does
+not carry them over. So set it by hand.
 
 ## Step 4 — check it
 
@@ -123,6 +131,30 @@ every section sits in a 10px stripe of the wrong background colour.
 Elementor's importer drops `_css_classes` on containers while keeping them on
 widgets, and keeps element ids on both — so the classes are restored at parse time,
 keyed by id. Same fix the IM build needed.
+
+**`--display` is called `--ff-display`.** Elementor defines `--display:flex` on
+`.e-con`, and it cascades into every section wrapper inside it. With the original
+name, every `font-family:var(--display)` inside a container resolved to the word
+`flex` and each heading fell back to the browser default — no error, no warning.
+The build now fails outright if any of the page's 45 custom properties collides
+with an Elementor container variable.
+
+**The stylesheet is scoped, and the scoping is asserted.** Every selector gets
+exactly one `.seo ` prefix. Uniformity is the point: the whole sheet moves up by
+the same (0,1,0), so the page's internal cascade is untouched, while
+`.seo .display` at (0,2,0) clears the kit. Comments are stripped first — the
+selector splitter is not comment-aware, and a `/* … */` block parsed as a
+selector silently shredded the stylesheet on the first attempt. The build checks
+for a handful of rules by name afterwards and stops rather than shipping a sheet
+that quietly lost half its rules.
+
+**Colour and font-family are handed back to inheritance on text elements.** The
+page colours text by setting `color` on a section and letting it inherit, but
+inheritance only applies when nothing matches the element itself — and the kit
+matches every `p` and heading directly. That painted the hero headline near-black
+and re-wrapped body copy in the theme's face. Headings are excluded from the
+`font-family:inherit` rule on purpose: the page sets their face itself at the
+same weight, and the compat rule would land later in the file and beat it.
 
 ---
 
