@@ -183,8 +183,8 @@
 .case:hover .case__media img{transform:scale(1.045)}
 .case__tag{
   position:absolute;left:16px;bottom:16px;
-  background:rgba(0,17,77,.86);color:#fff;
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  /* solid, not backdrop-filter — see the note on .pcard__mark */
+  background:rgba(0,17,77,.92);color:#fff;
   font-size:12.5px;font-weight:700;border-radius:var(--r-pill);padding:7px 14px;
 }
 .case__body{padding:clamp(22px,2.4vw,32px);display:flex;flex-direction:column;gap:6px}
