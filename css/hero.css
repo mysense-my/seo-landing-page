@@ -184,7 +184,7 @@
   flex:0 0 auto;width:23px;height:23px;border-radius:50%;
   display:grid;place-items:center;
   background:#EDEFF6;color:var(--muted-2);
-  font-family:var(--display);font-weight:800;font-size:10.5px;
+  font-family:var(--ff-display);font-weight:800;font-size:10.5px;
 }
 /* the visitor's own site is the only coloured mark, the way a real favicon is
    coloured among plainer ones. It is a cue, not an annotation. */
@@ -238,7 +238,7 @@
   max-width:200px;
 }
 .chip__n{
-  font-family:var(--display);font-weight:900;font-size:24px;
+  font-family:var(--ff-display);font-weight:900;font-size:24px;
   letter-spacing:-.03em;line-height:1;color:var(--blue);
 }
 .chip__l{font-size:11.5px;font-weight:600;color:var(--muted);line-height:1.35}

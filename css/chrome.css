@@ -85,14 +85,14 @@
 .site-menu__logo{display:block;height:26px;width:auto}
 .site-menu__close{
   background:none;border:0;cursor:pointer;color:#fff;padding:12px 0 12px 16px;
-  font-family:var(--display);font-size:12px;font-weight:800;letter-spacing:.16em;
+  font-family:var(--ff-display);font-size:12px;font-weight:800;letter-spacing:.16em;
   text-transform:uppercase;opacity:.85;transition:opacity .3s;
 }
 .site-menu__close:hover{opacity:.5}
 
 .site-menu__links{display:flex;flex-direction:column;margin-top:30px}
 .site-menu__links a{
-  color:#fff;font-family:var(--display);font-weight:800;
+  color:#fff;font-family:var(--ff-display);font-weight:800;
   text-transform:uppercase;font-size:clamp(28px,7.4vw,56px);line-height:1.14;
   letter-spacing:-.02em;padding:2px 0;transition:opacity .3s;
   animation:smfade .45s var(--ease) both;
@@ -110,7 +110,7 @@
   justify-content:space-between;gap:20px;padding-bottom:18px;
 }
 .site-menu__label{
-  color:rgba(255,255,255,.5);font-family:var(--display);
+  color:rgba(255,255,255,.5);font-family:var(--ff-display);
   font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
 }
 .site-menu__contact{display:flex;flex-direction:column;gap:7px;text-align:right}
@@ -120,7 +120,7 @@
 .site-menu__cta{
   display:flex;align-items:center;justify-content:space-between;gap:14px;
   border-top:1px solid rgba(255,255,255,.18);padding-top:18px;color:#fff;
-  font-family:var(--display);font-weight:800;text-transform:uppercase;
+  font-family:var(--ff-display);font-weight:800;text-transform:uppercase;
   font-size:clamp(16px,4.6vw,22px);letter-spacing:-.01em;transition:opacity .3s;
 }
 .site-menu__cta:hover{opacity:.6}

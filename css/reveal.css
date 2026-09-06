@@ -177,7 +177,7 @@
 .cmp__head .cmp__c{border-top:0}
 
 .cmp__c--lbl{
-  font-family:var(--display);font-weight:800;font-size:14.5px;
+  font-family:var(--ff-display);font-weight:800;font-size:14.5px;
   letter-spacing:-.01em;color:rgba(255,255,255,.94);
   background:rgba(0,0,0,.20);
   align-items:center;
@@ -206,7 +206,7 @@
 
 .cmp__head .cmp__c{
   padding-block:clamp(15px,1.5vw,19px);
-  font-family:var(--display);font-weight:800;
+  font-family:var(--ff-display);font-weight:800;
   font-size:clamp(13.5px,1.15vw,16px);
   text-transform:none;letter-spacing:-.01em;
   align-items:center;
@@ -250,7 +250,7 @@
 .method__close{
   text-align:center;
   margin:clamp(24px,3vw,36px) auto 0;max-width:44ch;
-  font-family:var(--display);font-weight:800;
+  font-family:var(--ff-display);font-weight:800;
   font-size:clamp(17px,1.7vw,23px);letter-spacing:-.02em;line-height:1.25;
   color:#fff;
 }
@@ -333,7 +333,7 @@
   position:absolute;left:0;bottom:0;z-index:3;
   padding:clamp(16px,1.7vw,24px);
   writing-mode:vertical-rl;transform:rotate(180deg);
-  font-family:var(--display);font-weight:800;
+  font-family:var(--ff-display);font-weight:800;
   font-size:clamp(14px,1.15vw,17px);letter-spacing:-.01em;line-height:1;
   color:#fff;white-space:nowrap;pointer-events:none;
   transition:opacity .3s var(--ease);

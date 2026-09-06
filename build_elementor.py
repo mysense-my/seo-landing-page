@@ -196,6 +196,37 @@ css = css[:_body.start()] + '\nbody{' + ';'.join(decls) + '}' + css[_body.end():
 css = re.sub(r'/\*.*?\*/', '', css, flags=re.S)
 css = scope_css(css, SCOPE)
 
+# ---------------------------------------------------------------------------
+# Custom-property collision guard.
+#
+# Elementor's containers define their own custom properties ON `.e-con`, which
+# cascades into every section wrapper inside it. Any token of ours sharing a
+# name is silently reassigned: `--display` cost a round trip when
+# `font-family:var(--display)` started resolving to the word "flex" and every
+# heading fell back to the browser default. A name clash produces no error and
+# no warning, so it is asserted here instead.
+# ---------------------------------------------------------------------------
+ELEMENTOR_VARS = {
+    'display', 'flex-direction', 'flex-wrap', 'flex-basis', 'flex-grow', 'flex-shrink',
+    'justify-content', 'align-items', 'align-content', 'align-self', 'order', 'gap',
+    'row-gap', 'column-gap', 'width', 'height', 'min-height', 'max-height', 'content-width',
+    'overflow', 'position', 'z-index', 'text-align', 'container-widget-width',
+    'container-widget-height', 'container-widget-flex-grow', 'container-widget-align-self',
+    'container-max-width', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+    'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+    'padding-block-start', 'padding-block-end', 'padding-inline-start', 'padding-inline-end',
+    'border-radius', 'border-width', 'border-style', 'border-color',
+}
+ours = {m.group(1) for m in re.finditer(r'(?m)^\s*--([a-z0-9-]+)\s*:', css)}
+clash = sorted(ours & ELEMENTOR_VARS)
+if clash:
+    raise SystemExit(
+        "BUILD STOPPED: custom properties collide with Elementor container variables -> "
+        + ", ".join('--' + c for c in clash)
+        + "\n  Elementor sets these on .e-con and they cascade into every section wrapper.\n"
+          "  Rename the token in css/ (e.g. --display -> --ff-display).")
+print(f"token guard   : {len(ours)} custom properties, no collisions")
+
 # The scoping is the single most fragile step in this build, so it is asserted
 # rather than trusted: a stylesheet that silently loses its rules still produces
 # a template that imports cleanly and looks wrong only in the browser.

@@ -90,7 +90,7 @@
 
 .award__text{min-width:0}
 .award__t{
-  font-family:var(--display);font-weight:800;
+  font-family:var(--ff-display);font-weight:800;
   font-size:clamp(15px,1.3vw,17.5px);line-height:1.2;letter-spacing:-.015em;
   color:#fff;margin:0 0 6px;
 }
@@ -158,7 +158,7 @@
 }
 .numcard:hover{background:rgba(255,255,255,.13);transform:translateY(-4px)}
 .numcard__n{
-  font-family:var(--display);font-weight:900;
+  font-family:var(--ff-display);font-weight:900;
   font-size:clamp(32px,3.6vw,50px);line-height:1;
   letter-spacing:-.04em;color:var(--yellow);
 }
@@ -378,7 +378,7 @@
   display:flex;flex-direction:column;gap:12px;position:relative;
 }
 .rcard__q{
-  font-family:var(--display);font-size:44px;line-height:.6;color:var(--cyan);
+  font-family:var(--ff-display);font-size:44px;line-height:.6;color:var(--cyan);
   font-weight:900;display:block;height:22px;
 }
 .rcard__b{font-size:14px;line-height:1.62;color:var(--muted)}
@@ -405,7 +405,7 @@
   width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;
   background:none;border:0;cursor:pointer;text-align:left;
   padding:20px 22px;
-  font-family:var(--display);font-weight:800;font-size:clamp(15px,1.3vw,18px);
+  font-family:var(--ff-display);font-weight:800;font-size:clamp(15px,1.3vw,18px);
   color:var(--navy);letter-spacing:-.01em;
 }
 .acc__btn i{
@@ -519,7 +519,7 @@
   transform:translateX(var(--marquee-x,0));
 }
 .band span{
-  font-family:var(--display);font-weight:800;text-transform:uppercase;
+  font-family:var(--ff-display);font-weight:800;text-transform:uppercase;
   font-size:clamp(16px,2vw,26px);letter-spacing:-.02em;
   white-space:nowrap;color:var(--ink);
 }
