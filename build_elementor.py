@@ -22,7 +22,10 @@ PASTE = os.path.join(ROOT, 'paste-sections')
 
 PAGE_ID = "420"
 SITE    = "https://seo.mysense.com.my"
-ASSET_BASE = SITE + "/wp-content/uploads/seo-landing"
+# All 41 images were uploaded to the media library over the REST API on 6 Sep
+# 2026 and every one landed here, verified filename by filename against the
+# source bytes. Not guessed — read back from each upload's source_url.
+ASSET_BASE = SITE + "/wp-content/uploads/2026/09"
 SCOPE   = "seo"                      # every section is wrapped in <div class="seo …">
 
 # The page ships its own header and footer, so it wants Elementor CANVAS — the
@@ -49,9 +52,10 @@ motion = open(os.path.join(ROOT, 'js', 'motion.js'), encoding='utf-8').read()
 # ---------------------------------------------------------------------------
 # 1. Assets
 #
-# All 41 images ship as one folder upload rather than through the media library:
-# it is one drag instead of 41, the filenames cannot drift, and nothing depends
-# on guessing which /uploads/YYYY/MM/ folder WordPress chose.
+# The images live in the media library at /uploads/2026/09/. They were uploaded
+# by fetching each one from the GitHub Pages copy inside the logged-in admin page
+# and POSTing it to /wp-json/wp/v2/media, so the resulting URLs were read back
+# from the API rather than assumed.
 # ---------------------------------------------------------------------------
 def rewrite(s):
     s = re.sub(r'assets/([A-Za-z0-9._-]+\.(?:jpe?g|png|webp|svg))',
@@ -71,45 +75,136 @@ def rewrite(s):
 # do not paint anything, and scoping them would break `var()` lookups inside
 # Elementor's own wrappers.
 # ---------------------------------------------------------------------------
-# EVERY scope prefix is `:where(.seo)`, never `.seo`, and that is load-bearing.
-# A bare-element rule like `h1{margin:0}` is specificity (0,0,1); rewriting it as
-# `.seo h1` makes it (0,1,1), which then BEATS the page's own
-# `.hero__title{margin:0 0 20px}` at (0,1,0) and silently flattens the layout.
-# `:where(.seo) h1` stays (0,0,1), so the original cascade is preserved exactly
-# while still being confined to our markup.
-W = f':where(.{SCOPE})'
-RESETS = [
-    (r'\*,\*::before,\*::after\{box-sizing:border-box\}',
-     f'{W},{W} *,{W} *::before,{W} *::after{{box-sizing:border-box}}'),
-    (r'\nimg,svg,video\{', f'\n{W} img,{W} svg,{W} video{{'),
-    (r'\nbutton\{font:inherit;color:inherit\}', f'\n{W} button{{font:inherit;color:inherit}}'),
-    (r'\na\{color:inherit;text-decoration:none\}', f'\n{W} a{{color:inherit;text-decoration:none}}'),
-    (r'\nh1,h2,h3,h4,h5\{', f'\n{W} h1,{W} h2,{W} h3,{W} h4,{W} h5{{'),
-    (r'\np\{margin:0\}', f'\n{W} p{{margin:0}}'),
-    (r'\nhtml\{-webkit-text-size-adjust:100%\}', f'\n.{SCOPE}{{-webkit-text-size-adjust:100%}}'),
-]
-for pat, rep in RESETS:
-    css, n = re.subn(pat, rep, css, count=1)
-    if not n:
-        raise SystemExit(f"BUILD STOPPED: reset not found, base.css changed shape -> {pat}")
+# EVERY selector gets exactly ONE `.seo ` prefix — no more, no less, and never a
+# `:where()`. Two separate hazards make this the only correct choice:
+#
+#   1. The Elementor Kit styles bare elements at CLASS-LEVEL specificity:
+#      `.elementor-kit-50 h1{font-family:Nunito Sans;text-transform:capitalize;
+#      color:#100739}` is (0,1,1) and beats the page's own `.display` at (0,1,0).
+#      Left alone, every heading on the page renders in the theme's font, in
+#      Title Case, in the theme's colour.
+#   2. Prefixing only SOME selectors inverts the page's own cascade. An earlier
+#      build scoped just the bare-element resets, turning `h1{margin:0}` from
+#      (0,0,1) into (0,1,1), which then beat `.hero__title{margin:0 0 20px}` and
+#      flattened the hero.
+#
+# One uniform prefix fixes both: every rule moves up by the same (0,1,0), so the
+# page's internal cascade is untouched, while `.seo .display` at (0,2,0) clears
+# the kit, and `.seo h1` at (0,1,1) ties the kit and wins on source order because
+# this <style> sits in the body and the kit's stylesheet is in the head.
 
-# body -> .seo, MINUS overflow. `overflow-x:clip` on an ancestor makes it a scroll
-# container and silently kills position:sticky in its descendants — which this page
-# depends on twice (the .plan copy column and the .journey step stack). The page
-# gets away with it because the body IS the scroller; a scoped div does not.
+def _split_commas(sel):
+    """Split a selector list on top-level commas only — :is(a,b) stays intact."""
+    parts, depth, buf = [], 0, ''
+    for ch in sel:
+        if ch in '([': depth += 1
+        elif ch in ')]': depth -= 1
+        if ch == ',' and depth == 0:
+            parts.append(buf); buf = ''
+        else:
+            buf += ch
+    parts.append(buf)
+    return [p.strip() for p in parts if p.strip()]
+
+
+def _split_rules(s):
+    """[(header, body|None)] for each top-level rule; nested at-rules keep their body."""
+    rules, i, start, depth, header, bstart = [], 0, 0, 0, '', 0
+    while i < len(s):
+        c = s[i]
+        if c == '{':
+            if depth == 0:
+                header, bstart = s[start:i], i + 1
+            depth += 1
+        elif c == '}':
+            depth -= 1
+            if depth == 0:
+                rules.append((header, s[bstart:i])); start = i + 1
+        elif c == ';' and depth == 0 and s[start:i].strip().startswith('@'):
+            rules.append((s[start:i], None)); start = i + 1
+        i += 1
+    tail = s[start:].strip()
+    if tail:
+        rules.append((tail, None))
+    return rules
+
+
+AT_KEYFRAMES = re.compile(r'^\s*@(-\w+-)?keyframes\b', re.I)
+AT_NESTED    = re.compile(r'^\s*@(media|supports|container|layer|scope)\b', re.I)
+# classes that live on <html>, so the scope has to go AFTER them, not before
+HTML_STATE   = re.compile(r'^(html(?:\.[\w-]+)*|\.is-touch)\s+(.+)$')
+
+
+def scope_selector(sel, scope):
+    out = []
+    for p in _split_commas(sel):
+        if p == ':root':
+            out.append(p)
+        elif p in ('html', 'body'):
+            out.append('.' + scope)
+        elif p == '*':
+            out.append(f'.{scope},.{scope} *')
+        elif p.startswith('*::'):
+            out.append(f'.{scope} {p}')
+        else:
+            m = HTML_STATE.match(p)
+            # `.is-touch` is set on <html>, which is ABOVE our wrapper, so
+            # `.seo .is-touch x` would never match anything
+            out.append(f'{m.group(1)} .{scope} {m.group(2)}' if m else f'.{scope} {p}')
+    return ','.join(out)
+
+
+def scope_css(s, scope):
+    out = []
+    for header, body in _split_rules(s):
+        h = header.strip()
+        if body is None:
+            out.append(h + (';' if not h.endswith(';') else ''))
+        elif AT_KEYFRAMES.match(h):
+            out.append(h + '{' + body + '}')            # percentages, not selectors
+        elif AT_NESTED.match(h):
+            out.append(h + '{' + scope_css(body, scope) + '}')
+        elif h.startswith('@'):
+            out.append(h + '{' + body + '}')            # @font-face and friends
+        else:
+            out.append(scope_selector(h, scope) + '{' + body + '}')
+    return '\n'.join(out)
+
+
+# body's overflow has to go BEFORE scoping. `overflow-x:clip` is free on the
+# standalone page because the body IS the scroller; on a scoped <div> it makes
+# that div a clipping ancestor and kills position:sticky in its descendants —
+# which this page needs twice, in the closing CTA copy column and the journey
+# step stack. The CSS comment in front of the declaration is stripped first:
+# a decl starting with `/*` silently fails a startswith('overflow') test, which
+# is exactly how it survived into .seo on the first build.
 _body = re.search(r'\nbody\{(.*?)\n\}', css, re.S)
 if not _body:
     raise SystemExit("BUILD STOPPED: body{} rule not found")
-# strip CSS comments FIRST: the overflow declaration is preceded by one, and a
-# decl that starts with `/*` silently fails a startswith('overflow') test — which
-# is exactly how it survived into .seo on the first build
 _decls_src = re.sub(r'/\*.*?\*/', '', _body.group(1), flags=re.S)
 decls = [d.strip() for d in _decls_src.replace('\n', ' ').split(';') if d.strip()]
 dropped = [d for d in decls if d.startswith('overflow')]
 decls = [d for d in decls if not d.startswith('overflow')]
 if not dropped:
     raise SystemExit("BUILD STOPPED: expected an overflow declaration on body{} to drop")
-css = css[:_body.start()] + '\n.' + SCOPE + '{' + ';'.join(decls) + '}' + css[_body.end():]
+css = css[:_body.start()] + '\nbody{' + ';'.join(decls) + '}' + css[_body.end():]
+
+# Comments MUST go before scoping. The selector splitter is not comment-aware, so
+# a `/* … */` block reads as a selector and every comma inside it reads as a
+# selector separator — which silently shredded the whole stylesheet on the first
+# attempt (`.display{` survived exactly once, and half the page lost its styling).
+css = re.sub(r'/\*.*?\*/', '', css, flags=re.S)
+css = scope_css(css, SCOPE)
+
+# The scoping is the single most fragile step in this build, so it is asserted
+# rather than trusted: a stylesheet that silently loses its rules still produces
+# a template that imports cleanly and looks wrong only in the browser.
+for must in ('.seo .display{', '.seo .hero__title', '.seo .h2{', '.seo .btn{',
+             '.seo .serp' if '.serp' in css else '.seo .res__t', '.seo .site-menu{'):
+    if must not in css:
+        raise SystemExit(f"BUILD STOPPED: scoping lost a rule -> {must}")
+if re.search(r'(^|\n)\s*\.seo\s*/\*', css):
+    raise SystemExit("BUILD STOPPED: a comment was scoped as a selector")
 
 css = rewrite(css)
 motion = rewrite(motion)
@@ -150,6 +245,30 @@ css += f"""
 .e-con:has(.{SCOPE}),.e-con:has(.{SCOPE}) .e-con-inner,
 .elementor-widget-html:has(.{SCOPE}),
 .elementor-widget-html:has(.{SCOPE}) > .elementor-widget-container{{overflow:visible}}
+
+/* Give inheritance back. The page colours most text by setting `color` on a
+   SECTION and letting it inherit down — but inheritance only applies when no
+   rule matches the element itself, and the kit matches every heading and
+   paragraph directly (`.elementor-kit-50 h1{{color:#100739}}`). That silently
+   beats the inherited white and paints the hero headline near-black. These sit
+   at (0,1,1), the same weight as the kit's rules, and win on source order
+   because this <style> is in the body; anything the page colours explicitly is
+   at (0,2,0) or more and still wins over both. */
+.{SCOPE} h1,.{SCOPE} h2,.{SCOPE} h3,.{SCOPE} h4,.{SCOPE} h5,.{SCOPE} h6,
+.{SCOPE} p,.{SCOPE} li,.{SCOPE} dt,.{SCOPE} dd,.{SCOPE} b,.{SCOPE} strong,
+.{SCOPE} em,.{SCOPE} i,.{SCOPE} span,.{SCOPE} small,.{SCOPE} label{{color:inherit}}
+
+/* Same problem, same cause, for the typeface. The kit sets a font on bare `p`,
+   so body copy stopped inheriting Manrope and silently rendered in the theme's
+   face — same width, different metrics, so paragraphs re-wrapped and three
+   sections came out ~22px short. Headings are deliberately NOT in this list:
+   the page sets their face itself at the same weight, and `font-family:inherit`
+   here would land later in the file and beat it, dropping every heading to the
+   body font. */
+.{SCOPE} p,.{SCOPE} li,.{SCOPE} dt,.{SCOPE} dd,.{SCOPE} b,.{SCOPE} strong,
+.{SCOPE} em,.{SCOPE} i,.{SCOPE} span,.{SCOPE} small,.{SCOPE} label,.{SCOPE} a,
+.{SCOPE} button,.{SCOPE} input,.{SCOPE} select,.{SCOPE} textarea{{
+  font-family:inherit;text-transform:inherit;letter-spacing:inherit;line-height:inherit}}
 
 /* From here down the rules touch OUR elements, so they are wrapped in :where()
    to contribute zero specificity and never outrank the page's own stylesheet. */
