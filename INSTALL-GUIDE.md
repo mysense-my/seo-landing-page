@@ -109,14 +109,6 @@ its results, and the closing CTA's copy column pins while the form scrolls past 
 
 ## What the build does to the page, and why
 
-**The stylesheet is scoped with `:where(.seo)`, never `.seo`.** This is the one
-thing to preserve if the build is ever edited. A bare rule like `h1{margin:0}` is
-specificity (0,0,1); rewriting it as `.seo h1` makes it (0,1,1), which then beats
-the page's own `.hero__title{margin:0 0 20px}` at (0,1,0) and silently flattens
-every heading gap on the page. `:where(.seo) h1` stays at (0,0,1), so the original
-cascade survives intact while still being confined to our markup. The first build
-made this mistake and the hero collapsed.
-
 **`overflow-x:clip` is dropped from the scoped body rule.** On the standalone page
 the body is the scroller, so clipping there is free. Inside a scoped `<div>` it
 would make that div a clipping ancestor and kill `position:sticky` in its
