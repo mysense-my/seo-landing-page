@@ -238,11 +238,18 @@ def shield(scoped):
             continue
         if h.startswith('@'):
             continue
-        decls = [d.strip() for d in body.split(';')
-                 if re.match(r'background(-image)?\s*:', d.strip())
-                 and re.search(r'gradient|url\(', d)]
-        if not decls:
+        # Carry the WHOLE background group, not just the declaration holding the
+        # gradient. `background:` is a SHORTHAND: re-stating it alone resets every
+        # other background longhand to its initial value, and with !important that
+        # beats the original rule. That is exactly how the footer headline broke —
+        # `.foot__t em` pairs its gradient with `background-clip:text`, the shield
+        # re-stated only the shorthand, background-clip fell back to border-box,
+        # and the gradient filled the whole box while `color:transparent` hid the
+        # word: a solid blue-to-cyan rectangle where "enquiries" should be.
+        all_bg = [d.strip() for d in body.split(';') if re.match(r'-?\w*-?background', d.strip())]
+        if not any(re.search(r'gradient|url\(', d) for d in all_bg):
             continue
+        decls = all_bg
         sel = ','.join(p.replace('.' + SCOPE, BOOST, 1) if p.strip().startswith('.' + SCOPE) else p
                        for p in _split_commas(h))
         out.append(sel + '{' + ';'.join(d + ' !important' for d in decls) + '}')
@@ -251,6 +258,41 @@ def shield(scoped):
 
 _shield = shield(css)
 _shield_count = _shield.count('!important')
+
+# `background:` is a SHORTHAND, so re-stating it alone resets every OTHER
+# background longhand to its initial value — and the shield states it with
+# !important at (0,5,0), so that reset wins. `.foot__t em` fills its text with a
+# gradient via `background-clip:text`; a shield carrying only the shorthand sent
+# background-clip back to border-box, the gradient painted the whole box and
+# `color:transparent` hid the letters, so the footer read
+# "SEARCH THAT BRINGS [solid blue block], NOT JUST POSITIONS." Assert the whole
+# background group survives, in every nesting level, so this cannot come back.
+def _clip_survives(scoped, shielded):
+    have = {}
+    def collect(s):
+        for hh, bb in _split_rules(s):
+            if bb is None:
+                continue
+            if AT_NESTED.match(hh.strip()):
+                collect(bb)
+            else:
+                for sp in _split_commas(hh):
+                    have[sp] = bb
+    collect(shielded)
+    for hh, bb in _split_rules(scoped):
+        if bb is None or hh.strip().startswith('@'):
+            if bb is not None and AT_NESTED.match(hh.strip()):
+                _clip_survives(bb, shielded)
+            continue
+        if 'background-clip' not in bb:
+            continue
+        for sp in _split_commas(hh):
+            boosted = (sp.replace('.' + SCOPE, BOOST, 1)
+                       if sp.strip().startswith('.' + SCOPE) else sp)
+            if boosted in have and 'background-clip' not in have[boosted]:
+                raise SystemExit('BUILD STOPPED: lazy shield re-states `background` '
+                                 'without background-clip for -> ' + sp)
+_clip_survives(css, _shield)
 if _shield_count < 15:
     raise SystemExit(f"BUILD STOPPED: lazy-load shield only caught {_shield_count} "
                      "background declarations, expected 18+")
